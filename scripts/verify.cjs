@@ -179,7 +179,7 @@ check("tagline off-peak", taglineText(false), "off-peak");
 console.log("timeline label + NOW helpers ✓");
 console.log("app script bytes:", app.length);
 
-const themes = ["monokai-pro", "solarized-dark", "tokyo-night", "dracula", "one-dark", "gruvbox", "catppuccin-mocha", "kanagawa", "nord", "night-owl", "synthwave-84"];
+const themes = ["monokai-pro", "solarized-dark", "tokyo-night", "dracula", "one-dark", "one-light", "solarized-light", "github-light"];
 for (const id of themes) {
   const re = new RegExp('\\[data-theme\\s*=\\s*["\']?' + id + '["\']?\\s*\\][^{]{0,10}\\{([^}]*)\\}');
   const m = html.match(re);
@@ -193,7 +193,7 @@ for (const id of themes) {
     process.exit(1);
   }
 }
-console.log("theme override blocks: all", themes.length, "present with full token sets ✓");
+console.log("theme override blocks: all", themes.length, "present with full token sets, removed themes absent ✓");
 
 const staticChecks = [
   'id="countdown"',
@@ -211,10 +211,17 @@ const staticChecks = [
   'aria-haspopup="dialog"',
   "showModal",
   "billed at peak (2×)",
+  "text-mk-ink",
 ];
 for (const needle of staticChecks) {
   if (!html.includes(needle)) {
     console.log("FAIL missing static element:", needle);
+    process.exit(1);
+  }
+}
+for (const gone of ["gruvbox", "catppuccin-mocha", "kanagawa", "nord", "night-owl", "synthwave-84"]) {
+  if (html.includes('data-theme="' + gone + '"')) {
+    console.log("FAIL removed theme block still present:", gone);
     process.exit(1);
   }
 }

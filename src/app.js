@@ -24,12 +24,9 @@
     { id: "tokyo-night", label: "Tokyo Night", swatches: ["#c0caf5", "#e0af68", "#f7768e", "#7aa2f7", "#9ece6a"] },
     { id: "dracula", label: "Dracula", swatches: ["#f8f8f2", "#f1fa8c", "#ff79c6", "#8be9fd", "#50fa7b"] },
     { id: "one-dark", label: "One Dark", swatches: ["#abb2bf", "#e5c07b", "#e06c75", "#56b6c2", "#98c379"] },
-    { id: "gruvbox", label: "Gruvbox", swatches: ["#ebdbb2", "#fabd2f", "#fb4934", "#83a598", "#b8bb26"] },
-    { id: "catppuccin-mocha", label: "Catppuccin Mocha", swatches: ["#cdd6f4", "#f9e2af", "#f38ba8", "#89dceb", "#a6e3a1"] },
-    { id: "kanagawa", label: "Kanagawa", swatches: ["#dcd7ba", "#e6c384", "#ff5d62", "#7e9cd8", "#98bb6c"] },
-    { id: "nord", label: "Nord", swatches: ["#d8dee9", "#ebcb8b", "#bf616a", "#88c0d0", "#a3be8c"] },
-    { id: "night-owl", label: "Night Owl", swatches: ["#d6deeb", "#fad430", "#ff5874", "#7fdbca", "#addb67"] },
-    { id: "synthwave-84", label: "SynthWave '84", swatches: ["#e2e9ec", "#fced8a", "#f97e72", "#36f9f6", "#b6ffbf"] },
+    { id: "one-light", label: "One Light", swatches: ["#383a42", "#e5c07b", "#e45649", "#6bb4f5", "#50a14f"] },
+    { id: "solarized-light", label: "Solarized Light", swatches: ["#586e75", "#b58900", "#e066a7", "#2aa198", "#859900"] },
+    { id: "github-light", label: "GitHub Light", swatches: ["#1f2328", "#d4a72c", "#e05b63", "#5ba1ef", "#37a254"] },
   ];
 
   const THEME_KEY = "deepseek-peak-theme";
@@ -218,8 +215,8 @@
   const themeList = $("#themeList");
   const themePillLabel = $("#themePillLabel");
 
-  const OFFCHIP = "border border-black bg-mk-green text-mk-bg shadow-[1px_1px_0px_0px_#000000]";
-  const PEAKCHIP = "border border-black bg-mk-yellow text-mk-bg shadow-[1px_1px_0px_0px_#000000]";
+  const OFFCHIP = "border border-black bg-mk-green text-mk-ink shadow-[1px_1px_0px_0px_#000000]";
+  const PEAKCHIP = "border border-black bg-mk-yellow text-mk-ink shadow-[1px_1px_0px_0px_#000000]";
   const DIM = "border border-black bg-mk-input text-mk-muted";
 
   function renderBadge(now) {
@@ -259,7 +256,7 @@
     const peak = isPeak(now);
     priceMode.textContent = priceModeText(peak);
     priceMode.className =
-      "px-1.5 py-0.5 text-xs font-black uppercase tracking-wide text-mk-bg " +
+      "px-1.5 py-0.5 text-xs font-black uppercase tracking-wide text-mk-ink " +
       (peak ? "bg-mk-yellow" : "bg-mk-green");
   }
 
@@ -270,7 +267,7 @@
   function renderTagline(now) {
     const peak = isPeak(now);
     taglineChip.textContent = taglineText(peak);
-    taglineChip.className = "px-1 text-mk-bg " + (peak ? "bg-mk-pink" : "bg-mk-green");
+    taglineChip.className = "px-1 text-mk-ink " + (peak ? "bg-mk-pink" : "bg-mk-green");
   }
 
   function renderCountdown(now) {
@@ -380,7 +377,7 @@
       btn.className =
         "flex w-full items-center justify-between border-b-2 border-black px-3 py-2 text-left text-sm font-bold uppercase tracking-wide transition-all last:border-b-0 " +
         (t.id === state.tz
-          ? "bg-mk-yellow text-mk-bg"
+          ? "bg-mk-yellow text-mk-ink"
           : "text-mk-fg hover:translate-x-[2px] hover:bg-mk-yellow/30") +
         " active:translate-x-[2px] active:bg-mk-yellow";
       const name = document.createElement("span");
@@ -422,7 +419,7 @@
       btn.className =
         "flex w-full items-center justify-between border-b-2 border-black px-3 py-2 text-left text-sm font-bold uppercase tracking-wide transition-all last:border-b-0 " +
         (t.id === theme
-          ? "bg-mk-yellow text-mk-bg"
+          ? "bg-mk-yellow text-mk-ink"
           : "text-mk-fg hover:translate-x-[2px] hover:bg-mk-yellow/30") +
         " active:translate-x-[2px] active:bg-mk-yellow";
       const name = document.createElement("span");

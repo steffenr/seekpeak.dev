@@ -18,7 +18,7 @@ no build at runtime, no JavaScript frameworks.
   local clock, DST-correct.
 - **Timezone picker** — auto-detected, user-selectable. The verdict is always
   computed on UTC; your timezone only changes which clocks you read.
-- **11 editor-style color themes** — persisted in `localStorage`, applied
+- **8 color themes (5 dark + 3 light)** — persisted in `localStorage`, applied
   without flash.
 - **Info dialog** ("?") — a short explanation of how the page works and why
   it exists.
