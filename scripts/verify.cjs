@@ -211,6 +211,8 @@ const staticChecks = [
   'aria-haspopup="dialog"',
   "showModal",
   "billed at peak (2×)",
+  'paypalme/SeekPeak',
+  "Support me",
   "text-mk-ink",
 ];
 for (const needle of staticChecks) {
