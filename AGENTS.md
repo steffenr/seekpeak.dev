@@ -2,7 +2,7 @@
 
 ## Project
 
-**Seek Peak** — a zero-dependency static page that tells a visitor whether the DeepSeek API is currently in peak (2× price) or off-peak time, in their own timezone. Neo-brutalist design: black borders + hard shadows (`#000000`), monospace font, 6 user-selectable color themes.
+**Seek Peak** — a zero-dependency static page that tells a visitor whether the DeepSeek API is currently in peak (2× price) or off-peak time, in their own timezone. Neo-brutalist design: black borders + hard shadows (`#000000`), monospace font, 8 user-selectable color themes (5 dark + 3 light).
 
 **Domain model (see `docs/ADR-001`/`ADR-002`/`GLOSSARY.md`):**
 - The **verdict is computed on UTC now** — identical for every visitor at any instant.
@@ -28,7 +28,7 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 |---|---|
 | `index.template.html` | Source of the single-page layout: hero badge card (`#badgeCard`, `#badgeText`, `#badgeMsg`, `#countdown`), pricing table, timeline (`#timeline`), timezone picker, footer. Contains the FOUC theme script in `<head>` and the `/*__CSS__|__CONFIG__|__APP__*/` placeholders. |
 | `src/app.js` | Single IIFE. All logic: verdict (`isPeak`, `nextTransition`), timezone math (`localMidnight`, `localHour`, `tzOffsetMin`, `offsetLabel`), minute-precision engine (`minuteMask`, `hourFraction`, `peakRuns`, `fmtBoundary`), pure UI helpers (`countdownText`, `priceModeText`, `taglineText`, `timelineHourLabel`, `isNowHour`), and thin DOM renderers (`renderBadge`, `renderTagline`, `renderCountdown`, `renderPriceMode`, `renderTimeline`, `renderPriceTable`, `renderTzLabel`, `renderTzList`, theme renderers). |
-| `src/style.css` | Tailwind v4 source: `@theme` tokens (`mk-bg`, `mk-fg`, `mk-card`, `mk-input`, `mk-cyan`, `mk-pink`, `mk-yellow`, `mk-green`, `mk-purple`, `mk-orange`, `mk-muted`, `mk-badge-peak`, `mk-badge-off`) + 6 `[data-theme=…]` override blocks. |
+| `src/style.css` | Tailwind v4 source: `@theme` tokens (`mk-bg`, `mk-fg`, `mk-card`, `mk-input`, `mk-ink`, `mk-cyan`, `mk-pink`, `mk-yellow`, `mk-green`, `mk-purple`, `mk-orange`, `mk-muted`, `mk-badge-peak`, `mk-badge-off`) + 8 `[data-theme=…]` override blocks. |
 | `config.json` | Single source of truth: `peakWindows` + `models` (deepseek-v4-flash, deepseek-v4-pro) with `cacheHit`/`cacheMiss`/`output` offPeak/peak prices. |
 | `scripts/verify.cjs` | Test harness (node `vm`). Reads the BUILT `dist/index.html`, parses config + inlined app, mocks DOM/localStorage/setInterval, re-injects `window.__t = { …exports… }`, then runs assertions. |
 | `scripts/build.mjs` | Build pipeline described above. |
@@ -57,8 +57,8 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 ## Themes
 
 - Theme key: `deepseek-peak-theme` (localStorage), default `monokai-pro`, invalid → default, wrapped in try/catch. `[data-theme]` is set on `documentElement` by both the inline `<head>` FOUC script and `src/app.js`.
-- 6 themes (favorites first): monokai-pro, solarized-dark, tokyo-night, dracula, one-dark, gruvbox.
-- `mk-ink` stays `#19181a` in every theme; solarized-dark uses `#073642` for card/input.
+- 8 themes (favorites first): monokai-pro, solarized-dark, tokyo-night, dracula, one-dark, one-light, solarized-light, github-light.
+- `mk-ink` stays `#19181a` in every theme; solarized-dark uses `#073642` for card/input. Light themes declare `color-scheme: light`; chip ink is always `text-mk-ink`, never `text-mk-bg`.
 - Badge text color tokens (`--color-mk-badge-peak` / `--color-mk-badge-off`) are defined per theme; the Tailwind minifier may rewrite `#800000` to `maroon` (same value) — theme-block regexes in verify.cjs tolerate this.
 - Adding a theme requires: a `[data-theme=…]` block in `src/style.css`, a `THEMES` entry in `src/app.js`, and (optionally) updating the theme list in verify.cjs.
 

@@ -119,98 +119,53 @@
   --color-mk-badge-off: #282c34;
 }
 
-[data-theme="gruvbox"] {
-  --color-mk-bg: #282828;
-  --color-mk-card: #3c3836;
-  --color-mk-input: #1d2021;
-  --color-mk-fg: #ebdbb2;
-  --color-mk-muted: #a89984;
-  --color-mk-yellow: #fabd2f;
-  --color-mk-pink: #fb4934;
-  --color-mk-cyan: #83a598;
-  --color-mk-green: #b8bb26;
-  --color-mk-orange: #fe8019;
-  --color-mk-purple: #d3869b;
-  --color-mk-badge-peak: #8a1a12;
-  --color-mk-badge-off: #282828;
+[data-theme="one-light"] {
+  color-scheme: light;
+  --color-mk-bg: #fafafa;
+  --color-mk-card: #e8e8e8;
+  --color-mk-input: #ffffff;
+  --color-mk-fg: #383a42;
+  --color-mk-muted: #a0a1a7;
+  --color-mk-yellow: #e5c07b;
+  --color-mk-pink: #e45649;
+  --color-mk-cyan: #6bb4f5;
+  --color-mk-green: #50a14f;
+  --color-mk-orange: #d19a66;
+  --color-mk-purple: #c96cc8;
+  --color-mk-badge-peak: #6f262c;
+  --color-mk-badge-off: #19181a;
 }
 
-[data-theme="catppuccin-mocha"] {
-  --color-mk-bg: #1e1e2e;
-  --color-mk-card: #313244;
-  --color-mk-input: #181825;
-  --color-mk-fg: #cdd6f4;
-  --color-mk-muted: #a6adc8;
-  --color-mk-yellow: #f9e2af;
-  --color-mk-pink: #f38ba8;
-  --color-mk-cyan: #89dceb;
-  --color-mk-green: #a6e3a1;
-  --color-mk-orange: #fab387;
-  --color-mk-purple: #cba6f7;
-  --color-mk-badge-peak: #7c2530;
-  --color-mk-badge-off: #1e1e2e;
+[data-theme="solarized-light"] {
+  color-scheme: light;
+  --color-mk-bg: #fdf6e3;
+  --color-mk-card: #eee8d5;
+  --color-mk-input: #fdf6e3;
+  --color-mk-fg: #586e75;
+  --color-mk-muted: #93a1a1;
+  --color-mk-yellow: #b58900;
+  --color-mk-pink: #e066a7;
+  --color-mk-cyan: #2aa198;
+  --color-mk-green: #859900;
+  --color-mk-orange: #cb4b16;
+  --color-mk-purple: #8f7ad6;
+  --color-mk-badge-peak: #520015;
+  --color-mk-badge-off: #19181a;
 }
 
-[data-theme="kanagawa"] {
-  --color-mk-bg: #1f1f28;
-  --color-mk-card: #16161d;
-  --color-mk-input: #16161d;
-  --color-mk-fg: #dcd7ba;
-  --color-mk-muted: #727169;
-  --color-mk-yellow: #e6c384;
-  --color-mk-pink: #ff5d62;
-  --color-mk-cyan: #7e9cd8;
-  --color-mk-green: #98bb6c;
-  --color-mk-orange: #ffa066;
-  --color-mk-purple: #957fb8;
-  --color-mk-badge-peak: #990010;
-  --color-mk-badge-off: #1f1f28;
-}
-
-[data-theme="nord"] {
-  --color-mk-bg: #2e3440;
-  --color-mk-card: #3b4252;
-  --color-mk-input: #434c5e;
-  --color-mk-fg: #d8dee9;
-  --color-mk-muted: #4c566a;
-  --color-mk-yellow: #ebcb8b;
-  --color-mk-pink: #bf616a;
-  --color-mk-cyan: #88c0d0;
-  --color-mk-green: #a3be8c;
-  --color-mk-orange: #d08770;
-  --color-mk-purple: #b48ead;
-  --color-mk-badge-peak: #7c2530;
-  --color-mk-badge-off: #2e3440;
-}
-
-[data-theme="night-owl"] {
-  --color-mk-bg: #011627;
-  --color-mk-card: #01121f;
-  --color-mk-input: #0a1a2a;
-  --color-mk-fg: #d6deeb;
-  --color-mk-muted: #4b6479;
-  --color-mk-yellow: #fad430;
-  --color-mk-pink: #ff5874;
-  --color-mk-cyan: #7fdbca;
-  --color-mk-green: #addb67;
-  --color-mk-orange: #f78c6c;
-  --color-mk-purple: #c792ea;
-  --color-mk-badge-peak: #7c2530;
-  --color-mk-badge-off: #011627;
-}
-
-[data-theme="synthwave-84"] {
-  --color-mk-bg: #241b2f;
-  --color-mk-card: #2b213f;
-  --color-mk-input: #181524;
-  --color-mk-fg: #e2e9ec;
-  --color-mk-muted: #6d6486;
-  --color-mk-yellow: #fced8a;
-  --color-mk-pink: #f97e72;
-  --color-mk-cyan: #36f9f6;
-  --color-mk-green: #b6ffbf;
-  --color-mk-orange: #ff8b39;
-  --color-mk-purple: #a674ff;
-  --color-mk-badge-peak: #800020;
-  --color-mk-badge-off: #241b2f;
+[data-theme="github-light"] {
+  color-scheme: light;
+  --color-mk-bg: #ffffff;
+  --color-mk-card: #f6f8fa;
+  --color-mk-input: #f6f8fa;
+  --color-mk-fg: #1f2328;
+  --color-mk-muted: #656d76;
+  --color-mk-yellow: #d4a72c;
+  --color-mk-pink: #e05b63;
+  --color-mk-cyan: #5ba1ef;
+  --color-mk-green: #37a254;
+  --color-mk-orange: #bc4c00;
+  --color-mk-purple: #a77fe9;
+  --color-mk-badge-peak: #82071e;
+  --color-mk-badge-off: #19181a;
 }
