@@ -1,0 +1,19 @@
+{
+  "peakWindows": [["01:00", "04:00"], ["06:00", "10:00"]],
+  "models": [
+    {
+      "id": "deepseek-v4-flash",
+      "name": "deepseek-v4-flash",
+      "cacheHit": { "offPeak": 0.007, "peak": 0.014 },
+      "cacheMiss": { "offPeak": 0.22, "peak": 0.44 },
+      "output": { "offPeak": 0.66, "peak": 1.32 }
+    },
+    {
+      "id": "deepseek-v4-pro",
+      "name": "deepseek-v4-pro",
+      "cacheHit": { "offPeak": 0.022, "peak": 0.044 },
+      "cacheMiss": { "offPeak": 0.66, "peak": 1.32 },
+      "output": { "offPeak": 1.98, "peak": 3.96 }
+    }
+  ]
+}
