@@ -1,0 +1,14 @@
+{
+  "name": "deepseek-peak",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static page telling you whether deepseek API is in peak time, in your timezone.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}
