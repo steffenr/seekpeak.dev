@@ -2,13 +2,17 @@ import { execSync } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync, rmSync, copyFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { minify } from "terser";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const tmpCss = join(root, "dist", ".tmp.css");
 const dist = join(root, "dist");
 const ogSource = join(root, "assets", "og-image.png");
+// Names must survive minification: verify.cjs injects `window.__t = { … }` by
+// string-replacing the trailing IIFE, so it needs these identifiers intact.
+const EXPORT_NAMES = ["pad", "toMin", "utcDaySec", "isPeak", "nextTransition", "minuteMask", "hourFraction", "peakRuns", "fmtBoundary", "localMidnight", "countdownText", "priceModeText", "timelineHourLabel", "isNowHour", "taglineText"];
 
-function build() {
+async function build() {
   rmSync(dist, { recursive: true, force: true });
   mkdirSync(dist, { recursive: true });
 
@@ -16,7 +20,13 @@ function build() {
   const css = readFileSync(tmpCss, "utf8");
 
   const config = JSON.stringify(JSON.parse(readFileSync(join(root, "config.json"), "utf8")), null, 2);
-  const app = readFileSync(join(root, "src", "app.js"), "utf8");
+  const app = (
+    await minify(readFileSync(join(root, "src", "app.js"), "utf8"), {
+      keep_fnames: true,
+      mangle: { reserved: EXPORT_NAMES, keep_fnames: true },
+      compress: { keep_fnames: true, inline: false, reduce_vars: false },
+    })
+  ).code;
 
   let html = readFileSync(join(root, "index.template.html"), "utf8");
   html = html.replace("/*__CSS__*/", () => css);
@@ -52,7 +62,7 @@ function build() {
 }
 
 const watch = process.argv.includes("--watch");
-build();
+await build();
 
 if (watch) {
   const { watchFile } = await import("node:fs");
