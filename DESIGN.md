@@ -44,6 +44,8 @@ parts:
 | `scripts/build.mjs` | Build pipeline (below). |
 | `scripts/verify.cjs` | Test harness against the built artifact (verification strategy below). |
 | `assets/og-image.png` | User-authored Open Graph image (1200×630 recommended); copied verbatim to `dist/og-image.png`. |
+| `assets/site.webmanifest` | PWA manifest template: `__SITE_NAME__` / `__SITE_URL__` tokens are replaced from `config.json` at build; emitted to `dist/site.webmanifest`. |
+| `assets/favicon.ico`, `favicon-96x96.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` | User-authored site icons; copied verbatim to `dist/` and referenced from the `<head>` links + manifest. |
 
 ### Design principles
 
@@ -85,7 +87,11 @@ parts:
    name, so helper names must survive minification.
 4. A leftover template placeholder (`/*__CSS__*/`, `__SITE_URL__`,
    `__OG_IMAGE_URL__`, …) is a hard error.
-5. `assets/og-image.png` → `dist/og-image.png`; `dist/robots.txt` is emitted.
+5. `assets/og-image.png` → `dist/og-image.png`; the site icons
+   (`favicon.ico`, `favicon-96x96.png`, `apple-touch-icon.png`,
+   `icon-192.png`, `icon-512.png`) are copied verbatim; `assets/site.webmanifest`
+   is token-replaced (`__SITE_NAME__`, `__SITE_URL__` from `config.json`) →
+   `dist/site.webmanifest`; `dist/robots.txt` is emitted.
 
 The site URL flows `config.json` (`site`) → `build.mjs` → head tokens
 (canonical, og:*, JSON-LD). Nothing else may hardcode the domain, and
