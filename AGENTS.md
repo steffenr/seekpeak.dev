@@ -2,13 +2,7 @@
 
 ## Project
 
-**Seek Peak** — a zero-dependency static page that tells a visitor whether the DeepSeek API is currently in peak (2× price) or off-peak time, in their own timezone. Neo-brutalist design: black borders + hard shadows (`#000000`), monospace font, 8 user-selectable color themes (5 dark + 3 light).
-
-**Domain model (see `docs/ADR-001`/`ADR-002`/`GLOSSARY.md`):**
-- The **verdict is computed on UTC now** — identical for every visitor at any instant.
-- Peak windows are half-open `[start, end)` UTC intervals: `01:00–04:00` and `06:00–10:00`. `06:00:00.000` is peak; `10:00:00.000` is off-peak. No races at boundaries.
-- The visitor timezone is **display-only**: it changes which clock you read, never the price. Per-timezone blocks are derived at runtime via `Intl` (DST-correct) — never hardcoded.
-- Output is a **single self-contained `index.html`** (works from `file://`). No backend, no framework, vanilla JS only (see `docs/ADR-003`).
+**Seek Peak** — a zero-dependency static page that tells a visitor whether the DeepSeek API is currently in peak (2×) or off-peak time, in their own timezone. The domain model, architecture, build pipeline and theme system are documented in `DESIGN.md`; committed decisions live in `docs/ADR-001`/`ADR-002`/`ADR-003` + `docs/GLOSSARY.md`.
 
 ## Commands
 
@@ -19,21 +13,8 @@ node scripts/verify.cjs            # the test suite (reads built dist/index.html
 npm run build && node scripts/verify.cjs   # standard check — MUST be green before finishing any task
 ```
 
-- Build (`scripts/build.mjs`): runs Tailwind v4 CLI to compile `src/style.css` → minified CSS, then inlines that CSS + `config.json` (as `window.CONFIG`) + `src/app.js` into `index.template.html` → `dist/index.html`. The inlined JS is minified with `terser` (`keep_fnames` + `mangle.reserved` preserve the names verify.cjs injects). A leftover placeholder (`/*__CSS__*/`, `__SITE_URL__`, `__OG_IMAGE_URL__`, etc.) throws. Also copies `assets/og-image.png` → `dist/og-image.png` and emits `dist/robots.txt` — site URL flows from `config.json` → `build.mjs` → head tokens; never hardcode the domain in `index.template.html`.
-- There is **no separate lint/typecheck** target — `verify.cjs` + the build are the only gates.
-
-## Architecture & key files
-
-| File | Role |
-|---|---|
-| `index.template.html` | Source of the single-page layout: hero badge card (`#badgeCard`, `#badgeText`, `#badgeMsg`, `#countdown`), pricing table, timeline (`#timeline`), timezone picker, footer. Contains the FOUC theme script in `<head>` and the `/*__CSS__|__CONFIG__|__APP__*/` placeholders. |
-| `src/app.js` | Single IIFE. All logic: verdict (`isPeak`, `nextTransition`), timezone math (`localMidnight`, `localHour`, `tzOffsetMin`, `offsetLabel`), minute-precision engine (`minuteMask`, `hourFraction`, `peakRuns`, `fmtBoundary`), pure UI helpers (`countdownText`, `priceModeText`, `taglineText`, `timelineHourLabel`, `isNowHour`), and thin DOM renderers (`renderBadge`, `renderTagline`, `renderCountdown`, `renderPriceMode`, `renderTimeline`, `renderPriceTable`, `renderTzLabel`, `renderTzList`, theme renderers). |
-| `src/style.css` | Tailwind v4 source: `@theme` tokens (`mk-bg`, `mk-fg`, `mk-card`, `mk-input`, `mk-ink`, `mk-cyan`, `mk-pink`, `mk-yellow`, `mk-green`, `mk-purple`, `mk-orange`, `mk-muted`, `mk-badge-peak`, `mk-badge-off`) + 8 `[data-theme=…]` override blocks. |
-| `config.json` | Single source of truth: `peakWindows` + `models` (deepseek-v4-flash, deepseek-v4-pro) with `cacheHit`/`cacheMiss`/`output` offPeak/peak prices, + `site` block (`url`, `name`) for the SEO/OG head. |
-| `scripts/verify.cjs` | Test harness (node `vm`). Reads the BUILT `dist/index.html`, parses config + inlined app, mocks DOM/localStorage/setInterval, re-injects `window.__t = { …exports… }`, then runs assertions. |
-| `scripts/build.mjs` | Build pipeline described above. |
-| `assets/og-image.png` | User-authored Open Graph image (1200×630 recommended); copied verbatim to `dist/og-image.png`. |
-| `docs/` | `ADR-001/002/003`, `GLOSSARY.md`, and `superpowers/specs|plans/` (feature design docs + implementation plans). |
+- There is **no separate lint/typecheck** target — the build + `verify.cjs` are the only gates.
+- If you add a build placeholder token to `index.template.html`, wire it end-to-end or the build throws. Site URL/brand must keep flowing `config.json` → `build.mjs` → head tokens (`__SITE_URL__`, `__OG_IMAGE_URL__`) — never hardcode the domain.
 
 ## Verify.cjs conventions (test suite)
 
@@ -47,23 +28,20 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 
 ## Code conventions
 
-- **Pure logic separated from DOM:** pure helpers (testable, exported) feed thin renderers. Follow this split for any new logic — never compute inside a renderer without a pure counterpart.
+- **Pure logic separated from DOM:** pure helpers (testable, exported) feed thin renderers. Follow this split for any new logic — never compute inside a renderer without a pure counterpart (see `DESIGN.md` for rationale).
 - Verdict helpers: `isPeak(now)` (UTC), `nextTransition(now)` returns the next flip instant (never null for valid config). `minuteMask(now, tz)` → boolean[1440]; `hourFraction(mask, h)`; `peakRuns(mask)` → half-open `[startMin, endMin]`; `fmtBoundary(mid, tz, min)` → `"HH:MM"` (clamps min ≥ 1440 to `"24:00"`).
 - **Countdown gotcha:** format the transition `Date` directly via `part(d, tz, "hour"/"minute")` — do NOT reuse `fmtBoundary` (it clamps to `24:00`). ICU zero-pads minute only when `hour` is also requested (`{hour:"2-digit", minute:"2-digit"}`) — there is a comment in `countdownText` about this; do not "simplify" it.
 - Renderers read fresh `isPeak(now)` locally (not `state.peak`) to avoid ordering coupling (`renderCountdown`, `renderTagline`, `renderPriceMode`).
 - `setInterval` (1s) drives `renderCountdown` every tick; on a verdict flip it re-renders badge, tagline, priceMode, priceTable, timeline.
 - Tailwind JIT: any class used in JS must appear as a **complete literal string** in `src/app.js`/`index.template.html` (no dynamic class-name interpolation) or it will be purged.
-- Site URL/brand: `config.json` `site` block → `build.mjs` → head tokens (`__SITE_URL__`, `__OG_IMAGE_URL__`). Never hardcode the domain in `index.template.html`.
 - No comments unless they explain a non-obvious invariant (e.g. the ICU padding note).
 - Don't touch `src/app.js`'s IIFE structure or the export-injection line in verify.cjs carelessly — they must stay in sync.
 
-## Themes
+## Editing themes
 
-- Theme key: `deepseek-peak-theme` (localStorage), default `monokai-pro`, invalid → default, wrapped in try/catch. `[data-theme]` is set on `documentElement` by both the inline `<head>` FOUC script and `src/app.js`.
-- 8 themes (favorites first): monokai-pro, solarized-dark, tokyo-night, dracula, one-dark, one-light, solarized-light, github-light.
-- `mk-ink` stays `#19181a` in every theme; solarized-dark uses `#073642` for card/input. Light themes declare `color-scheme: light`; chip ink is always `text-mk-ink`, never `text-mk-bg`.
-- Badge text color tokens (`--color-mk-badge-peak` / `--color-mk-badge-off`) are defined per theme; the Tailwind minifier may rewrite `#800000` to `maroon` (same value) — theme-block regexes in verify.cjs tolerate this.
+- Theme key `deepseek-peak-theme` (localStorage), default `monokai-pro`, invalid → default, wrapped in try/catch. `[data-theme]` is set on `documentElement` by both the inline `<head>` FOUC script and `src/app.js`.
 - Adding a theme requires: a `[data-theme=…]` block in `src/style.css`, a `THEMES` entry in `src/app.js`, and (optionally) updating the theme list in verify.cjs.
+- The palette, invariants and FOUC/persistence design live in `DESIGN.md` (§ Theme system).
 
 ## Git / workflow
 
