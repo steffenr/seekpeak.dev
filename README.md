@@ -35,7 +35,8 @@ is off-peak. Per-timezone blocks are derived at runtime via `Intl`
 (DST-correct) — never hardcoded. Configuration (windows + prices) lives in
 `config.json`, the single source of truth.
 
-See `docs/ADR-*.md` and `docs/GLOSSARY.md` for the full domain model.
+See `DESIGN.md` for the full design, and `docs/ADR-*.md` + `docs/GLOSSARY.md`
+for the committed domain-model decisions.
 
 ## Build
 
@@ -84,7 +85,8 @@ build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
 | `scripts/build.mjs` | Build pipeline (Tailwind v4 → minified CSS, then inline + dist assets) |
 | `assets/og-image.png` | Your Open Graph image (1200×630 recommended), copied to `dist/og-image.png` |
 | `scripts/verify.cjs` | Test suite against the built `dist/index.html` |
-| `docs/` | ADRs, glossary, and design/implementation notes |
+| `DESIGN.md` | Domain model, architecture, build pipeline, theme system, verification strategy |
+| `docs/` | ADRs, glossary, and superpowers spec/plan notes |
 
 ## Not affiliated
 
