@@ -22,6 +22,8 @@ no build at runtime, no JavaScript frameworks.
   without flash.
 - **Info dialog** ("?") — a short explanation of how the page works and why
   it exists.
+- **SEO / metadata** — canonical URL, Open Graph + Twitter cards, JSON-LD
+  (`WebSite` / `FAQPage` / `speakable`), and a `robots.txt`.
 
 ## How it works
 
@@ -47,6 +49,10 @@ built artifact and covers verdict logic (all 86400 seconds), half-open
 boundaries, countdown text, DST-transition midnights, cross-midnight
 timelines, and static template expectations.
 
+The site URL lives in the `site` block of `config.json` and flows through the
+build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
+`index.template.html`.
+
 ## Configuration
 
 `config.json` is the single source of truth:
@@ -56,7 +62,11 @@ timelines, and static template expectations.
   "peakWindows": [["01:00", "04:00"], ["06:00", "10:00"]],  // half-open UTC
   "models": [
     { "id": "deepseek-v4-flash", "cacheHit": { "offPeak": 0.007, "peak": 0.014 }, /* … */ }
-  ]
+  ],
+  "site": {
+    "url": "https://seekpeak.dev",   // feeds canonical/og:/JSON-LD at build
+    "name": "Seek Peak"
+  }
 }
 ```
 
@@ -67,7 +77,7 @@ timelines, and static template expectations.
 | `index.template.html` | Single-page layout + placeholders for CSS, config, app |
 | `src/app.js` | All logic (pure, testable helpers + thin DOM renderers) |
 | `src/style.css` | Tailwind v4 source: theme tokens + `[data-theme=…]` blocks |
-| `config.json` | Peak windows + model prices |
+| `config.json` | Peak windows, model prices, + `site` block |
 | `scripts/build.mjs` | Build pipeline (Tailwind v4 → minified CSS, then inline) |
 | `scripts/verify.cjs` | Test suite against the built `dist/index.html` |
 | `docs/` | ADRs, glossary, and design/implementation notes |

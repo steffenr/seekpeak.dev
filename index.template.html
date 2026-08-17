@@ -3,8 +3,86 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Seek Peak</title>
-    <meta name="description" content="Is the DeepSeek API in peak time right now — in your timezone?" />
+    <title>Seek Peak — Is the DeepSeek API in peak time right now?</title>
+    <meta name="description" content="See in real time whether DeepSeek API requests are billed at peak (2×) or off-peak rates. Peak hours are 01:00–04:00 and 06:00–10:00 UTC; per-1M-token prices shown in your timezone." />
+    <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%232d2a2e"/><text x="8" y="11" font-family="monospace" font-size="8" fill="%23fcfcfa" text-anchor="middle">SP</text></svg>' />
+    <meta name="theme-color" content="#2d2a2e" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="__SITE_URL__/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Seek Peak" />
+    <meta property="og:url" content="__SITE_URL__/" />
+    <meta property="og:title" content="Seek Peak — Is the DeepSeek API in peak time right now?" />
+    <meta property="og:description" content="Peak (2×) or off-peak right now — DeepSeek API rates in your timezone." />
+    <meta property="og:image" content="__OG_IMAGE_URL__" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Seek Peak — DeepSeek API peak-time indicator" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Seek Peak — Is the DeepSeek API in peak time right now?" />
+    <meta name="twitter:description" content="Peak (2×) or off-peak right now — DeepSeek API rates in your timezone." />
+    <meta name="twitter:image" content="__OG_IMAGE_URL__" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "Seek Peak",
+          "url": "__SITE_URL__/"
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is the DeepSeek API in peak time right now?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Seek Peak compares the current UTC time against DeepSeek's peak windows (01:00-04:00 and 06:00-10:00 UTC) and shows whether requests are billed at peak (2x) or off-peak rates, in your timezone."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What are DeepSeek's peak hours?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Peak windows are 01:00-04:00 and 06:00-10:00 UTC (half-open intervals, so 06:00:00.000 is peak and 10:00:00.000 is off-peak). All other hours are off-peak."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How much does DeepSeek charge during peak?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "During peak windows rates are exactly 2x off-peak for input (cache hit and cache miss) and output tokens - for example deepseek-v4-flash output jumps from $0.66 to $1.32 per 1M tokens."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does Seek Peak use my timezone?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The verdict is always computed on UTC and is identical for every visitor; your timezone only changes which clocks you read. The timeline and peak blocks are projected onto your local clock using Intl (DST-correct)."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": "Seek Peak",
+          "url": "__SITE_URL__/",
+          "speakable": { "@type": "SpeakableSpecification", "cssSelector": ["#badgeText", "#badgeMsg"] }
+        }
+      ]
+    }
+    </script>
+    <noscript>
+      <p>
+        Enable JavaScript to see the live verdict. DeepSeek peak windows are
+        01:00-04:00 and 06:00-10:00 UTC; during peak, rates are 2x off-peak.
+      </p>
+    </noscript>
     <style>/*__CSS__*/</style>
     <script>
       (function () {

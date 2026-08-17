@@ -92,6 +92,16 @@ if (!(isPeakAt === true && t.getUTCHours() === 6 && t.getUTCMinutes() === 0)) {
 }
 console.log("nextTransition ✓");
 console.log("config:", config.models.length, "models,", config.peakWindows.length, "windows");
+const site = config.site || {};
+if (!site.url || !site.name) {
+  console.log("FAIL config.site missing url/name:", JSON.stringify(site));
+  process.exit(1);
+}
+if (!/^https:\/\//.test(site.url)) {
+  console.log("FAIL config.site.url must be absolute https:", site.url);
+  process.exit(1);
+}
+console.log("config.site:", site.name, "->", site.url);
 const { minuteMask, hourFraction, peakRuns, fmtBoundary, localMidnight } = context.window.__t;
 const colomboTz = "Asia/Colombo";
 const colomboMid = localMidnight(ref(0), colomboTz);
@@ -234,3 +244,41 @@ for (const gone of ["clockLocal", "clockTz", "renderClock"]) {
   }
 }
 console.log("static template: countdown/tagline-chip/price-mode/details/info-dialog present, clock removed ✓");
+
+if (!html.includes('rel="canonical" href="' + site.url + '/"')) {
+  console.log("FAIL canonical missing for", site.url);
+  process.exit(1);
+}
+if (!html.includes('property="og:url" content="' + site.url + '/"')) {
+  console.log("FAIL og:url missing");
+  process.exit(1);
+}
+if (!html.includes('property="og:image" content="' + site.url + '/og-image.png"')) {
+  console.log("FAIL og:image missing");
+  process.exit(1);
+}
+if (!html.includes('name="twitter:card" content="summary_large_image"')) {
+  console.log("FAIL twitter:card missing");
+  process.exit(1);
+}
+if (!html.includes('property="og:image:width" content="1200"') || !html.includes('property="og:image:height" content="630"')) {
+  console.log("FAIL og:image dimensions missing");
+  process.exit(1);
+}
+if (!html.includes('name="theme-color"')) {
+  console.log("FAIL theme-color missing");
+  process.exit(1);
+}
+if (!html.includes("application/ld+json") || !html.includes('"@type": "FAQPage"') || !html.includes('"@type": "WebSite"') || !html.includes("SpeakableSpecification")) {
+  console.log("FAIL JSON-LD (FAQPage/WebSite/speakable) missing");
+  process.exit(1);
+}
+if (!html.includes("<noscript>")) {
+  console.log("FAIL noscript missing");
+  process.exit(1);
+}
+if (html.includes("__SITE_URL__") || html.includes("__OG_IMAGE_URL__")) {
+  console.log("FAIL leftover build token in html");
+  process.exit(1);
+}
+console.log("SEO/GEO head: canonical/OG/Twitter/theme-color/JSON-LD/noscript present, tokens replaced ✓");
