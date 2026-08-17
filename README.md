@@ -1,3 +1,7 @@
+<h1 align="center">
+<img width="600" alt="sp_logo" src="https://github.com/user-attachments/assets/bf4b457f-bb4c-424f-9dd7-0424409727ce" />
+</h1>
+
 # Seek Peak
 
 A zero-dependency static page that tells you whether the DeepSeek API is
