@@ -37,7 +37,7 @@ const context = {
 };
 vm.createContext(context);
 
-const withExport = app.replace(/\}\)\(\);\s*$/, "window.__t = { pad, toMin, utcDaySec, isPeak, nextTransition, minuteMask, hourFraction, peakRuns, fmtBoundary, localMidnight, countdownText, priceModeText, timelineHourLabel, isNowHour, taglineText }; })();");
+const withExport = app.replace(/\}\)\(\);\s*$/, ";window.__t = { pad, toMin, utcDaySec, isPeak, nextTransition, minuteMask, hourFraction, peakRuns, fmtBoundary, localMidnight, countdownText, priceModeText, timelineHourLabel, isNowHour, taglineText }; })();");
 vm.runInContext(withExport, context);
 
 const isPeak = context.window.__t.isPeak;
@@ -307,3 +307,10 @@ if (fs.existsSync("dist/sitemap.xml")) {
   process.exit(1);
 }
 console.log("robots.txt present, no sitemap.xml ✓");
+
+const appSrc = fs.readFileSync("src/app.js", "utf8");
+if (app.length >= appSrc.length) {
+  console.log("FAIL inlined app.js not minified (", app.length, ">= src", appSrc.length, ")");
+  process.exit(1);
+}
+console.log("inlined app.js minified:", appSrc.length, "->", app.length, "bytes ✓");

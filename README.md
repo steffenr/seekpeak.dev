@@ -40,14 +40,14 @@ See `docs/ADR-*.md` and `docs/GLOSSARY.md` for the full domain model.
 ## Build
 
 ```bash
-npm run build                 # compile + inline Tailwind CSS, config, app.js
+npm run build                 # compile + minify + inline Tailwind CSS, config, app.js
 npm run build && node scripts/verify.cjs   # build + run the test suite
 npm run watch                 # rebuild on change
 ```
 
 Output: `dist/index.html`, plus `dist/og-image.png` (copied verbatim from
 `assets/og-image.png` — author it yourself, 1200×630 recommended) and
-`dist/robots.txt`. The test harness
+`dist/robots.txt`. The inlined JS is minified with terser. The test harness
 (`scripts/verify.cjs`) parses the built artifact and covers verdict logic (all
 86400 seconds), half-open boundaries, countdown text, DST-transition midnights,
 cross-midnight timelines, and static template / SEO / dist-file expectations.
