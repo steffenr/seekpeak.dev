@@ -1,13 +1,15 @@
 import { execSync } from "node:child_process";
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, rmSync, copyFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const tmpCss = join(root, "dist", ".tmp.css");
 const dist = join(root, "dist");
+const ogSource = join(root, "assets", "og-image.png");
 
 function build() {
+  rmSync(dist, { recursive: true, force: true });
   mkdirSync(dist, { recursive: true });
 
   execSync(`node_modules/.bin/tailwindcss -i src/style.css -o dist/.tmp.css --minify`, { cwd: root, stdio: "pipe" });
@@ -33,6 +35,18 @@ function build() {
   }
 
   writeFileSync(join(dist, "index.html"), html);
+
+  copyFileSync(ogSource, join(dist, "og-image.png"));
+
+  writeFileSync(
+    join(dist, "robots.txt"),
+    [
+      "User-agent: *",
+      "Allow: /",
+      "",
+    ].join("\n")
+  );
+
   rmSync(tmpCss, { force: true });
   console.log("dist/index.html written", Buffer.byteLength(html), "bytes");
 }

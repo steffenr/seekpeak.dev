@@ -22,8 +22,9 @@ no build at runtime, no JavaScript frameworks.
   without flash.
 - **Info dialog** ("?") — a short explanation of how the page works and why
   it exists.
-- **SEO / metadata** — canonical URL, Open Graph + Twitter cards, JSON-LD
-  (`WebSite` / `FAQPage` / `speakable`), and a `robots.txt`.
+- **SEO / metadata** — canonical URL, Open Graph + Twitter cards with a
+  generated OG image, JSON-LD (`WebSite` / `FAQPage` / `speakable`), and a
+  minimal `robots.txt`.
 
 ## How it works
 
@@ -44,10 +45,12 @@ npm run build && node scripts/verify.cjs   # build + run the test suite
 npm run watch                 # rebuild on change
 ```
 
-Output: `dist/index.html`. The test harness (`scripts/verify.cjs`) parses the
-built artifact and covers verdict logic (all 86400 seconds), half-open
-boundaries, countdown text, DST-transition midnights, cross-midnight
-timelines, and static template expectations.
+Output: `dist/index.html`, plus `dist/og-image.png` (copied verbatim from
+`assets/og-image.png` — author it yourself, 1200×630 recommended) and
+`dist/robots.txt`. The test harness
+(`scripts/verify.cjs`) parses the built artifact and covers verdict logic (all
+86400 seconds), half-open boundaries, countdown text, DST-transition midnights,
+cross-midnight timelines, and static template / SEO / dist-file expectations.
 
 The site URL lives in the `site` block of `config.json` and flows through the
 build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
@@ -78,7 +81,8 @@ build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
 | `src/app.js` | All logic (pure, testable helpers + thin DOM renderers) |
 | `src/style.css` | Tailwind v4 source: theme tokens + `[data-theme=…]` blocks |
 | `config.json` | Peak windows, model prices, + `site` block |
-| `scripts/build.mjs` | Build pipeline (Tailwind v4 → minified CSS, then inline) |
+| `scripts/build.mjs` | Build pipeline (Tailwind v4 → minified CSS, then inline + dist assets) |
+| `assets/og-image.png` | Your Open Graph image (1200×630 recommended), copied to `dist/og-image.png` |
 | `scripts/verify.cjs` | Test suite against the built `dist/index.html` |
 | `docs/` | ADRs, glossary, and design/implementation notes |
 
