@@ -19,7 +19,7 @@ node scripts/verify.cjs            # the test suite (reads built dist/index.html
 npm run build && node scripts/verify.cjs   # standard check — MUST be green before finishing any task
 ```
 
-- Build (`scripts/build.mjs`): runs Tailwind v4 CLI to compile `src/style.css` → minified CSS, then inlines that CSS + `config.json` (as `window.CONFIG`) + `src/app.js` into `index.template.html` → `dist/index.html`. A leftover placeholder (`/*__CSS__*/` etc.) throws.
+- Build (`scripts/build.mjs`): runs Tailwind v4 CLI to compile `src/style.css` → minified CSS, then inlines that CSS + `config.json` (as `window.CONFIG`) + `src/app.js` into `index.template.html` → `dist/index.html`. A leftover placeholder (`/*__CSS__*/`, `__SITE_URL__`, `__OG_IMAGE_URL__`, etc.) throws — site URL flows from `config.json` → `build.mjs` → head tokens; never hardcode the domain in `index.template.html`.
 - There is **no separate lint/typecheck** target — `verify.cjs` + the build are the only gates.
 
 ## Architecture & key files
@@ -29,7 +29,7 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 | `index.template.html` | Source of the single-page layout: hero badge card (`#badgeCard`, `#badgeText`, `#badgeMsg`, `#countdown`), pricing table, timeline (`#timeline`), timezone picker, footer. Contains the FOUC theme script in `<head>` and the `/*__CSS__|__CONFIG__|__APP__*/` placeholders. |
 | `src/app.js` | Single IIFE. All logic: verdict (`isPeak`, `nextTransition`), timezone math (`localMidnight`, `localHour`, `tzOffsetMin`, `offsetLabel`), minute-precision engine (`minuteMask`, `hourFraction`, `peakRuns`, `fmtBoundary`), pure UI helpers (`countdownText`, `priceModeText`, `taglineText`, `timelineHourLabel`, `isNowHour`), and thin DOM renderers (`renderBadge`, `renderTagline`, `renderCountdown`, `renderPriceMode`, `renderTimeline`, `renderPriceTable`, `renderTzLabel`, `renderTzList`, theme renderers). |
 | `src/style.css` | Tailwind v4 source: `@theme` tokens (`mk-bg`, `mk-fg`, `mk-card`, `mk-input`, `mk-ink`, `mk-cyan`, `mk-pink`, `mk-yellow`, `mk-green`, `mk-purple`, `mk-orange`, `mk-muted`, `mk-badge-peak`, `mk-badge-off`) + 8 `[data-theme=…]` override blocks. |
-| `config.json` | Single source of truth: `peakWindows` + `models` (deepseek-v4-flash, deepseek-v4-pro) with `cacheHit`/`cacheMiss`/`output` offPeak/peak prices. |
+| `config.json` | Single source of truth: `peakWindows` + `models` (deepseek-v4-flash, deepseek-v4-pro) with `cacheHit`/`cacheMiss`/`output` offPeak/peak prices, + `site` block (`url`, `name`) for the SEO/OG head. |
 | `scripts/verify.cjs` | Test harness (node `vm`). Reads the BUILT `dist/index.html`, parses config + inlined app, mocks DOM/localStorage/setInterval, re-injects `window.__t = { …exports… }`, then runs assertions. |
 | `scripts/build.mjs` | Build pipeline described above. |
 | `docs/` | `ADR-001/002/003`, `GLOSSARY.md`, and `superpowers/specs|plans/` (feature design docs + implementation plans). |
@@ -40,6 +40,7 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 - Pure logic functions are exported from `src/app.js` by injecting `window.__t = { name, … };` — to test a new pure helper, add its name to that injected object AND write assertions in the corresponding block.
 - DOM-bound renderers are NOT unit-tested (the `elem()` mock is a no-op); test their pure logic instead (e.g. `taglineText`, `priceModeText`, `timelineHourLabel`).
 - Static template expectations are asserted via string/regex checks on `html` (e.g. `data-col="model"`, `<details`, absence of `clockLocal`). Remember `dist` inlines `src/app.js`, so identifier-presence checks scan the JS too.
+- SEO/GEO static checks cover the head (canonical, og:url/og:image, twitter:card, JSON-LD `WebSite`/`FAQPage`/`speakable`, `<noscript>`, `theme-color`).
 - Existing assertion style: `if (!cond) { console.log("FAIL …"); process.exit(1); }` + `console.log("… ✓")`.
 - Reference-based cross-checks exist for `isPeak` (all 86400 seconds) and a Colombo (UTC+5:30) minute-mask case.
 
@@ -51,6 +52,7 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 - Renderers read fresh `isPeak(now)` locally (not `state.peak`) to avoid ordering coupling (`renderCountdown`, `renderTagline`, `renderPriceMode`).
 - `setInterval` (1s) drives `renderCountdown` every tick; on a verdict flip it re-renders badge, tagline, priceMode, priceTable, timeline.
 - Tailwind JIT: any class used in JS must appear as a **complete literal string** in `src/app.js`/`index.template.html` (no dynamic class-name interpolation) or it will be purged.
+- Site URL/brand: `config.json` `site` block → `build.mjs` → head tokens (`__SITE_URL__`, `__OG_IMAGE_URL__`). Never hardcode the domain in `index.template.html`.
 - No comments unless they explain a non-obvious invariant (e.g. the ICU padding note).
 - Don't touch `src/app.js`'s IIFE structure or the export-injection line in verify.cjs carelessly — they must stay in sync.
 

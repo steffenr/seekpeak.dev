@@ -21,9 +21,15 @@ function build() {
   html = html.replace("/*__CONFIG__*/", () => config);
   html = html.replace("/*__APP__*/", () => app);
 
-  const leftover = html.match(/\/\*__(CSS|CONFIG|APP)__\*\//);
+  const cfg = JSON.parse(readFileSync(join(root, "config.json"), "utf8"));
+  const siteUrl = (cfg.site?.url || "").replace(/\/+$/, "");
+  if (!siteUrl) throw new Error("config.json missing site.url");
+  html = html.split("__SITE_URL__").join(siteUrl);
+  html = html.split("__OG_IMAGE_URL__").join(siteUrl + "/og-image.png");
+
+  const leftover = html.match(/\/\*__(CSS|CONFIG|APP)__\*\//) || (html.includes("__SITE_URL__") || html.includes("__OG_IMAGE_URL__") ? html : null);
   if (leftover) {
-    throw new Error(`placeholder not replaced: ${leftover[0]}`);
+    throw new Error(`placeholder not replaced: ${leftover}`);
   }
 
   writeFileSync(join(dist, "index.html"), html);
