@@ -1,0 +1,86 @@
+name: Deploy to Netcup
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Enable Corepack (Yarn Berry)
+        run: |
+          corepack enable
+          corepack prepare yarn@4.14.1 --activate
+
+      - name: Cache Yarn
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/node/corepack
+            ~/.yarn/berry/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Validate
+        run: yarn validate
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    env:
+      WEB_ROOT: /httpdocs/seekpeak-dev
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Enable Corepack (Yarn Berry)
+        run: |
+          corepack enable
+          corepack prepare yarn@4.14.1 --activate
+
+      - name: Cache Yarn
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/node/corepack
+            ~/.yarn/berry/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build
+        run: yarn build
+
+      - name: Write SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.NETCUP_SSH_KEY }}" > ~/.ssh/netcup_gh_sp_deploy
+          chmod 600 ~/.ssh/netcup_gh_sp_deploy
+          echo "${{ secrets.NETCUP_HOST }} ${{ secrets.NETCUP_KNOWN_HOSTS }}" > ~/.ssh/known_hosts || true
+
+      - name: Deploy (tar over ssh)
+        run: |
+          tar -C dist -czf - . | ssh -i ~/.ssh/netcup_gh_sp_deploy \
+            -o StrictHostKeyChecking=accept-new \
+            "${{ secrets.NETCUP_USER }}@${{ secrets.NETCUP_HOST }}" \
+            "rm -rf ${WEB_ROOT%/}/ && mkdir -p ${WEB_ROOT%/} && tar -xzf - -C ${WEB_ROOT%/}"
