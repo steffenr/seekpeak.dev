@@ -282,3 +282,28 @@ if (html.includes("__SITE_URL__") || html.includes("__OG_IMAGE_URL__")) {
   process.exit(1);
 }
 console.log("SEO/GEO head: canonical/OG/Twitter/theme-color/JSON-LD/noscript present, tokens replaced ✓");
+
+const png = fs.readFileSync("dist/og-image.png");
+const sig = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+for (let i = 0; i < sig.length; i++) {
+  if (png[i] !== sig[i]) {
+    console.log("FAIL og-image.png bad PNG signature at byte", i);
+    process.exit(1);
+  }
+}
+console.log("og-image.png valid PNG ✓");
+
+const robots = fs.readFileSync("dist/robots.txt", "utf8");
+if (!robots.includes("Allow: /")) {
+  console.log("FAIL robots.txt content");
+  process.exit(1);
+}
+if (robots.includes("Sitemap:")) {
+  console.log("FAIL robots.txt should not reference a sitemap (single-page site)");
+  process.exit(1);
+}
+if (fs.existsSync("dist/sitemap.xml")) {
+  console.log("FAIL dist/sitemap.xml should not exist (single-page site, no sitemap)");
+  process.exit(1);
+}
+console.log("robots.txt present, no sitemap.xml ✓");

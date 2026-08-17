@@ -19,7 +19,7 @@ node scripts/verify.cjs            # the test suite (reads built dist/index.html
 npm run build && node scripts/verify.cjs   # standard check — MUST be green before finishing any task
 ```
 
-- Build (`scripts/build.mjs`): runs Tailwind v4 CLI to compile `src/style.css` → minified CSS, then inlines that CSS + `config.json` (as `window.CONFIG`) + `src/app.js` into `index.template.html` → `dist/index.html`. A leftover placeholder (`/*__CSS__*/`, `__SITE_URL__`, `__OG_IMAGE_URL__`, etc.) throws — site URL flows from `config.json` → `build.mjs` → head tokens; never hardcode the domain in `index.template.html`.
+- Build (`scripts/build.mjs`): runs Tailwind v4 CLI to compile `src/style.css` → minified CSS, then inlines that CSS + `config.json` (as `window.CONFIG`) + `src/app.js` into `index.template.html` → `dist/index.html`. The inlined JS is minified with `terser` (`keep_fnames` + `mangle.reserved` preserve the names verify.cjs injects). A leftover placeholder (`/*__CSS__*/`, `__SITE_URL__`, `__OG_IMAGE_URL__`, etc.) throws. Also copies `assets/og-image.png` → `dist/og-image.png` and emits `dist/robots.txt` — site URL flows from `config.json` → `build.mjs` → head tokens; never hardcode the domain in `index.template.html`.
 - There is **no separate lint/typecheck** target — `verify.cjs` + the build are the only gates.
 
 ## Architecture & key files
@@ -32,6 +32,7 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 | `config.json` | Single source of truth: `peakWindows` + `models` (deepseek-v4-flash, deepseek-v4-pro) with `cacheHit`/`cacheMiss`/`output` offPeak/peak prices, + `site` block (`url`, `name`) for the SEO/OG head. |
 | `scripts/verify.cjs` | Test harness (node `vm`). Reads the BUILT `dist/index.html`, parses config + inlined app, mocks DOM/localStorage/setInterval, re-injects `window.__t = { …exports… }`, then runs assertions. |
 | `scripts/build.mjs` | Build pipeline described above. |
+| `assets/og-image.png` | User-authored Open Graph image (1200×630 recommended); copied verbatim to `dist/og-image.png`. |
 | `docs/` | `ADR-001/002/003`, `GLOSSARY.md`, and `superpowers/specs|plans/` (feature design docs + implementation plans). |
 
 ## Verify.cjs conventions (test suite)
@@ -40,7 +41,7 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 - Pure logic functions are exported from `src/app.js` by injecting `window.__t = { name, … };` — to test a new pure helper, add its name to that injected object AND write assertions in the corresponding block.
 - DOM-bound renderers are NOT unit-tested (the `elem()` mock is a no-op); test their pure logic instead (e.g. `taglineText`, `priceModeText`, `timelineHourLabel`).
 - Static template expectations are asserted via string/regex checks on `html` (e.g. `data-col="model"`, `<details`, absence of `clockLocal`). Remember `dist` inlines `src/app.js`, so identifier-presence checks scan the JS too.
-- SEO/GEO static checks cover the head (canonical, og:url/og:image, twitter:card, JSON-LD `WebSite`/`FAQPage`/`speakable`, `<noscript>`, `theme-color`).
+- SEO/GEO static checks cover the head (canonical, og:url/og:image, twitter:card, JSON-LD `WebSite`/`FAQPage`/`speakable`, `<noscript>`, `theme-color`) and the extra dist files (`og-image.png` PNG signature, `robots.txt`; no `sitemap.xml` — single-page site). The minify check asserts the inlined `app.js` is smaller than `src/app.js`.
 - Existing assertion style: `if (!cond) { console.log("FAIL …"); process.exit(1); }` + `console.log("… ✓")`.
 - Reference-based cross-checks exist for `isPeak` (all 86400 seconds) and a Colombo (UTC+5:30) minute-mask case.
 
