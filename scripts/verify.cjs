@@ -293,6 +293,68 @@ for (let i = 0; i < sig.length; i++) {
 }
 console.log("og-image.png valid PNG ✓");
 
+const pngSig = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+const isPng = (p) => {
+  const b = fs.readFileSync("dist/" + p);
+  return b.length > pngSig.length && pngSig.every((v, i) => b[i] === v);
+};
+for (const icon of ["favicon-96x96.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png"]) {
+  if (!isPng(icon)) {
+    console.log("FAIL", icon, "missing or bad PNG signature");
+    process.exit(1);
+  }
+}
+const ico = fs.readFileSync("dist/favicon.ico");
+if (!(ico[0] === 0 && ico[1] === 0 && ico[2] === 1 && ico[3] === 0)) {
+  console.log("FAIL favicon.ico missing or bad ICO header");
+  process.exit(1);
+}
+console.log("favicon + PWA icons present with valid signatures ✓");
+
+for (const link of [
+  'rel="icon" href="/favicon.ico"',
+  'rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png"',
+  'rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"',
+  'rel="manifest" href="/site.webmanifest"',
+]) {
+  if (!html.includes(link)) {
+    console.log("FAIL missing head link:", link);
+    process.exit(1);
+  }
+}
+if (html.includes("data:image/svg+xml") || html.includes('rel="icon" href=\'data:')) {
+  console.log("FAIL inline SVG favicon still present");
+  process.exit(1);
+}
+console.log("head favicon/apple-touch-icon/manifest links present, SVG data-URI favicon removed ✓");
+
+const manifestRaw = fs.readFileSync("dist/site.webmanifest", "utf8");
+const manifest = JSON.parse(manifestRaw);
+if (manifest.name !== site.name || manifest.short_name !== site.name) {
+  console.log("FAIL manifest name mismatch:", manifest.name, "/", manifest.short_name, "vs", site.name);
+  process.exit(1);
+}
+if (manifest.start_url !== site.url + "/") {
+  console.log("FAIL manifest start_url:", manifest.start_url, "expected", site.url + "/");
+  process.exit(1);
+}
+if (manifest.theme_color !== "#2d2a2e" || manifest.background_color !== "#2d2a2e") {
+  console.log("FAIL manifest theme/background colors:", manifest.theme_color, manifest.background_color);
+  process.exit(1);
+}
+for (const icon of manifest.icons) {
+  const rel = icon.src.replace(/^\//, "");
+  if (!fs.existsSync("dist/" + rel)) {
+    console.log("FAIL manifest references missing icon:", icon.src);
+    process.exit(1);
+  }
+}
+if (manifestRaw.includes("__SITE_NAME__") || manifestRaw.includes("__SITE_URL__")) {
+  console.log("FAIL leftover build token in site.webmanifest");
+  process.exit(1);
+}
+console.log("site.webmanifest valid JSON, brand from config, icons exist, no leftover tokens ✓");
+
 const robots = fs.readFileSync("dist/robots.txt", "utf8");
 if (!robots.includes("Allow: /")) {
   console.log("FAIL robots.txt content");
