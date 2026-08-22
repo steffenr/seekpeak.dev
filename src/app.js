@@ -229,27 +229,36 @@
   const PEAKCHIP = "border border-black bg-mk-yellow text-mk-ink shadow-[1px_1px_0px_0px_#000000]";
   const DIM = "border border-black bg-mk-input text-mk-muted";
 
+  function badgeMsgText(peak, weekend) {
+    if (weekend) {
+      return "It's the weekend — DeepSeek bills every request at the off-peak rate today, no matter the hour.";
+    }
+    return peak
+      ? "Your next request right now is billed at peak rates."
+      : "Your next request right now is billed at off-peak rates.";
+  }
+
   function renderBadge(now) {
     const peak = isPeak(now);
+    const weekend = isWeekend(now);
     state.peak = peak;
+    const msg = badgeMsgText(peak, weekend);
     const els = peak
       ? {
           card: "bg-mk-yellow",
           text: "PEAK TIME",
-          msg: "Your next request right now is billed at peak rates.",
           dot: "bg-mk-pink",
           fg: "text-mk-badge-peak",
         }
       : {
           card: "bg-mk-green",
           text: "OFF-PEAK TIME",
-          msg: "Your next request right now is billed at off-peak rates.",
           dot: "bg-mk-cyan",
           fg: "text-mk-badge-off",
         };
     badgeDot.className = "h-4 w-4 rounded-sm border-2 border-black shadow-[2px_2px_0px_0px_#000000] " + els.dot;
     badgeText.textContent = els.text;
-    badgeMsg.textContent = els.msg;
+    badgeMsg.textContent = msg;
     badgeText.className = "text-2xl font-black uppercase tracking-tight sm:text-3xl " + els.fg;
     badgeMsg.className = "mt-2 text-sm font-bold " + els.fg;
     badgeCard.className =
