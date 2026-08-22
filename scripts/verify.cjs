@@ -37,7 +37,7 @@ const context = {
 };
 vm.createContext(context);
 
-const withExport = app.replace(/\}\)\(\);\s*$/, ";window.__t = { pad, toMin, utcDaySec, isPeak, nextTransition, minuteMask, hourFraction, peakRuns, fmtBoundary, localMidnight, countdownText, priceModeText, timelineHourLabel, isNowHour, taglineText, isWeekend }; })();");
+const withExport = app.replace(/\}\)\(\);\s*$/, ";window.__t = { pad, toMin, utcDaySec, isPeak, nextTransition, minuteMask, hourFraction, peakRuns, fmtBoundary, localMidnight, countdownText, priceModeText, timelineHourLabel, isNowHour, taglineText, isWeekend, badgeMsgText }; })();");
 vm.runInContext(withExport, context);
 
 const isPeak = context.window.__t.isPeak;
@@ -231,6 +231,12 @@ const { priceModeText } = context.window.__t;
 check("priceMode peak", priceModeText(true), "PEAK");
 check("priceMode off-peak", priceModeText(false), "OFF-PEAK");
 console.log("pricing mode helper ✓");
+
+const { badgeMsgText } = context.window.__t;
+check("badgeMsgText peak", badgeMsgText(true, false), "Your next request right now is billed at peak rates.");
+check("badgeMsgText off-peak", badgeMsgText(false, false), "Your next request right now is billed at off-peak rates.");
+check("badgeMsgText weekend", badgeMsgText(false, true), "It's the weekend — DeepSeek bills every request at the off-peak rate today, no matter the hour.");
+console.log("badge message helper (peak/off-peak/weekend) ✓");
 
 const { timelineHourLabel, isNowHour, taglineText } = context.window.__t;
 check("timeline label h0", timelineHourLabel(0), "00");
