@@ -46,23 +46,34 @@ const next = context.window.__t.nextTransition;
 const windows = config.peakWindows.map(([a, b]) => [a, b].map((t) => t.split(":").map(Number).reduce((h, m) => h * 60 + m)));
 const utcSec = (d) => d.getUTCHours() * 3600 + d.getUTCMinutes() * 60 + d.getUTCSeconds() + d.getUTCMilliseconds() / 1000;
 const ref = (sec) => new Date(Date.UTC(2026, 0, 1) + sec * 1000);
+const weekendCfgForSweep = config.weekendOffPeak;
+const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const isWeekendRef = (d) => {
+  const wd = new Intl.DateTimeFormat("en-US", { timeZone: weekendCfgForSweep.timezone, weekday: "short" }).format(d);
+  return weekendCfgForSweep.days.includes(weekdayNames.indexOf(wd));
+};
 const isPeakRef = (d) => {
+  if (isWeekendRef(d)) return false;
   const s = utcSec(d);
   return windows.some(([a, b]) => s >= a * 60 && s < b * 60);
 };
 
+const sweepStart = Date.UTC(2026, 0, 4); // Sunday, 2026-01-04
 let bad = 0;
-for (let s = 0; s < 86400; s++) {
-  if (isPeakRef(ref(s)) !== isPeak(ref(s))) {
-    bad++;
-    if (bad < 6) console.log("MISMATCH", s);
+for (let day = 0; day < 9; day++) {
+  for (let s = 0; s < 86400; s++) {
+    const d = new Date(sweepStart + day * 86400000 + s * 1000);
+    if (isPeakRef(d) !== isPeak(d)) {
+      bad++;
+      if (bad < 6) console.log("MISMATCH", d.toISOString());
+    }
   }
 }
 if (bad) {
   console.log("FAIL:", bad, "second mismatches");
   process.exit(1);
 }
-console.log("isPeak matches reference across all 86400 seconds ✓");
+console.log("isPeak matches reference across 9 UTC days (two full Beijing weekends, incl. margin) ✓");
 
 const cases = [
   [3600, true],
@@ -82,6 +93,14 @@ for (const [sec, expect] of cases) {
   }
 }
 console.log("half-open boundary semantics [start,end) ✓");
+
+const weekdayPeakCheck = isPeak(new Date("2026-01-01T07:00:00.000Z"));
+const weekendPeakCheck = isPeak(new Date("2026-01-03T07:00:00.000Z"));
+if (weekdayPeakCheck !== true || weekendPeakCheck !== false) {
+  console.log("FAIL weekend override: weekday(Thu 07:00Z)=", weekdayPeakCheck, "weekend(Sat 07:00Z)=", weekendPeakCheck);
+  process.exit(1);
+}
+console.log("weekend off-peak override (same UTC clock time, weekday vs Saturday) ✓");
 
 const t = next(ref(3600 * 5));
 const isPeakAt = isPeak(t);
