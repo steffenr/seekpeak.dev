@@ -12,7 +12,7 @@ const manifestSource = join(root, "assets", "site.webmanifest");
 const iconFiles = ["favicon.ico", "favicon-96x96.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png"];
 // Names must survive minification: verify.cjs injects `window.__t = { … }` by
 // string-replacing the trailing IIFE, so it needs these identifiers intact.
-const EXPORT_NAMES = ["pad", "toMin", "utcDaySec", "isPeak", "nextTransition", "minuteMask", "hourFraction", "peakRuns", "fmtBoundary", "localMidnight", "countdownText", "priceModeText", "timelineHourLabel", "isNowHour", "taglineText"];
+const EXPORT_NAMES = ["pad", "toMin", "utcDaySec", "isPeak", "nextTransition", "minuteMask", "hourFraction", "peakRuns", "fmtBoundary", "localMidnight", "countdownText", "priceModeText", "timelineHourLabel", "isNowHour", "taglineText", "isWeekend"];
 
 async function build() {
   rmSync(dist, { recursive: true, force: true });
@@ -26,7 +26,7 @@ async function build() {
     await minify(readFileSync(join(root, "src", "app.js"), "utf8"), {
       keep_fnames: true,
       mangle: { reserved: EXPORT_NAMES, keep_fnames: true },
-      compress: { keep_fnames: true, inline: false, reduce_vars: false },
+      compress: { keep_fnames: true, inline: false, reduce_vars: false, unused: false },
     })
   ).code;
 
