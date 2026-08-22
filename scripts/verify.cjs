@@ -37,7 +37,7 @@ const context = {
 };
 vm.createContext(context);
 
-const withExport = app.replace(/\}\)\(\);\s*$/, ";window.__t = { pad, toMin, utcDaySec, isPeak, nextTransition, minuteMask, hourFraction, peakRuns, fmtBoundary, localMidnight, countdownText, priceModeText, timelineHourLabel, isNowHour, taglineText }; })();");
+const withExport = app.replace(/\}\)\(\);\s*$/, ";window.__t = { pad, toMin, utcDaySec, isPeak, nextTransition, minuteMask, hourFraction, peakRuns, fmtBoundary, localMidnight, countdownText, priceModeText, timelineHourLabel, isNowHour, taglineText, isWeekend }; })();");
 vm.runInContext(withExport, context);
 
 const isPeak = context.window.__t.isPeak;
@@ -102,6 +102,30 @@ if (!/^https:\/\//.test(site.url)) {
   process.exit(1);
 }
 console.log("config.site:", site.name, "->", site.url);
+
+const weekendCfg = config.weekendOffPeak || {};
+if (!weekendCfg.timezone || !Array.isArray(weekendCfg.days) || weekendCfg.days.length === 0) {
+  console.log("FAIL config.weekendOffPeak missing timezone/days:", JSON.stringify(weekendCfg));
+  process.exit(1);
+}
+console.log("config.weekendOffPeak:", weekendCfg.timezone, weekendCfg.days);
+
+const { isWeekend } = context.window.__t;
+const weekendCases = [
+  ["2026-01-02T15:59:59.999Z", false, "Fri 23:59:59.999 Beijing"],
+  ["2026-01-02T16:00:00.000Z", true, "Sat 00:00:00.000 Beijing"],
+  ["2026-01-04T15:59:59.999Z", true, "Sun 23:59:59.999 Beijing"],
+  ["2026-01-04T16:00:00.000Z", false, "Mon 00:00:00.000 Beijing"],
+];
+for (const [iso, expect, label] of weekendCases) {
+  const got = isWeekend(new Date(iso));
+  if (got !== expect) {
+    console.log(`FAIL isWeekend ${label}: expected ${expect} got ${got}`);
+    process.exit(1);
+  }
+}
+console.log("isWeekend Beijing-anchored boundaries ✓");
+
 const { minuteMask, hourFraction, peakRuns, fmtBoundary, localMidnight } = context.window.__t;
 const colomboTz = "Asia/Colombo";
 const colomboMid = localMidnight(ref(0), colomboTz);

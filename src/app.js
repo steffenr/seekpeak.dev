@@ -3,6 +3,7 @@
 
   const CONFIG = window.CONFIG;
   const WINDOWS = CONFIG.peakWindows;
+  const WEEKEND = CONFIG.weekendOffPeak;
 
   const $ = (sel) => document.querySelector(sel);
   const pad = (n) => String(n).padStart(2, "0");
@@ -103,6 +104,12 @@
       mo: parseInt(part(d, tz, "month", opts), 10) - 1,
       d: parseInt(part(d, tz, "day", opts), 10),
     };
+  }
+
+  function isWeekend(d) {
+    const { y, mo, d: dd } = tzDateParts(d, WEEKEND.timezone);
+    const day = new Date(Date.UTC(y, mo, dd)).getUTCDay();
+    return WEEKEND.days.includes(day);
   }
 
   function localMidnight(d, tz) {
