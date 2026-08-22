@@ -285,6 +285,8 @@ const staticChecks = [
   'paypalme/SeekPeak',
   "Support me",
   "text-mk-ink",
+  "Are weekends billed differently?",
+  "Since August 23, 2026, DeepSeek bills weekends",
 ];
 for (const needle of staticChecks) {
   if (!html.includes(needle)) {
