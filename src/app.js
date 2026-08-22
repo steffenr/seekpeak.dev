@@ -57,17 +57,19 @@
   }
 
   function nextTransition(now) {
+    const v0 = isPeak(now);
     const day0 = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-    let best = null;
-    for (const [a, b] of WINDOWS) {
-      for (const m of [toMin(a), toMin(b)]) {
-        for (let k = 0; k < 2; k++) {
-          const t = day0 + (m * 60 + k * 86400) * 1000;
-          if (t > now.getTime() && (best === null || t < best)) best = t;
-        }
-      }
+    const boundaryMin = [];
+    for (const [a, b] of WINDOWS) boundaryMin.push(toMin(a), toMin(b));
+    const candidates = [];
+    for (let day = 0; day <= 9; day++) {
+      for (const m of boundaryMin) candidates.push(day0 + day * 86400000 + m * 60000);
     }
-    return new Date(best);
+    candidates.sort((a, b) => a - b);
+    for (const t of candidates) {
+      if (t > now.getTime() && isPeak(new Date(t)) !== v0) return new Date(t);
+    }
+    return null;
   }
 
   function partsInTz(d, tz, opts) {
