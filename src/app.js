@@ -47,6 +47,7 @@
   }
 
   function isPeak(d) {
+    if (isWeekend(d)) return false;
     const s = utcDaySec(d);
     return WINDOWS.some(([a, b]) => {
       const sa = toMin(a) * 60;
