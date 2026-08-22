@@ -24,11 +24,17 @@ backend, no runtime build, no JavaScript frameworks (see `docs/ADR-003`).
 - Peak windows are half-open `[start, end)` UTC intervals: `01:00–04:00` and
   `06:00–10:00`. `06:00:00.000` is peak; `10:00:00.000` is off-peak. No races
   at boundaries.
+- **Weekends are always off-peak.** Saturday and Sunday in Beijing time
+  (`Asia/Shanghai`, fixed UTC+8) override the UTC windows above — this is a
+  second, fixed anchor for *which calendar day it is*, never the visitor's
+  clock, so the "identical for every visitor" property still holds (see
+  `docs/ADR-004`).
 - The visitor timezone is **display-only**: it changes which clock you read,
   never the price. Per-timezone blocks are derived at runtime via `Intl`
   (DST-correct) — never hardcoded.
-- `config.json` is the single source of truth for `peakWindows`, model prices,
-  and the `site` block (see `docs/ADR-002`).
+- `config.json` is the single source of truth for `peakWindows`,
+  `weekendOffPeak`, model prices, and the `site` block (see `docs/ADR-002`,
+  `docs/ADR-004`).
 
 ## Architecture
 
@@ -63,17 +69,25 @@ parts:
   which clamps minutes ≥ 1440 to `"24:00"`. ICU zero-pads the minute only when
   the hour is requested at the same time (`{hour:"2-digit", minute:"2-digit"}`).
   There is a comment in `countdownText` about this; do not simplify it away.
+- **`nextTransition` scans forward, not just "the next boundary."** Because
+  a Beijing weekend can suppress up to two calendar days of otherwise-peak
+  windows, the next real verdict flip might not be the next chronological
+  window boundary — the function scans a 10-day lookahead and returns the
+  first boundary where `isPeak` actually differs from `isPeak(now)`.
 
 ### Pure-logic inventory
 
-- Verdict: `isPeak(now)` (UTC), `nextTransition(now)` → next flip instant
-  (never null for valid config).
-- Timezone math: `localMidnight`, `localHour`, `tzOffsetMin`, `offsetLabel`.
+- Verdict: `isPeak(now)` (UTC + Beijing-weekend override), `isWeekend(now)`
+  (Beijing-anchored, `docs/ADR-004`), `nextTransition(now)` → next flip
+  instant (never null for valid config; scans a 10-day lookahead so it can
+  skip a Beijing weekend's non-flipping window boundaries).
+- Timezone math: `localMidnight`, `localHour`, `tzOffsetMin`, `offsetLabel`,
+  `tzDateParts`.
 - Minute-precision engine: `minuteMask(now, tz)` → `boolean[1440]`,
   `hourFraction(mask, h)`, `peakRuns(mask)` → half-open `[startMin, endMin]`,
   `fmtBoundary(mid, tz, min)` → `"HH:MM"` (clamps min ≥ 1440 to `"24:00"`).
 - UI text helpers: `countdownText`, `priceModeText`, `taglineText`,
-  `timelineHourLabel`, `isNowHour`.
+  `timelineHourLabel`, `isNowHour`, `badgeMsgText`.
 
 ## Build pipeline
 

@@ -24,7 +24,7 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 - Static template expectations are asserted via string/regex checks on `html` (e.g. `data-col="model"`, `<details`, absence of `clockLocal`). Remember `dist` inlines `src/app.js`, so identifier-presence checks scan the JS too.
 - SEO/GEO static checks cover the head (canonical, og:url/og:image, twitter:card, JSON-LD `WebSite`/`FAQPage`/`speakable`, `<noscript>`, `theme-color`) and the extra dist files (`og-image.png` PNG signature, `robots.txt`; no `sitemap.xml` — single-page site). The minify check asserts the inlined `app.js` is smaller than `src/app.js`.
 - Existing assertion style: `if (!cond) { console.log("FAIL …"); process.exit(1); }` + `console.log("… ✓")`.
-- Reference-based cross-checks exist for `isPeak` (all 86400 seconds) and a Colombo (UTC+5:30) minute-mask case.
+- Reference-based cross-checks exist for `isPeak` (9 UTC days spanning two Beijing weekends, checked against an independent Intl-weekday reference) and a Colombo (UTC+5:30) minute-mask case.
 
 ## Code conventions
 
