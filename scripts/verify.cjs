@@ -110,6 +110,15 @@ if (!(isPeakAt === true && t.getUTCHours() === 6 && t.getUTCMinutes() === 0)) {
   process.exit(1);
 }
 console.log("nextTransition ✓");
+
+const tWeekend = next(new Date("2026-01-03T07:00:00.000Z"));
+const wantWeekend = new Date("2026-01-05T01:00:00.000Z");
+if (tWeekend.getTime() !== wantWeekend.getTime() || isPeak(tWeekend) !== true) {
+  console.log("FAIL nextTransition weekend span: got", tWeekend.toISOString(), "want", wantWeekend.toISOString());
+  process.exit(1);
+}
+console.log("nextTransition spans a full Beijing weekend (Sat mid-window → Mon window start) ✓");
+
 console.log("config:", config.models.length, "models,", config.peakWindows.length, "windows");
 const site = config.site || {};
 if (!site.url || !site.name) {
@@ -203,6 +212,9 @@ dstMid("2026-04-24T12:00:00Z", "Africa/Cairo", [2026, 3, 23, 22], "midnight-tran
 // 00:00-03:00 today + 23:00-24:00 today, and the 01:00-04:00Z window of the
 // next UTC day lands fully on today evening (18:00-21:00) — never on the
 // wrong local date.
+// 2026-03-29 is also a Sunday, so this Berlin calendar day now falls under
+// the Beijing-weekend override and is correctly all-off-peak — the CET→CEST
+// jump math it used to exercise isn't visible on this fixture anymore.
 const runsText = (iso, tz) => {
   const now = new Date(iso);
   const mid = localMidnight(now, tz);
@@ -210,9 +222,9 @@ const runsText = (iso, tz) => {
     .map(([s, e]) => `${fmtBoundary(mid, tz, s)}–${fmtBoundary(mid, tz, e)}`)
     .join(" & ");
 };
-check("Berlin DST day runs", runsText("2026-03-29T12:00:00Z", "Europe/Berlin"), "03:00–06:00 & 08:00–12:00");
+check("Berlin DST day runs", runsText("2026-03-29T12:00:00Z", "Europe/Berlin"), "");
 check("Berlin winter runs", runsText("2026-01-15T12:00:00Z", "Europe/Berlin"), "02:00–05:00 & 07:00–11:00");
-check("PDT cross-midnight runs", runsText("2026-08-15T12:00:00Z", "America/Los_Angeles"), "00:00–03:00 & 18:00–21:00 & 23:00–24:00");
+check("PDT cross-midnight runs", runsText("2026-08-13T12:00:00Z", "America/Los_Angeles"), "00:00–03:00 & 18:00–21:00 & 23:00–24:00");
 console.log("DST-transition midnights + cross-midnight windows ✓");
 
 const { priceModeText } = context.window.__t;
