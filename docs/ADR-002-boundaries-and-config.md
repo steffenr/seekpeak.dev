@@ -15,6 +15,8 @@ Half-open intervals `[start, end)` computed on UTC:
 off-peak. No races at boundaries.
 
 ### Config schema (as built)
+(extended by `docs/ADR-004-weekend-off-peak.md`, which adds a
+`weekendOffPeak` field)
 ```json
 {
   "peakWindows": [["01:00", "04:00"], ["06:00", "10:00"]],

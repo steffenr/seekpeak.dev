@@ -124,8 +124,9 @@ re-injects `window.__t = { … }` to reach the inlined pure helpers by name.
 DOM-bound renderers are intentionally not unit-tested (the `elem()` mock is a
 no-op) — their pure inputs are asserted instead.
 
-Reference-based cross-checks cover `isPeak` for all 86400 seconds of a day and
-a Colombo (UTC+5:30) minute-mask case, so boundary/rounding bugs in the
+Reference-based cross-checks cover `isPeak` across a 9-UTC-day sweep spanning
+Beijing weekends, checked against an independent Intl-weekday reference, and a
+Colombo (UTC+5:30) minute-mask case, so boundary/rounding bugs in the
 hand-written assertions cannot silently pass.
 
 ## Theme system

@@ -72,12 +72,20 @@
     return null;
   }
 
+  const dtfCache = new Map();
+
   function partsInTz(d, tz, opts) {
-    try {
-      return new Intl.DateTimeFormat("en-US", { timeZone: tz, hourCycle: "h23", ...opts }).formatToParts(d);
-    } catch {
-      return new Intl.DateTimeFormat("en-US", { hourCycle: "h23", ...opts }).formatToParts(d);
+    const key = tz + "|" + opts.year + "|" + opts.month + "|" + opts.day + "|" + opts.hour + "|" + opts.minute + "|" + opts.timeZoneName;
+    let fmt = dtfCache.get(key);
+    if (!fmt) {
+      try {
+        fmt = new Intl.DateTimeFormat("en-US", { timeZone: tz, hourCycle: "h23", ...opts });
+      } catch {
+        fmt = new Intl.DateTimeFormat("en-US", { hourCycle: "h23", ...opts });
+      }
+      dtfCache.set(key, fmt);
     }
+    return fmt.formatToParts(d);
   }
 
   function part(d, tz, type, opts) {
@@ -102,10 +110,15 @@
 
   function tzDateParts(d, tz) {
     const opts = { year: "numeric", month: "2-digit", day: "2-digit" };
+    const parts = partsInTz(d, tz, opts);
+    const get = (type) => {
+      const p = parts.find((x) => x.type === type);
+      return p ? p.value : "";
+    };
     return {
-      y: parseInt(part(d, tz, "year", opts), 10),
-      mo: parseInt(part(d, tz, "month", opts), 10) - 1,
-      d: parseInt(part(d, tz, "day", opts), 10),
+      y: parseInt(get("year"), 10),
+      mo: parseInt(get("month"), 10) - 1,
+      d: parseInt(get("day"), 10),
     };
   }
 
@@ -231,7 +244,7 @@
 
   function badgeMsgText(peak, weekend) {
     if (weekend) {
-      return "It's the weekend — DeepSeek bills every request at the off-peak rate today, no matter the hour.";
+      return "It's the weekend in Beijing — DeepSeek bills every request at the off-peak rate right now, no matter the hour.";
     }
     return peak
       ? "Your next request right now is billed at peak rates."

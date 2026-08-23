@@ -35,9 +35,12 @@ no build at runtime, no JavaScript frameworks.
 The verdict is computed on **UTC now**, so it is identical for every visitor
 at any instant. Peak windows are half-open UTC intervals
 (`01:00–04:00` and `06:00–10:00`): `06:00:00.000` is peak, `10:00:00.000`
-is off-peak. Per-timezone blocks are derived at runtime via `Intl`
-(DST-correct) — never hardcoded. Configuration (windows + prices) lives in
-`config.json`, the single source of truth.
+is off-peak — on weekdays. **Weekends are always off-peak:** Saturday and
+Sunday in Beijing time (`Asia/Shanghai`, fixed UTC+8) override the UTC
+windows above, all day, regardless of the visitor's own timezone (see
+`docs/ADR-004`). Per-timezone blocks are derived at runtime via `Intl`
+(DST-correct) — never hardcoded. Configuration (windows + prices +
+weekend rule) lives in `config.json`, the single source of truth.
 
 See `DESIGN.md` for the full design, and `docs/ADR-*.md` + `docs/GLOSSARY.md`
 for the committed domain-model decisions.
@@ -53,9 +56,11 @@ npm run watch                 # rebuild on change
 Output: `dist/index.html`, plus `dist/og-image.png` (copied verbatim from
 `assets/og-image.png` — author it yourself, 1200×630 recommended) and
 `dist/robots.txt`. The inlined JS is minified with terser. The test harness
-(`scripts/verify.cjs`) parses the built artifact and covers verdict logic (all
-86400 seconds), half-open boundaries, countdown text, DST-transition midnights,
-cross-midnight timelines, and static template / SEO / dist-file expectations.
+(`scripts/verify.cjs`) parses the built artifact and covers verdict logic
+(a 9-UTC-day sweep spanning Beijing weekends, checked against an independent
+Intl-weekday reference), half-open boundaries, countdown text, DST-transition
+midnights, cross-midnight timelines, and static template / SEO / dist-file
+expectations.
 
 The site URL lives in the `site` block of `config.json` and flows through the
 build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
@@ -67,7 +72,8 @@ build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
 
 ```jsonc
 {
-  "peakWindows": [["01:00", "04:00"], ["06:00", "10:00"]],  // half-open UTC
+  "peakWindows": [["01:00", "04:00"], ["06:00", "10:00"]],  // half-open UTC, weekdays only
+  "weekendOffPeak": { "timezone": "Asia/Shanghai", "days": [0, 6] },  // Sat+Sun, Beijing-anchored
   "models": [
     { "id": "deepseek-v4-flash", "cacheHit": { "offPeak": 0.007, "peak": 0.014 }, /* … */ }
   ],
@@ -85,7 +91,7 @@ build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
 | `index.template.html` | Single-page layout + placeholders for CSS, config, app |
 | `src/app.js` | All logic (pure, testable helpers + thin DOM renderers) |
 | `src/style.css` | Tailwind v4 source: theme tokens + `[data-theme=…]` blocks |
-| `config.json` | Peak windows, model prices, + `site` block |
+| `config.json` | Peak windows, weekend off-peak rule, model prices, + `site` block |
 | `scripts/build.mjs` | Build pipeline (Tailwind v4 → minified CSS, then inline + dist assets) |
 | `assets/og-image.png` | Your Open Graph image (1200×630 recommended), copied to `dist/og-image.png` |
 | `scripts/verify.cjs` | Test suite against the built `dist/index.html` |

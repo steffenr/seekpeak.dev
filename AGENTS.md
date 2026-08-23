@@ -2,7 +2,7 @@
 
 ## Project
 
-**Seek Peak** — a zero-dependency static page that tells a visitor whether the DeepSeek API is currently in peak (2×) or off-peak time, in their own timezone. The domain model, architecture, build pipeline and theme system are documented in `DESIGN.md`; committed decisions live in `docs/ADR-001`/`ADR-002`/`ADR-003` + `docs/GLOSSARY.md`.
+**Seek Peak** — a zero-dependency static page that tells a visitor whether the DeepSeek API is currently in peak (2×) or off-peak time, in their own timezone. The domain model, architecture, build pipeline and theme system are documented in `DESIGN.md`; committed decisions live in `docs/ADR-001`/`ADR-002`/`ADR-003`/`ADR-004` + `docs/GLOSSARY.md`.
 
 ## Commands
 
@@ -29,7 +29,7 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 ## Code conventions
 
 - **Pure logic separated from DOM:** pure helpers (testable, exported) feed thin renderers. Follow this split for any new logic — never compute inside a renderer without a pure counterpart (see `DESIGN.md` for rationale).
-- Verdict helpers: `isPeak(now)` (UTC), `nextTransition(now)` returns the next flip instant (never null for valid config). `minuteMask(now, tz)` → boolean[1440]; `hourFraction(mask, h)`; `peakRuns(mask)` → half-open `[startMin, endMin]`; `fmtBoundary(mid, tz, min)` → `"HH:MM"` (clamps min ≥ 1440 to `"24:00"`).
+- Verdict helpers: `isPeak(now)` (UTC + Beijing-weekend override via `isWeekend(now)`, `docs/ADR-004`), `nextTransition(now)` returns the next flip instant (never null for valid config; scans a 10-day lookahead since a Beijing weekend can suppress up to two calendar days of window boundaries). `minuteMask(now, tz)` → boolean[1440]; `hourFraction(mask, h)`; `peakRuns(mask)` → half-open `[startMin, endMin]`; `fmtBoundary(mid, tz, min)` → `"HH:MM"` (clamps min ≥ 1440 to `"24:00"`); `badgeMsgText(peak, weekend)` → badge copy for the peak/off-peak/weekend states.
 - **Countdown gotcha:** format the transition `Date` directly via `part(d, tz, "hour"/"minute")` — do NOT reuse `fmtBoundary` (it clamps to `24:00`). ICU zero-pads minute only when `hour` is also requested (`{hour:"2-digit", minute:"2-digit"}`) — there is a comment in `countdownText` about this; do not "simplify" it.
 - Renderers read fresh `isPeak(now)` locally (not `state.peak`) to avoid ordering coupling (`renderCountdown`, `renderTagline`, `renderPriceMode`).
 - `setInterval` (1s) drives `renderCountdown` every tick; on a verdict flip it re-renders badge, tagline, priceMode, priceTable, timeline.
