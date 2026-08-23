@@ -73,7 +73,7 @@ if (bad) {
   console.log("FAIL:", bad, "second mismatches");
   process.exit(1);
 }
-console.log("isPeak matches reference across 9 UTC days (two full Beijing weekends, incl. margin) ✓");
+console.log("isPeak matches reference across 9 UTC days (a full Beijing weekend, incl. margin) ✓");
 
 const cases = [
   [3600, true],
@@ -205,16 +205,18 @@ dstMid("2026-03-08T12:00:00Z", "America/New_York", [2026, 2, 8, 5], "US spring m
 dstMid("2026-11-01T12:00:00Z", "America/New_York", [2026, 10, 1, 4], "US fall midnight (25h day)");
 dstMid("2026-04-24T12:00:00Z", "Africa/Cairo", [2026, 3, 23, 22], "midnight-transition zone");
 
-// Timeline masks on DST days must reflect the real local clock. Berlin is
-// CEST after 2026-03-29 02:00 (03:00-06:00 & 08:00-12:00) and CET in winter
-// (02:00-05:00 & 07:00-11:00) — the shift falls out of the instants.
+// Timeline masks on DST days must reflect the real local clock — the shift
+// falls out of the instants, not a hardcoded offset. Berlin is CET in winter
+// (02:00-05:00 & 07:00-11:00, checked below).
 // Cross-midnight windows (gotcha): in PDT the 06:00-10:00Z window splits into
 // 00:00-03:00 today + 23:00-24:00 today, and the 01:00-04:00Z window of the
 // next UTC day lands fully on today evening (18:00-21:00) — never on the
 // wrong local date.
-// 2026-03-29 is also a Sunday, so this Berlin calendar day now falls under
-// the Beijing-weekend override and is correctly all-off-peak — the CET→CEST
-// jump math it used to exercise isn't visible on this fixture anymore.
+// 2026-03-29 (Berlin's spring-forward date) is also a Sunday, so this Berlin
+// calendar day now falls under the Beijing-weekend override and is correctly
+// all-off-peak — hence the expected value below is "", not a CEST peak-run
+// string. The DST offset-jump assertion further below covers the CET→CEST
+// math independently of the weekend override.
 const runsText = (iso, tz) => {
   const now = new Date(iso);
   const mid = localMidnight(now, tz);
@@ -224,6 +226,20 @@ const runsText = (iso, tz) => {
 };
 check("Berlin DST day runs", runsText("2026-03-29T12:00:00Z", "Europe/Berlin"), "");
 check("Berlin winter runs", runsText("2026-01-15T12:00:00Z", "Europe/Berlin"), "02:00–05:00 & 07:00–11:00");
+
+// The weekend override zeroes out the peak-run fixture above, so recover
+// signal on the underlying CET→CEST offset jump directly: Berlin's local
+// day is 23h long on its spring-forward date, independent of which weekday
+// it falls on.
+const berlinDstDayMs =
+  localMidnight(new Date("2026-03-30T12:00:00Z"), "Europe/Berlin") -
+  localMidnight(new Date("2026-03-29T12:00:00Z"), "Europe/Berlin");
+if (berlinDstDayMs !== 23 * 3600 * 1000) {
+  console.log("FAIL Berlin DST day length: got", berlinDstDayMs / 3600000, "hours, want 23");
+  process.exit(1);
+}
+console.log("Berlin spring-forward day is 23h ✓");
+
 check("PDT cross-midnight runs", runsText("2026-08-13T12:00:00Z", "America/Los_Angeles"), "00:00–03:00 & 18:00–21:00 & 23:00–24:00");
 console.log("DST-transition midnights + cross-midnight windows ✓");
 
@@ -235,7 +251,7 @@ console.log("pricing mode helper ✓");
 const { badgeMsgText } = context.window.__t;
 check("badgeMsgText peak", badgeMsgText(true, false), "Your next request right now is billed at peak rates.");
 check("badgeMsgText off-peak", badgeMsgText(false, false), "Your next request right now is billed at off-peak rates.");
-check("badgeMsgText weekend", badgeMsgText(false, true), "It's the weekend — DeepSeek bills every request at the off-peak rate today, no matter the hour.");
+check("badgeMsgText weekend", badgeMsgText(false, true), "It's the weekend in Beijing — DeepSeek bills every request at the off-peak rate right now, no matter the hour.");
 console.log("badge message helper (peak/off-peak/weekend) ✓");
 
 const { timelineHourLabel, isNowHour, taglineText } = context.window.__t;

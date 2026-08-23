@@ -26,7 +26,7 @@ async function build() {
     await minify(readFileSync(join(root, "src", "app.js"), "utf8"), {
       keep_fnames: true,
       mangle: { reserved: EXPORT_NAMES, keep_fnames: true },
-      compress: { keep_fnames: true, inline: false, reduce_vars: false, unused: false },
+      compress: { keep_fnames: true, inline: false, reduce_vars: false },
     })
   ).code;
 

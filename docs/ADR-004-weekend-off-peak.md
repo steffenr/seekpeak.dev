@@ -43,6 +43,12 @@ have been before August 23, 2026.
 - UI copy that stated peak windows as unconditional (meta description,
   noscript, FAQ, "why do prices change?", info dialog) needed a weekday
   qualifier and/or a weekend explanation to stay accurate.
+- `isWeekend` relies on `Intl.DateTimeFormat` support for `Asia/Shanghai`; if
+  a runtime's `Intl` implementation lacks this timezone, the underlying
+  `partsInTz` helper falls back to the visitor's own local clock, which
+  would violate the "verdict identical for every visitor" property this ADR
+  otherwise preserves. Not hardened against, since mainstream browsers and
+  Node's small-icu builds carry full tzdata.
 
 ## Verification (cross-check)
 - `2026-01-02T15:59:59.999Z` (Beijing Fri 23:59:59.999) → weekday, off-peak
