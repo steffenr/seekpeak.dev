@@ -58,6 +58,22 @@
             },
             {
               "@type": "Question",
+              "name": "Which base URL does AgentRouter use?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "AgentRouter exposes two surfaces: the Anthropic Messages endpoint at https://agentrouter.org (without /v1), used by Claude Code, and the OpenAI-compatible endpoint at https://agentrouter.org/v1. Do not mix the two base URLs."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which tools can I use with AgentRouter?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The AgentRouter docs include setup guides for Claude Code (CLI and VS Code), Codex, Cursor, Cline, Roo Code, Kilo Code, GitHub Copilot, opencode, Qwen Code, OpenClaw, Hermes, Pi / oh-my-pi, Trae and the Claude desktop app."
+              }
+            },
+            {
+              "@type": "Question",
               "name": "How do I get the $50 credit?",
               "acceptedAnswer": {
                 "@type": "Answer",
@@ -156,6 +172,11 @@
           <span class="rounded-md border-2 border-black bg-mk-card px-3 py-1.5 text-sm font-black text-mk-fg shadow-[3px_3px_0px_0px_#000000]">glm-5.3</span>
           <span class="rounded-md border-2 border-black bg-mk-card px-3 py-1.5 text-sm font-black text-mk-fg shadow-[3px_3px_0px_0px_#000000]">gpt-5.6-sol</span>
         </div>
+        <p class="mt-2 text-sm font-semibold text-mk-muted">
+          Model ids move as new releases land — each guide in the
+          <a href="https://agentrouter.org/docs/index.html" target="_blank" rel="noopener noreferrer" class="bg-mk-yellow px-1 text-mk-ink">AgentRouter docs</a>
+          names the ids current for that tool.
+        </p>
       </section>
 
       <section class="mt-8">
@@ -166,6 +187,39 @@
           <p class="text-sm font-semibold leading-relaxed text-mk-fg">
               AgentRouter is an AI gateway and routing platform that provides compatible relay services and model routing.
           </p>
+          <p class="mt-3 text-sm font-semibold leading-relaxed text-mk-fg">
+            Its own terms describe it as a <b>sustainable free API service for genuine developers</b> — a
+            community-run project aimed at real programming work rather than a metered commercial gateway.
+            You point the coding tool you already use at one of two endpoints, drop in your key, and keep working.
+          </p>
+        </div>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="inline-block border-2 border-black bg-mk-cyan px-2 text-lg font-black uppercase tracking-tight text-mk-ink shadow-[3px_3px_0px_0px_#000000]">
+          Two endpoints, one key
+        </h2>
+        <p class="mt-2 text-sm font-semibold text-mk-muted">
+          Every integration in the docs is one of these two. Pick the one your tool speaks.
+        </p>
+        <div class="mt-3 grid gap-3 sm:grid-cols-2">
+          <div class="rounded-md border-2 border-black bg-mk-card p-4 shadow-[4px_4px_0px_0px_#000000]">
+            <p class="text-xs font-black uppercase tracking-wider text-mk-cyan">Anthropic Messages</p>
+            <p class="mt-1 break-all text-sm font-black text-mk-fg">https://agentrouter.org</p>
+            <p class="mt-1 text-sm font-semibold leading-relaxed text-mk-fg">
+              For Claude Code and anything speaking <code class="border border-black bg-mk-input px-1 text-mk-fg">anthropic-messages</code>.
+              Note the missing <code class="border border-black bg-mk-input px-1 text-mk-fg">/v1</code> — mixing the two base URLs is the
+              single most common setup mistake.
+            </p>
+          </div>
+          <div class="rounded-md border-2 border-black bg-mk-card p-4 shadow-[4px_4px_0px_0px_#000000]">
+            <p class="text-xs font-black uppercase tracking-wider text-mk-cyan">OpenAI compatible</p>
+            <p class="mt-1 break-all text-sm font-black text-mk-fg">https://agentrouter.org/v1</p>
+            <p class="mt-1 text-sm font-semibold leading-relaxed text-mk-fg">
+              For everything on <code class="border border-black bg-mk-input px-1 text-mk-fg">openai-completions</code> — the surface the
+              oh-my-pi config below uses, and the one most tools already support.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -186,7 +240,47 @@
             <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">Zero-Friction Access</span>
              Designed to allow quick integration with compatible apps without mandatory sign-ups or billing setup for basic use.
           </li>
+          <li class="rounded-md border-2 border-black bg-mk-card p-4 text-sm font-semibold leading-relaxed text-mk-fg shadow-[4px_4px_0px_0px_#000000]">
+            <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">Works with what you already run</span>
+            The docs carry a step-by-step guide per tool: Claude Code (CLI and VS Code), Codex, Cursor, Cline,
+            Roo Code, Kilo Code, GitHub Copilot, opencode, Qwen Code, OpenClaw, Hermes, Pi / oh-my-pi, Trae and
+            the Claude desktop app. No SDK to adopt — it is a base URL and a key.
+          </li>
+          <li class="rounded-md border-2 border-black bg-mk-card p-4 text-sm font-semibold leading-relaxed text-mk-fg shadow-[4px_4px_0px_0px_#000000]">
+            <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">Swap models without swapping tools</span>
+            One key reaches Claude Opus, GPT, GLM and DeepSeek models side by side. Changing model is an
+            edit to one config line, so you can move a project to a cheaper or stronger model without
+            re-authenticating or re-learning a client.
+          </li>
+          <li class="rounded-md border-2 border-black bg-mk-card p-4 text-sm font-semibold leading-relaxed text-mk-fg shadow-[4px_4px_0px_0px_#000000]">
+            <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">Quota that follows real work</span>
+            Quotas, model availability and rate limits are adjusted dynamically toward accounts with genuine,
+            sustained usage — and idle accounts have unused resources reclaimed. If you actually code against
+            it, that allocation works in your favour.
+          </li>
         </ul>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="inline-block border-2 border-black bg-mk-purple px-2 text-lg font-black uppercase tracking-tight text-mk-ink shadow-[3px_3px_0px_0px_#000000]">
+          What it is not for
+        </h2>
+        <p class="mt-2 text-sm font-semibold text-mk-muted">
+          Worth knowing before you sign up — the platform's terms of use are explicit about it.
+        </p>
+        <div class="mt-3 rounded-md border-2 border-black bg-mk-card p-5 shadow-[6px_6px_0px_0px_#000000]">
+          <ul class="space-y-2 text-sm font-semibold leading-relaxed text-mk-fg">
+            <li>· Harvesting outputs to train, fine-tune or distil other models.</li>
+            <li>· Batch sign-ups, farmed referrals or scripted calls made only to collect credit.</li>
+            <li>· Reselling, renting or sharing accounts and their API credit.</li>
+            <li>· Roleplay chat apps, single-turn encyclopedia querying, or bulk SEO / content-farm text.</li>
+            <li>· Polling around rate limits, stress tests, or anything that destabilises the service.</li>
+          </ul>
+          <p class="mt-3 text-sm font-semibold leading-relaxed text-mk-muted">
+            Individual developers doing real work are explicitly unaffected. Appeals go to
+            agent_router_org@163.com.
+          </p>
+        </div>
       </section>
 
       <section class="mt-8">
@@ -196,6 +290,7 @@
         <p class="mt-2 text-sm font-semibold text-mk-muted">
           Add the following entry to your <code class="border border-black bg-mk-input px-1 text-mk-fg">models.yaml</code>
           and replace <code class="border border-black bg-mk-input px-1 text-mk-fg">sk-xxx</code> with your AgentRouter API key.
+          New to it? See <a href="/omp/" class="bg-mk-green px-1 text-mk-ink">why omp</a>.
         </p>
         <div class="mt-3 overflow-x-auto rounded-md border-2 border-black bg-mk-input shadow-[6px_6px_0px_0px_#000000]">
           <pre class="px-4 py-3 text-xs leading-relaxed text-mk-fg sm:text-sm"><code>providers:
@@ -232,6 +327,12 @@
       </section>
 
       <footer class="mt-8 border-t-2 border-black pt-4 text-center text-xs font-black uppercase tracking-wider text-mk-muted">
+        <a href="https://agentrouter.org/docs/index.html" target="_blank" rel="noopener noreferrer">AgentRouter docs</a>
+        &nbsp;·&nbsp;
+        <a href="https://agentrouter.org/docs/terms.html" target="_blank" rel="noopener noreferrer">Terms of use</a>
+        &nbsp;·&nbsp;
+        <a href="/omp/">Why omp</a>
+        &nbsp;·&nbsp;
         <a href="/">Back to Seek Peak</a>
         <br /><i>This page is not related to deepseek.com. Credit offer and terms are set by agentrouter.org.</i>
       </footer>
