@@ -580,6 +580,10 @@ if (omp.includes("WSL")) {
   console.log("FAIL omp page should not sell the WSL angle");
   process.exit(1);
 }
+if (!html.includes('id="creditCta"') || !html.includes("$50 Credit on agentrouter.org")) {
+  console.log("FAIL main page missing the agentrouter credit CTA");
+  process.exit(1);
+}
 if (!html.includes('href="/omp/"')) {
   console.log("FAIL main page does not link to /omp/");
   process.exit(1);
