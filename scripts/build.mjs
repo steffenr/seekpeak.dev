@@ -22,13 +22,18 @@ async function build() {
   const css = readFileSync(tmpCss, "utf8");
 
   const config = JSON.stringify(JSON.parse(readFileSync(join(root, "config.json"), "utf8")), null, 2);
-  const app = (
-    await minify(readFileSync(join(root, "src", "app.js"), "utf8"), {
-      keep_fnames: true,
-      mangle: { reserved: EXPORT_NAMES, keep_fnames: true },
-      compress: { keep_fnames: true, inline: false, reduce_vars: false },
-    })
-  ).code;
+  const themes = readFileSync(join(root, "src", "themes.js"), "utf8");
+  // Themes are prepended to every page bundle so the theme list has one source of truth.
+  const bundle = async (file) =>
+    (
+      await minify(themes + readFileSync(join(root, "src", file), "utf8"), {
+        keep_fnames: true,
+        mangle: { reserved: EXPORT_NAMES, keep_fnames: true },
+        compress: { keep_fnames: true, inline: false, reduce_vars: false },
+      })
+    ).code;
+  const app = await bundle("app.js");
+  const arApp = await bundle("agentrouter.js");
 
   let html = readFileSync(join(root, "index.template.html"), "utf8");
   html = html.replace("/*__CSS__*/", () => css);
@@ -49,6 +54,17 @@ async function build() {
   }
 
   writeFileSync(join(dist, "index.html"), html);
+
+  let ar = readFileSync(join(root, "agentrouter.template.html"), "utf8");
+  ar = ar.replace("/*__CSS__*/", () => css);
+  ar = ar.replace("/*__AR_APP__*/", () => arApp);
+  ar = ar.split("__SITE_URL__").join(siteUrl);
+  ar = ar.split("__OG_IMAGE_URL__").join(siteUrl + "/og-image.png");
+  if (ar.match(/\/\*__(CSS|AR_APP)__\*\//) || ar.includes("__SITE_URL__") || ar.includes("__OG_IMAGE_URL__")) {
+    throw new Error("agentrouter placeholder not replaced");
+  }
+  mkdirSync(join(dist, "agentrouter"), { recursive: true });
+  writeFileSync(join(dist, "agentrouter", "index.html"), ar);
 
   copyFileSync(ogSource, join(dist, "og-image.png"));
 
@@ -83,7 +99,7 @@ await build();
 if (watch) {
   const { watchFile } = await import("node:fs");
   const { debounce } = await import("node:util");
-  const targets = ["src/style.css", "src/app.js", "config.json", "index.template.html", "assets/site.webmanifest"];
+  const targets = ["src/style.css", "src/app.js", "src/themes.js", "src/agentrouter.js", "config.json", "index.template.html", "agentrouter.template.html", "assets/site.webmanifest"];
   for (const t of targets) {
     watchFile(join(root, t), { interval: 150 }, debounce(build, 100));
   }
