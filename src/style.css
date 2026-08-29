@@ -18,7 +18,9 @@
 }
 
 @source "../index.template.html";
+@source "../agentrouter.template.html";
 @source "./app.js";
+@source "./agentrouter.js";
 
 :root {
   color-scheme: dark;

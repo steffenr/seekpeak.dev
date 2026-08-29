@@ -18,7 +18,8 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 
 ## Verify.cjs conventions (test suite)
 
-- It tests the **built artifact** (`dist/index.html`), so always `npm run build` first.
+- It tests the **built artifacts** (`dist/index.html` and `dist/agentrouter/index.html`), so always `npm run build` first.
+- The site has two pages: the verdict page (`index.template.html` + `src/app.js`) and the AgentRouter referral page (`agentrouter.template.html` + `src/agentrouter.js`, built to `dist/agentrouter/index.html`, placeholder `/*__AR_APP__*/`). Both inline the same Tailwind CSS and share the theme picker via `src/themes.js`.
 - Pure logic functions are exported from `src/app.js` by injecting `window.__t = { name, … };` — to test a new pure helper, add its name to that injected object AND write assertions in the corresponding block.
 - DOM-bound renderers are NOT unit-tested (the `elem()` mock is a no-op); test their pure logic instead (e.g. `taglineText`, `priceModeText`, `timelineHourLabel`).
 - Static template expectations are asserted via string/regex checks on `html` (e.g. `data-col="model"`, `<details`, absence of `clockLocal`). Remember `dist` inlines `src/app.js`, so identifier-presence checks scan the JS too.
@@ -40,7 +41,7 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 ## Editing themes
 
 - Theme key `deepseek-peak-theme` (localStorage), default `monokai-pro`, invalid → default, wrapped in try/catch. `[data-theme]` is set on `documentElement` by both the inline `<head>` FOUC script and `src/app.js`.
-- Adding a theme requires: a `[data-theme=…]` block in `src/style.css`, a `THEMES` entry in `src/app.js`, and (optionally) updating the theme list in verify.cjs.
+- Adding a theme requires: a `[data-theme=…]` block in `src/style.css`, an entry in `src/themes.js` (the single source of truth — `build.mjs` prepends it to both page bundles as `window.__THEMES`), and (optionally) updating the theme list in verify.cjs.
 - The palette, invariants and FOUC/persistence design live in `DESIGN.md` (§ Theme system).
 
 ## Git / workflow

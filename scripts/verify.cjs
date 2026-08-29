@@ -455,3 +455,78 @@ if (app.length >= appSrc.length) {
   process.exit(1);
 }
 console.log("inlined app.js minified:", appSrc.length, "->", app.length, "bytes ✓");
+const ar = fs.readFileSync("dist/agentrouter/index.html", "utf8");
+const AFF = "https://agentrouter.org/register?aff=ENwt";
+for (const needle of [
+  'id="creditBadge"',
+  "bg-mk-green",
+  "$50 Free Credit",
+  AFF,
+  'rel="noopener sponsored"',
+  "claude-opus-4-8",
+  "claude-opus-5",
+  "deepseek-v4-flash",
+  "glm-5.3",
+  "gpt-5.6-sol",
+  "AgentRouter is an AI gateway and routing platform that provides compatible relay services and model routing.",
+  "Acts as an Anthropic-compatible proxy that lets coding agents and API clients connect seamlessly.",
+  "Uses Model Context Protocol (MCP) routing to discover and delegate tasks to specialized AI agents.",
+  "Designed to allow quick integration with compatible apps without mandatory sign-ups or billing setup for basic use.",
+  'id="themeButton"',
+  'id="themeList"',
+  "Use it in oh-my-pi",
+  "models.yaml",
+  "baseUrl: https://agentrouter.org/v1",
+  "api: openai-completions",
+  "authHeader: true",
+  "User-Agent: opencode/1.0.0",
+]) {
+  if (!ar.includes(needle)) {
+    console.log("FAIL agentrouter page missing:", needle);
+    process.exit(1);
+  }
+}
+for (const id of ["claude-opus-4-8", "glm-5.3", "deepseek-v4-flash", "claude-opus-5", "gpt-5.6-sol"]) {
+  if (!ar.includes("- id: " + id) || !ar.includes("  name: " + id)) {
+    console.log("FAIL oh-my-pi models.yaml block missing model:", id);
+    process.exit(1);
+  }
+}
+if (!ar.includes('rel="canonical" href="' + site.url + '/agentrouter/"')) {
+  console.log("FAIL agentrouter canonical missing");
+  process.exit(1);
+}
+if (!ar.includes('property="og:url" content="' + site.url + '/agentrouter/"') || !ar.includes('property="og:image" content="' + site.url + '/og-image.png"')) {
+  console.log("FAIL agentrouter OG url/image missing");
+  process.exit(1);
+}
+if (ar.includes("__SITE_URL__") || ar.includes("__OG_IMAGE_URL__") || /\/\*__(CSS|AR_APP)__\*\//.test(ar)) {
+  console.log("FAIL leftover build token in agentrouter page");
+  process.exit(1);
+}
+if (!html.includes('href="/agentrouter/"')) {
+  console.log("FAIL main page does not link to /agentrouter/");
+  process.exit(1);
+}
+console.log("agentrouter page: badge/CTA/models/benefits/theme picker + SEO head present, linked from main page ✓");
+
+// The two bundles must ship the same theme list (src/themes.js is prepended to both).
+const arApp = [...ar.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
+for (const [name, src] of [["index", app], ["agentrouter", arApp]]) {
+  for (const id of themes) {
+    if (!src.includes('"' + id + '"')) {
+      console.log("FAIL", name, "bundle missing theme id:", id);
+      process.exit(1);
+    }
+  }
+}
+if (!arApp.includes("deepseek-peak-theme")) {
+  console.log("FAIL agentrouter bundle does not use the shared theme storage key");
+  process.exit(1);
+}
+const arSrc = fs.readFileSync("src/themes.js", "utf8") + fs.readFileSync("src/agentrouter.js", "utf8");
+if (arApp.length >= arSrc.length) {
+  console.log("FAIL inlined agentrouter.js not minified (", arApp.length, ">= src", arSrc.length, ")");
+  process.exit(1);
+}
+console.log("agentrouter bundle: all", themes.length, "themes + shared storage key, minified:", arSrc.length, "->", arApp.length, "bytes ✓");
