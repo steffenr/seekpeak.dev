@@ -544,8 +544,9 @@ for (const needle of [
   "hashline",
   "workspace/willRenameFiles",
   "curl -fsSL https://omp.sh/install | sh",
-  "irm https://omp.sh/install.ps1 | iex",
   "bun install -g @oh-my-pi/pi-coding-agent",
+  'id="creditCta"',
+  "$50 Credit on agentrouter.org",
   'href="/agentrouter/"',
   'id="themeButton"',
 ]) {
@@ -564,6 +565,15 @@ if (!omp.includes('"@type": "SoftwareApplication"') || !omp.includes('"@type": "
 }
 if (omp.includes("__SITE_URL__") || omp.includes("__OG_IMAGE_URL__") || /\/\*__(CSS|SUB_APP)__\*\//.test(omp)) {
   console.log("FAIL leftover build token in omp page");
+  process.exit(1);
+}
+// Windows stays a one-line mention (install command + platform list), not a pitch.
+if (!omp.includes("irm https://omp.sh/install.ps1 | iex")) {
+  console.log("FAIL omp page missing the Windows install command");
+  process.exit(1);
+}
+if (omp.includes("WSL")) {
+  console.log("FAIL omp page should not sell the WSL angle");
   process.exit(1);
 }
 if (!html.includes('href="/omp/"')) {
