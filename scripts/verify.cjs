@@ -524,9 +524,55 @@ if (!arApp.includes("deepseek-peak-theme")) {
   console.log("FAIL agentrouter bundle does not use the shared theme storage key");
   process.exit(1);
 }
-const arSrc = fs.readFileSync("src/themes.js", "utf8") + fs.readFileSync("src/agentrouter.js", "utf8");
+const arSrc = fs.readFileSync("src/themes.js", "utf8") + fs.readFileSync("src/subpage.js", "utf8");
 if (arApp.length >= arSrc.length) {
-  console.log("FAIL inlined agentrouter.js not minified (", arApp.length, ">= src", arSrc.length, ")");
+  console.log("FAIL inlined subpage.js not minified (", arApp.length, ">= src", arSrc.length, ")");
   process.exit(1);
 }
 console.log("agentrouter bundle: all", themes.length, "themes + shared storage key, minified:", arSrc.length, "->", arApp.length, "bytes ✓");
+
+const omp = fs.readFileSync("dist/omp/index.html", "utf8");
+for (const needle of [
+  'id="ompBadge"',
+  "Complete out of the box",
+  "https://omp.sh/",
+  "https://omp.sh/docs",
+  "https://github.com/can1357/oh-my-pi",
+  "fork of",
+  "Five reasons to switch",
+  "omp vs. a plain harness",
+  "hashline",
+  "workspace/willRenameFiles",
+  "curl -fsSL https://omp.sh/install | sh",
+  "irm https://omp.sh/install.ps1 | iex",
+  "bun install -g @oh-my-pi/pi-coding-agent",
+  'href="/agentrouter/"',
+  'id="themeButton"',
+]) {
+  if (!omp.toLowerCase().includes(needle.toLowerCase())) {
+    console.log("FAIL omp page missing:", needle);
+    process.exit(1);
+  }
+}
+if (!omp.includes('rel="canonical" href="' + site.url + '/omp/"') || !omp.includes('property="og:url" content="' + site.url + '/omp/"')) {
+  console.log("FAIL omp page canonical/og:url missing");
+  process.exit(1);
+}
+if (!omp.includes('"@type": "SoftwareApplication"') || !omp.includes('"@type": "FAQPage"')) {
+  console.log("FAIL omp page JSON-LD missing");
+  process.exit(1);
+}
+if (omp.includes("__SITE_URL__") || omp.includes("__OG_IMAGE_URL__") || /\/\*__(CSS|SUB_APP)__\*\//.test(omp)) {
+  console.log("FAIL leftover build token in omp page");
+  process.exit(1);
+}
+if (!html.includes('href="/omp/"')) {
+  console.log("FAIL main page does not link to /omp/");
+  process.exit(1);
+}
+const ompApp = [...omp.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
+if (ompApp !== arApp) {
+  console.log("FAIL sub-pages do not share the same theme-picker bundle");
+  process.exit(1);
+}
+console.log("omp page: hero/reasons/comparison/benchmarks/install + SEO head present, shares sub-page bundle ✓");

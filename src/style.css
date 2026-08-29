@@ -20,7 +20,8 @@
 @source "../index.template.html";
 @source "../agentrouter.template.html";
 @source "./app.js";
-@source "./agentrouter.js";
+@source "./subpage.js";
+@source "../omp.template.html";
 
 :root {
   color-scheme: dark;

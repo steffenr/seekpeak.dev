@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>omp (oh-my-pi) — why this coding agent over opencode or Pi</title>
+    <meta name="description" content="omp / oh-my-pi is a terminal coding agent with the IDE wired in: LSP-aware edits, a real debugger, hashline patches, subagents, 60+ providers and a native Rust core that runs on Windows without WSL. Why pick it over opencode or upstream Pi." />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#2d2a2e" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="__SITE_URL__/omp/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Seek Peak" />
+    <meta property="og:url" content="__SITE_URL__/omp/" />
+    <meta property="og:title" content="omp (oh-my-pi) — why this coding agent over opencode or Pi" />
+    <meta property="og:description" content="LSP-aware edits, a real debugger, hashline patches, subagents, 60+ providers, native Rust core — what omp adds on top of a plain terminal agent." />
+    <meta property="og:image" content="__OG_IMAGE_URL__" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="omp — a coding agent with the IDE wired in" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="omp (oh-my-pi) — why this coding agent over opencode or Pi" />
+    <meta name="twitter:description" content="LSP-aware edits, a real debugger, hashline patches, subagents, 60+ providers, native Rust core — what omp adds on top of a plain terminal agent." />
+    <meta name="twitter:image" content="__OG_IMAGE_URL__" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "name": "Why omp (oh-my-pi)",
+          "url": "__SITE_URL__/omp/",
+          "description": "Why to pick the omp / oh-my-pi coding agent over opencode or upstream Pi.",
+          "isPartOf": { "@type": "WebSite", "name": "Seek Peak", "url": "__SITE_URL__/" },
+          "speakable": { "@type": "SpeakableSpecification", "cssSelector": ["#ompBadgeText", "#ompBadgeMsg"] }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "omp (oh-my-pi)",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "macOS, Linux, Windows",
+          "license": "https://opensource.org/licenses/MIT",
+          "url": "https://omp.sh/",
+          "codeRepository": "https://github.com/can1357/oh-my-pi",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is omp / oh-my-pi?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "omp is a terminal-first coding agent, a fork of Mario Zechner's Pi, built around a native Rust core. It bundles editing, search, LSP code intelligence, a DAP debugger, subagents, browser and desktop control, memory and web search into one session, and runs natively on macOS, Linux and Windows."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Why use omp instead of opencode?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "omp links its tooling into the process instead of shelling out to rg, grep, find and bash, so it also works where those binaries do not exist — including Windows without WSL. It wires LSP into every write so renames update re-exports and aliased imports, drives a real debugger through DAP, and ships subagents, an advisor model, live collab sessions and 60+ model providers out of the box."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Why use omp instead of Pi?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "omp is a fork of Pi and keeps its terminal-first UX, but adds the batteries: 31 built-in tools, 14 LSP operations, 28 DAP operations, hashline content-hash edits, subagents with an Agent Hub, memory, collab links, and inheritance of Cursor, Cline, Codex and Copilot config already on disk."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How do I install omp?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "On macOS or Linux run curl -fsSL https://omp.sh/install | sh, or brew install can1357/tap/omp, or bun install -g @oh-my-pi/pi-coding-agent. On Windows run irm https://omp.sh/install.ps1 | iex in PowerShell."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+    <style>/*__CSS__*/</style>
+    <script>
+      (function () {
+        var KEY = "deepseek-peak-theme";
+        var t = "monokai-pro";
+        try {
+          var stored = window.localStorage.getItem(KEY);
+          if (stored) t = stored;
+        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", t);
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen bg-mk-bg font-mono text-mk-fg antialiased">
+    <div class="fixed right-4 top-4 z-50 flex items-start gap-2">
+      <button
+        id="themeButton"
+        type="button"
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        class="flex items-center gap-2 rounded-md border-2 border-black bg-mk-card px-3 py-2 text-xs font-black uppercase tracking-wide text-mk-fg shadow-[3px_3px_0px_0px_#000000] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#000000] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
+      >
+        <span id="themePillLabel" class="truncate">Monokai Pro</span>
+        <span class="flex gap-1">
+          <span class="h-3 w-3 border border-black bg-mk-yellow"></span>
+          <span class="h-3 w-3 border border-black bg-mk-pink"></span>
+          <span class="h-3 w-3 border border-black bg-mk-cyan"></span>
+        </span>
+      </button>
+      <div
+        id="themePanel"
+        hidden
+        class="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-md border-2 border-black bg-mk-card shadow-[6px_6px_0px_0px_#000000]"
+      >
+        <ul id="themeList" role="listbox" class="max-h-96 overflow-y-auto"></ul>
+      </div>
+    </div>
+
+    <main class="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+      <header class="mb-8 mt-8 text-center sm:mt-0">
+        <a
+          href="/"
+          class="inline-block rounded-md border-2 border-black bg-mk-card px-3 py-1.5 text-xs font-black uppercase tracking-wide text-mk-fg shadow-[3px_3px_0px_0px_#000000] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#000000]"
+        >
+          ← Seek Peak
+        </a>
+        <h1 class="mt-6 text-4xl font-black uppercase tracking-tight sm:text-5xl">
+          Why<span class="ml-2 inline-block -rotate-1 border-2 border-black bg-mk-purple px-2 text-mk-ink shadow-[4px_4px_0px_0px_#000000]">
+            omp
+          </span>
+        </h1>
+        <p class="mt-2 text-sm font-semibold uppercase tracking-wide text-mk-muted">
+          oh-my-pi — a coding agent with the
+          <span class="bg-mk-cyan px-1 text-mk-ink">IDE wired in</span>
+        </p>
+      </header>
+
+      <section id="ompBadge" class="rounded-md border-2 border-black bg-mk-cyan p-6 text-center text-mk-ink shadow-[6px_6px_0px_0px_#000000]">
+        <div class="flex items-center justify-center gap-3">
+          <span class="h-4 w-4 rounded-sm border-2 border-black bg-mk-purple shadow-[2px_2px_0px_0px_#000000]"></span>
+          <h2 id="ompBadgeText" class="text-2xl font-black uppercase tracking-tight sm:text-3xl">Complete out of the box</h2>
+        </div>
+        <p id="ompBadgeMsg" class="mt-2 text-sm font-bold">
+          31 built-in tools · 14 LSP ops · 28 DAP ops · 60+ providers · ~80k lines of Rust core.
+          One terminal session from request to verification — no plugin zoo, no WSL bridge.
+        </p>
+        <div class="mt-4 flex flex-wrap justify-center gap-2">
+          <a
+            href="https://omp.sh/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block rounded-md border-2 border-black bg-mk-yellow px-4 py-2 text-xs font-black uppercase tracking-wide text-mk-ink shadow-[4px_4px_0px_0px_#000000] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+          >
+            omp.sh
+          </a>
+          <a
+            href="https://omp.sh/docs"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block rounded-md border-2 border-black bg-mk-green px-4 py-2 text-xs font-black uppercase tracking-wide text-mk-ink shadow-[4px_4px_0px_0px_#000000] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+          >
+            Docs
+          </a>
+          <a
+            href="https://github.com/can1357/oh-my-pi"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block rounded-md border-2 border-black bg-mk-card px-4 py-2 text-xs font-black uppercase tracking-wide text-mk-fg shadow-[4px_4px_0px_0px_#000000] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+          >
+            GitHub
+          </a>
+        </div>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="inline-block border-2 border-black bg-mk-yellow px-2 text-lg font-black uppercase tracking-tight text-mk-ink shadow-[3px_3px_0px_0px_#000000]">
+          The short version
+        </h2>
+        <div class="mt-3 rounded-md border-2 border-black bg-mk-card p-5 shadow-[6px_6px_0px_0px_#000000]">
+          <p class="text-sm font-semibold leading-relaxed text-mk-fg">
+            Most terminal agents give the model a shell and a diff format and call it a harness.
+            omp is a fork of <b>Pi</b> by Mario Zechner that keeps the terminal-first UX and adds
+            everything you would otherwise bolt on yourself: language-server-aware edits, a real
+            debugger, structural rewrites, parallel subagents, memory, browser and desktop control —
+            all behind one tool namespace, all in one process, on all three platforms.
+          </p>
+        </div>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="inline-block border-2 border-black bg-mk-pink px-2 text-lg font-black uppercase tracking-tight text-mk-ink shadow-[3px_3px_0px_0px_#000000]">
+          Five reasons to switch
+        </h2>
+        <ul class="mt-3 grid gap-3 sm:grid-cols-2">
+          <li class="rounded-md border-2 border-black bg-mk-card p-4 text-sm font-semibold leading-relaxed text-mk-fg shadow-[4px_4px_0px_0px_#000000]">
+            <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">01 · Edits that land first try</span>
+            Hashline patches let the model point at content-hash anchors instead of retyping lines.
+            Stale anchors are rejected before they corrupt a file — no string-not-found retry loops,
+            no whitespace battles.
+          </li>
+          <li class="rounded-md border-2 border-black bg-mk-card p-4 text-sm font-semibold leading-relaxed text-mk-fg shadow-[4px_4px_0px_0px_#000000]">
+            <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">02 · The IDE is wired in</span>
+            Renames go through <code class="border border-black bg-mk-input px-1 text-mk-fg">workspace/willRenameFiles</code>,
+            so barrel files, re-exports and aliased imports update before the file moves. 14 LSP ops
+            and 28 DAP ops mean it can also attach lldb, dlv or debugpy instead of sprinkling prints.
+          </li>
+          <li class="rounded-md border-2 border-black bg-mk-card p-4 text-sm font-semibold leading-relaxed text-mk-fg shadow-[4px_4px_0px_0px_#000000]">
+            <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">03 · Native, not shelled out</span>
+            ripgrep, glob, find and a bash fork with 58 in-process coreutils are linked into the
+            binary. No fork/exec on the hot path, and the same binary runs on macOS, Linux and
+            Windows — no WSL bridge, no missing <code class="border border-black bg-mk-input px-1 text-mk-fg">rg</code> on a fresh box.
+          </li>
+          <li class="rounded-md border-2 border-black bg-mk-card p-4 text-sm font-semibold leading-relaxed text-mk-fg shadow-[4px_4px_0px_0px_#000000]">
+            <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">04 · Real parallelism + a second opinion</span>
+            <code class="border border-black bg-mk-input px-1 text-mk-fg">task</code> fans work out into isolated worktrees and returns
+            schema-validated results; Agent Hub (Alt+A) lets you steer, revive or kill workers live.
+            An advisor model reads every turn on its own context and flags what the doer rushed past.
+          </li>
+          <li class="rounded-md border-2 border-black bg-mk-card p-4 text-sm font-semibold leading-relaxed text-mk-fg shadow-[4px_4px_0px_0px_#000000] sm:col-span-2">
+            <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">05 · Your models, your config, nothing to migrate</span>
+            60+ providers and ~1000 models across API keys, OAuth, coding-plan subscriptions,
+            gateways and local servers — routed by ten roles (default, smol, slow, plan, advisor…)
+            with fallback chains, path-scoped models and round-robin credentials. On first run it
+            inherits the rules, skills and MCP servers already on disk from
+            <code class="border border-black bg-mk-input px-1 text-mk-fg">.claude</code>, <code class="border border-black bg-mk-input px-1 text-mk-fg">.cursor</code>,
+            <code class="border border-black bg-mk-input px-1 text-mk-fg">.codex</code>, <code class="border border-black bg-mk-input px-1 text-mk-fg">.cline</code>,
+            <code class="border border-black bg-mk-input px-1 text-mk-fg">.windsurf</code> and Copilot. No importer, no migration script.
+          </li>
+        </ul>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="inline-block border-2 border-black bg-mk-cyan px-2 text-lg font-black uppercase tracking-tight text-mk-ink shadow-[3px_3px_0px_0px_#000000]">
+          omp vs. a plain harness
+        </h2>
+        <p class="mt-2 text-sm font-semibold text-mk-muted">
+          What you get in the box versus what you normally wire up yourself.
+        </p>
+        <div class="mt-3 overflow-x-auto rounded-md border-2 border-black bg-mk-card shadow-[6px_6px_0px_0px_#000000]">
+          <table class="w-full min-w-[560px] text-left text-sm">
+            <thead>
+              <tr class="border-b-2 border-black bg-mk-input text-xs font-black uppercase tracking-wider text-mk-cyan">
+                <th class="px-4 py-3 font-black">Capability</th>
+                <th class="px-4 py-3 font-black">Typical agent (opencode, plain Pi)</th>
+                <th class="px-4 py-3 font-black">omp</th>
+              </tr>
+            </thead>
+            <tbody class="font-semibold">
+              <tr class="border-b-2 border-black/40">
+                <td class="px-4 py-3">Editing</td>
+                <td class="px-4 py-3 text-mk-muted">String replace / unified diff, retry on mismatch</td>
+                <td class="px-4 py-3">Hashline anchors + <code class="border border-black bg-mk-input px-1 text-mk-fg">ast_edit</code> previews</td>
+              </tr>
+              <tr class="border-b-2 border-black/40">
+                <td class="px-4 py-3">Code intelligence</td>
+                <td class="px-4 py-3 text-mk-muted">Text search only</td>
+                <td class="px-4 py-3">LSP: diagnostics, rename, code actions (14 ops)</td>
+              </tr>
+              <tr class="border-b-2 border-black/40">
+                <td class="px-4 py-3">Debugging</td>
+                <td class="px-4 py-3 text-mk-muted">print statements</td>
+                <td class="px-4 py-3">DAP: breakpoints, frames, variables (28 ops)</td>
+              </tr>
+              <tr class="border-b-2 border-black/40">
+                <td class="px-4 py-3">Shell &amp; search</td>
+                <td class="px-4 py-3 text-mk-muted">fork/exec to <code class="border border-black bg-mk-input px-1 text-mk-fg">rg</code>, <code class="border border-black bg-mk-input px-1 text-mk-fg">grep</code>, <code class="border border-black bg-mk-input px-1 text-mk-fg">bash</code></td>
+                <td class="px-4 py-3">In-process Rust: ripgrep, glob, 58 coreutils</td>
+              </tr>
+              <tr class="border-b-2 border-black/40">
+                <td class="px-4 py-3">Windows</td>
+                <td class="px-4 py-3 text-mk-muted">WSL or unsupported</td>
+                <td class="px-4 py-3">Native win32-x64 binary</td>
+              </tr>
+              <tr class="border-b-2 border-black/40">
+                <td class="px-4 py-3">Parallel work</td>
+                <td class="px-4 py-3 text-mk-muted">One agent, one context</td>
+                <td class="px-4 py-3">Subagents in isolated worktrees + Agent Hub</td>
+              </tr>
+              <tr class="border-b-2 border-black/40">
+                <td class="px-4 py-3">Review</td>
+                <td class="px-4 py-3 text-mk-muted">Ask nicely, read prose</td>
+                <td class="px-4 py-3"><code class="border border-black bg-mk-input px-1 text-mk-fg">/review</code> with P0–P3 ranking and a verdict</td>
+              </tr>
+              <tr class="border-b-2 border-black/40">
+                <td class="px-4 py-3">Pairing</td>
+                <td class="px-4 py-3 text-mk-muted">Screen share</td>
+                <td class="px-4 py-3"><code class="border border-black bg-mk-input px-1 text-mk-fg">/collab</code> link or QR, client-sealed frames</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Providers</td>
+                <td class="px-4 py-3 text-mk-muted">A handful, one key each</td>
+                <td class="px-4 py-3">60+ providers, 10 roles, fallback chains</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-2 text-xs font-black uppercase tracking-wide text-mk-muted">
+          Feature claims for omp come from its own README and docs; the middle column describes the common baseline, not a benchmark of any specific release.
+        </p>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="inline-block border-2 border-black bg-mk-orange px-2 text-lg font-black uppercase tracking-tight text-mk-ink shadow-[3px_3px_0px_0px_#000000]">
+          The edit format is the benchmark
+        </h2>
+        <p class="mt-2 text-sm font-semibold text-mk-muted">
+          Numbers published by the omp project for its tuned tool surface — same weights, same prompt.
+        </p>
+        <div class="mt-3 grid gap-3 sm:grid-cols-2">
+          <div class="rounded-md border-2 border-black bg-mk-card p-4 shadow-[4px_4px_0px_0px_#000000]">
+            <p class="text-xs font-black uppercase tracking-wider text-mk-muted">Grok Code Fast 1</p>
+            <p class="mt-1 text-2xl font-black text-mk-green">6.7% → 68.3%</p>
+            <p class="mt-1 text-sm font-semibold text-mk-fg">Tenfold lift once the edit format stops eating the model alive.</p>
+          </div>
+          <div class="rounded-md border-2 border-black bg-mk-card p-4 shadow-[4px_4px_0px_0px_#000000]">
+            <p class="text-xs font-black uppercase tracking-wider text-mk-muted">Grok 4 Fast</p>
+            <p class="mt-1 text-2xl font-black text-mk-green">−61% tokens</p>
+            <p class="mt-1 text-sm font-semibold text-mk-fg">Output collapses when the retry loop on bad diffs disappears.</p>
+          </div>
+          <div class="rounded-md border-2 border-black bg-mk-card p-4 shadow-[4px_4px_0px_0px_#000000]">
+            <p class="text-xs font-black uppercase tracking-wider text-mk-muted">MiniMax</p>
+            <p class="mt-1 text-2xl font-black text-mk-green">2.1× pass rate</p>
+            <p class="mt-1 text-sm font-semibold text-mk-fg">More than doubled on the same weights and prompt.</p>
+          </div>
+          <div class="rounded-md border-2 border-black bg-mk-card p-4 shadow-[4px_4px_0px_0px_#000000]">
+            <p class="text-xs font-black uppercase tracking-wider text-mk-muted">Gemini 3 Flash</p>
+            <p class="mt-1 text-2xl font-black text-mk-green">+5 pp</p>
+            <p class="mt-1 text-sm font-semibold text-mk-fg">Over <code class="border border-black bg-mk-input px-1 text-mk-fg">str_replace</code> — past Google's own best attempt at the format.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="inline-block border-2 border-black bg-mk-purple px-2 text-lg font-black uppercase tracking-tight text-mk-ink shadow-[3px_3px_0px_0px_#000000]">
+          Install it
+        </h2>
+        <div class="mt-3 overflow-x-auto rounded-md border-2 border-black bg-mk-input shadow-[6px_6px_0px_0px_#000000]">
+          <pre class="px-4 py-3 text-xs leading-relaxed text-mk-fg sm:text-sm"><code># macOS · Linux
+curl -fsSL https://omp.sh/install | sh
+
+# Homebrew
+brew install can1357/tap/omp
+
+# Bun (recommended)
+bun install -g @oh-my-pi/pi-coding-agent
+
+# Windows (PowerShell) — no WSL needed
+irm https://omp.sh/install.ps1 | iex
+
+# then, in any repo:
+cd path/to/your-project
+omp</code></pre>
+        </div>
+        <p class="mt-2 text-sm font-semibold text-mk-muted">
+          MIT licensed. Want cheap model access to drive it? See the
+          <a href="/agentrouter/" class="bg-mk-green px-1 text-mk-ink">AgentRouter setup</a> — it ships a ready-made
+          <code class="border border-black bg-mk-input px-1 text-mk-cyan">models.yaml</code> block for omp.
+        </p>
+      </section>
+
+      <footer class="mt-8 border-t-2 border-black pt-4 text-center text-xs font-black uppercase tracking-wider text-mk-muted">
+        <a href="https://omp.sh/" target="_blank" rel="noopener noreferrer">omp.sh</a>
+        &nbsp;·&nbsp;
+        <a href="https://omp.sh/docs" target="_blank" rel="noopener noreferrer">Docs</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/can1357/oh-my-pi" target="_blank" rel="noopener noreferrer">GitHub</a>
+        &nbsp;·&nbsp;
+        <a href="/">Back to Seek Peak</a>
+        <br /><i>Unofficial overview. omp is a fork of Pi by Mario Zechner; Pi and opencode are separate projects with their own maintainers.</i>
+      </footer>
+    </main>
+
+    <script>/*__SUB_APP__*/</script>
+  </body>
+</html>
