@@ -26,6 +26,8 @@ no build at runtime, no JavaScript frameworks.
   without flash.
 - **Info dialog** ("?") — a short explanation of how the page works and why
   it exists.
+- **Footer** — cross-links plus an icon-only link to the source repo on
+  GitHub; present on every page.
 - **SEO / metadata** — canonical URL, Open Graph + Twitter cards with a
   generated OG image, JSON-LD (`WebSite` / `FAQPage` / `speakable`), and a
   minimal `robots.txt`.

@@ -23,14 +23,29 @@ The largest sign-up balance on the list right now.
 - **Claim:** https://tabitoken.com/sign-up?aff=aEl5
 - **Models:** `claude-opus-4-8`, `claude-opus-5`
 
+### BluesMinds.com — $100 credit
+
+An AI gateway with an OpenAI-compatible base URL (`https://api.bluesminds.com/v1`), and
+the widest model spread on the list.
+
+- **Claim:** https://api.bluesminds.com/sign-up?aff=n8iO
+- **Models:** `deepseek-v4-pro`, `glm-5.3`, `gpt-5.6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.5`, `gpt-5.3-codex`, `gpt-5.2-chat`, `kimi-k3`, `kimi-k2.6`, `minimax-m3`, `nemotron-3-ultra-550b-a55b`, `nemotron-3-nano-omni-30b-a3b-reasoning`, `llama-4-maverick`, `gemma-4-26b`, `meta/muse-glimmer-30b`
+
 ### Gorouter.app — $70 credit
 
 - **Claim:** https://gorouter.app/sign-up?aff=4Ssb
 - **Models:** `claude-opus-4-8`, `claude-opus-5`
 
+### JustWoker.icu — $70 credit
+
+A New-API gateway with an OpenAI-compatible base URL (`https://api.justwoker.icu/v1`).
+
+- **Claim:** https://api.justwoker.icu/register?aff=4HgG
+- **Models:** `claude-opus-4-8`, `claude-opus-5`
+
 ### AgentRouter.org — $50 credit
 
-Widest model spread of the four, and the one with a full setup write-up
+The one with a full setup write-up
 (base URLs, per-tool config, oh-my-pi `models.yaml`): https://seekpeak.dev/agentrouter/
 
 - **Claim:** https://agentrouter.org/register?aff=ENwt
@@ -50,7 +65,9 @@ Has the OpenAI `gpt-5.6-luna` line plus a `claude-sonnet-4-6` option.
 | Provider | Credit | Models |
 | --- | --- | --- |
 | [Tabitoken.com](https://tabitoken.com/sign-up?aff=aEl5) | $120 | claude-opus-4-8, claude-opus-5 |
+| [BluesMinds.com](https://api.bluesminds.com/sign-up?aff=n8iO) | $100 | deepseek-v4-pro, glm-5.3, gpt-5.6-luna, gpt-5.6-sol, gpt-5.6-terra, gpt-5.5, gpt-5.3-codex, gpt-5.2-chat, kimi-k3, kimi-k2.6, minimax-m3, nemotron-3-ultra-550b-a55b, nemotron-3-nano-omni-30b-a3b-reasoning, llama-4-maverick, gemma-4-26b, meta/muse-glimmer-30b |
 | [Gorouter.app](https://gorouter.app/sign-up?aff=4Ssb) | $70 | claude-opus-4-8, claude-opus-5 |
+| [JustWoker.icu](https://api.justwoker.icu/register?aff=4HgG) | $70 | claude-opus-4-8, claude-opus-5 |
 | [AgentRouter.org](https://agentrouter.org/register?aff=ENwt) | $50 | claude-opus-4-8, claude-opus-5, deepseek-v4-flash, glm-5.3, gpt-5.6-sol |
 | [Vyceai.com](https://vyceai.com/signup?ref=VYCE_XFR2A9) | $40 | gpt-5.6-luna, gpt-5.6-luna-testing, claude-sonnet-4-6, deepseek-v4-flash |
 
