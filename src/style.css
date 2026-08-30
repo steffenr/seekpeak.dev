@@ -22,6 +22,7 @@
 @source "./app.js";
 @source "./subpage.js";
 @source "../omp.template.html";
+@source "../free-credits.template.html";
 
 :root {
   color-scheme: dark;

@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Free Credits — working sign-up credit for AI model providers</title>
+    <meta name="description" content="A hand-checked list of AI providers that hand out free credit when you register. Grab the credit, point your existing coding tool at their endpoint and test the models for real — no card needed to start." />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#2d2a2e" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="__SITE_URL__/free-credits/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Seek Peak" />
+    <meta property="og:url" content="__SITE_URL__/free-credits/" />
+    <meta property="og:title" content="Free Credits — working sign-up credit for AI model providers" />
+    <meta property="og:description" content="A hand-checked list of AI providers that give you free credit on registration. Test the models for real before you pay." />
+    <meta property="og:image" content="__OG_IMAGE_URL__" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Free Credits — working sign-up offers for AI model providers" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Free Credits — working sign-up credit for AI model providers" />
+    <meta name="twitter:description" content="A hand-checked list of AI providers that give you free credit on registration. Test the models for real before you pay." />
+    <meta name="twitter:image" content="__OG_IMAGE_URL__" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "name": "Free Credits",
+          "url": "__SITE_URL__/free-credits/",
+          "description": "A hand-checked list of AI providers that give you free credit when you register.",
+          "isPartOf": { "@type": "WebSite", "name": "Seek Peak", "url": "__SITE_URL__/" },
+          "speakable": { "@type": "SpeakableSpecification", "cssSelector": ["#freeCreditsTitle", "#freeCreditsIntro"] }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Are these credits really free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Each provider listed here adds credit to your account when you register, with no card required to start. You only pay once the free balance runs out."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the catch with the referral links?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The links on this page are referral links. You get the provider's standard sign-up credit and we may receive credit too. The offer and its terms are set by the provider, not by Seek Peak."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which providers are on the list?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The list currently has four verified offers: Tabitoken.com ($120), Gorouter.app ($70), AgentRouter.org ($50) and Vyceai.com ($40). Each one adds credit to a new account on registration."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+    <style>/*__CSS__*/</style>
+    <script>
+      (function () {
+        var KEY = "deepseek-peak-theme";
+        var t = "monokai-pro";
+        try {
+          var stored = window.localStorage.getItem(KEY);
+          if (stored) t = stored;
+        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", t);
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen bg-mk-bg font-mono text-mk-fg antialiased">
+    <div class="fixed right-4 top-4 z-50 flex items-start gap-2">
+      <button
+        id="themeButton"
+        type="button"
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        class="flex items-center gap-2 rounded-md border-2 border-black bg-mk-card px-3 py-2 text-xs font-black uppercase tracking-wide text-mk-fg shadow-[3px_3px_0px_0px_#000000] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#000000] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
+      >
+        <span id="themePillLabel" class="truncate">Monokai Pro</span>
+        <span class="flex gap-1">
+          <span class="h-3 w-3 border border-black bg-mk-yellow"></span>
+          <span class="h-3 w-3 border border-black bg-mk-pink"></span>
+          <span class="h-3 w-3 border border-black bg-mk-cyan"></span>
+        </span>
+      </button>
+      <div
+        id="themePanel"
+        hidden
+        class="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-md border-2 border-black bg-mk-card shadow-[6px_6px_0px_0px_#000000]"
+      >
+        <ul id="themeList" role="listbox" class="max-h-96 overflow-y-auto"></ul>
+      </div>
+    </div>
+
+    <main class="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+      <header class="mb-8 mt-8 text-center sm:mt-0">
+        <a
+          href="/"
+          class="inline-block rounded-md border-2 border-black bg-mk-card px-3 py-1.5 text-xs font-black uppercase tracking-wide text-mk-fg shadow-[3px_3px_0px_0px_#000000] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#000000]"
+        >
+          ← Seek Peak
+        </a>
+        <h1 id="freeCreditsTitle" class="mt-6 text-4xl font-black uppercase tracking-tight sm:text-5xl">
+          Free<span class="ml-2 inline-block -rotate-1 border-2 border-black bg-mk-green px-2 text-mk-ink shadow-[4px_4px_0px_0px_#000000]">
+            Credits
+          </span>
+        </h1>
+        <p class="mt-2 text-sm font-semibold uppercase tracking-wide text-mk-muted">
+          Working sign-up offers ·
+          <span class="bg-mk-yellow px-1 text-mk-ink">hand-checked</span>
+        </p>
+      </header>
+
+      <section class="mt-8">
+        <h2 class="inline-block border-2 border-black bg-mk-cyan px-2 text-lg font-black uppercase tracking-tight text-mk-ink shadow-[3px_3px_0px_0px_#000000]">
+          The idea
+        </h2>
+        <div class="mt-3 rounded-md border-2 border-black bg-mk-card p-5 shadow-[6px_6px_0px_0px_#000000]">
+          <p id="freeCreditsIntro" class="text-sm font-semibold leading-relaxed text-mk-fg">
+            Plenty of model providers want you to try their platform, so they drop free credit on your
+            account the moment you register — no card, no commitment. It is the cheapest way to see how a
+            model actually behaves on your own prompts before you spend anything.
+          </p>
+          <p class="mt-3 text-xs font-bold uppercase tracking-wide text-mk-muted">
+            Links are referral links — you get the provider's standard credit, and we may receive credit too.
+          </p>
+        </div>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="inline-block border-2 border-black bg-mk-pink px-2 text-lg font-black uppercase tracking-tight text-mk-ink shadow-[3px_3px_0px_0px_#000000]">
+          Working offers
+        </h2>
+
+        <article id="offerTabiToken" class="mt-3 rounded-md border-2 border-black bg-mk-card p-5 shadow-[6px_6px_0px_0px_#000000]">
+          <a
+            href="https://tabitoken.com/sign-up?aff=aEl5"
+            target="_blank"
+            rel="noopener sponsored"
+            class="block rounded-md border-2 border-black bg-mk-pink px-4 py-3 text-center text-base font-black uppercase tracking-wide text-mk-ink shadow-[4px_4px_0px_0px_#000000] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none sm:text-lg"
+          >
+            Tabitoken.com — $120 Credits
+          </a>
+          <div class="mt-3">
+            <span class="block text-xs font-black uppercase tracking-wider text-mk-cyan">Models</span>
+            <div class="mt-2 flex flex-wrap gap-2">
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">claude-opus-4-8</span>
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">claude-opus-5</span>
+            </div>
+          </div>
+        </article>
+
+        <article id="offerGoRouter" class="mt-3 rounded-md border-2 border-black bg-mk-card p-5 shadow-[6px_6px_0px_0px_#000000]">
+          <a
+            href="https://gorouter.app/sign-up?aff=4Ssb"
+            target="_blank"
+            rel="noopener sponsored"
+            class="block rounded-md border-2 border-black bg-mk-green px-4 py-3 text-center text-base font-black uppercase tracking-wide text-mk-ink shadow-[4px_4px_0px_0px_#000000] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none sm:text-lg"
+          >
+            Gorouter.app — $70 Credits
+          </a>
+          <div class="mt-3">
+            <span class="block text-xs font-black uppercase tracking-wider text-mk-cyan">Models</span>
+            <div class="mt-2 flex flex-wrap gap-2">
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">claude-opus-4-8</span>
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">claude-opus-5</span>
+            </div>
+          </div>
+        </article>
+
+        <article id="offerAgentRouter" class="mt-3 rounded-md border-2 border-black bg-mk-card p-5 shadow-[6px_6px_0px_0px_#000000]">
+          <a
+            href="https://agentrouter.org/register?aff=ENwt"
+            target="_blank"
+            rel="noopener sponsored"
+            class="block rounded-md border-2 border-black bg-mk-green px-4 py-3 text-center text-base font-black uppercase tracking-wide text-mk-ink shadow-[4px_4px_0px_0px_#000000] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none sm:text-lg"
+          >
+            AgentRouter.org — $50 Credits
+          </a>
+          <div class="mt-3">
+            <span class="block text-xs font-black uppercase tracking-wider text-mk-cyan">Models</span>
+            <div class="mt-2 flex flex-wrap gap-2">
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">claude-opus-4-8</span>
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">claude-opus-5</span>
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">deepseek-v4-flash</span>
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">glm-5.3</span>
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">gpt-5.6-sol</span>
+            </div>
+          </div>
+          <p class="mt-3 text-xs font-bold uppercase tracking-wide text-mk-muted">
+            Full write-up and setup: <a href="/agentrouter/" class="bg-mk-green px-1 text-mk-ink">the AgentRouter page</a>.
+          </p>
+        </article>
+
+        <article id="offerViceAi" class="mt-3 rounded-md border-2 border-black bg-mk-card p-5 shadow-[6px_6px_0px_0px_#000000]">
+          <a
+            href="https://vyceai.com/signup?ref=VYCE_XFR2A9"
+            target="_blank"
+            rel="noopener sponsored"
+            class="block rounded-md border-2 border-black bg-mk-green px-4 py-3 text-center text-base font-black uppercase tracking-wide text-mk-ink shadow-[4px_4px_0px_0px_#000000] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none sm:text-lg"
+          >
+            Vyceai.com — $40 Credits
+          </a>
+          <div class="mt-3">
+            <span class="block text-xs font-black uppercase tracking-wider text-mk-cyan">Models</span>
+            <div class="mt-2 flex flex-wrap gap-2">
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">gpt-5.6-luna</span>
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">gpt-5.6-luna-testing</span>
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">claude-sonnet-4-6</span>
+              <span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">deepseek-v4-flash</span>
+            </div>
+          </div>
+        </article>
+
+      </section>
+
+      <section class="mt-8">
+        <h2 class="inline-block border-2 border-black bg-mk-yellow px-2 text-lg font-black uppercase tracking-tight text-mk-ink shadow-[3px_3px_0px_0px_#000000]">
+          How this list works
+        </h2>
+        <ul class="mt-3 grid gap-3 sm:grid-cols-2">
+          <li class="rounded-md border-2 border-black bg-mk-card p-4 text-sm font-semibold leading-relaxed text-mk-fg shadow-[4px_4px_0px_0px_#000000]">
+            <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">Checked by hand</span>
+            An entry only stays here while the credit still shows up on a fresh account. Dead offers get pulled.
+          </li>
+          <li class="rounded-md border-2 border-black bg-mk-card p-4 text-sm font-semibold leading-relaxed text-mk-fg shadow-[4px_4px_0px_0px_#000000]">
+            <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">Provider sets the terms</span>
+            Credit amount, expiry and rate limits are decided by each provider and can change without notice.
+          </li>
+          <li class="rounded-md border-2 border-black bg-mk-card p-4 text-sm font-semibold leading-relaxed text-mk-fg shadow-[4px_4px_0px_0px_#000000]">
+            <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">Model ids drift</span>
+            The model lists are a snapshot. Names move as providers add and retire releases.
+          </li>
+          <li class="rounded-md border-2 border-black bg-mk-card p-4 text-sm font-semibold leading-relaxed text-mk-fg shadow-[4px_4px_0px_0px_#000000]">
+            <span class="mb-1 block text-xs font-black uppercase tracking-wider text-mk-cyan">Referral disclosure</span>
+            Every link is a referral link. It costs you nothing extra and may send some credit our way.
+          </li>
+        </ul>
+      </section>
+
+      <footer class="mt-8 border-t-2 border-black pt-4 text-center text-xs font-black uppercase tracking-wider text-mk-muted">
+        <a href="/omp/">Why omp</a>
+        &nbsp;·&nbsp;
+        <a href="/">Back to Seek Peak</a>
+        <br /><i>This page is not related to deepseek.com. Each credit offer and its terms are set by the provider.</i>
+      </footer>
+    </main>
+
+    <script>/*__SUB_APP__*/</script>
+  </body>
+</html>

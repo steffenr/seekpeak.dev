@@ -508,11 +508,11 @@ if (ar.includes("__SITE_URL__") || ar.includes("__OG_IMAGE_URL__") || /\/\*__(CS
   console.log("FAIL leftover build token in agentrouter page");
   process.exit(1);
 }
-if (!html.includes('href="/agentrouter/"')) {
-  console.log("FAIL main page does not link to /agentrouter/");
+if (html.includes('href="/agentrouter/"')) {
+  console.log("FAIL main page should no longer link to /agentrouter/ (route offers through /free-credits/)");
   process.exit(1);
 }
-console.log("agentrouter page: badge/CTA/models/benefits/theme picker + SEO head present, linked from main page ✓");
+console.log("agentrouter page: badge/CTA/models/benefits/theme picker + SEO head present, delinked from main page ✓");
 
 // The two bundles must ship the same theme list (src/themes.js is prepended to both).
 const arApp = [...ar.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
@@ -550,7 +550,8 @@ for (const needle of [
   "curl -fsSL https://omp.sh/install | sh",
   "bun install -g @oh-my-pi/pi-coding-agent",
   'id="creditCta"',
-  "$50 Credit on agentrouter.org",
+  "Free credits — $120 to start",
+  'href="/free-credits/"',
   'href="/agentrouter/"',
   'id="themeButton"',
 ]) {
@@ -580,8 +581,8 @@ if (omp.includes("WSL")) {
   console.log("FAIL omp page should not sell the WSL angle");
   process.exit(1);
 }
-if (!html.includes('id="creditCta"') || !html.includes("$50 Credit on agentrouter.org")) {
-  console.log("FAIL main page missing the agentrouter credit CTA");
+if (!html.includes('id="creditCta"') || !html.includes("Free credits — $120 to start") || !html.includes('href="/free-credits/"')) {
+  console.log("FAIL main page missing the free-credits CTA");
   process.exit(1);
 }
 if (!html.includes('href="/omp/"')) {
@@ -594,3 +595,57 @@ if (ompApp !== arApp) {
   process.exit(1);
 }
 console.log("omp page: hero/reasons/comparison/benchmarks/install + SEO head present, shares sub-page bundle ✓");
+
+const fc = fs.readFileSync("dist/free-credits/index.html", "utf8");
+for (const needle of [
+  'id="freeCreditsTitle"',
+  'id="offerAgentRouter"',
+  "AgentRouter.org — $50 Credits",
+  AFF,
+  'rel="noopener sponsored"',
+  "Tabitoken.com — $120 Credits",
+  "https://tabitoken.com/sign-up?aff=aEl5",
+  "Gorouter.app — $70 Credits",
+  "https://gorouter.app/sign-up?aff=4Ssb",
+  "Vyceai.com — $40 Credits",
+  "https://vyceai.com/signup?ref=VYCE_XFR2A9",
+  'id="freeCreditsIntro"',
+  "Working offers",
+  "How this list works",
+  'id="themeButton"',
+  'href="/agentrouter/"',
+  'href="/omp/"',
+]) {
+  if (!fc.includes(needle)) {
+    console.log("FAIL free-credits page missing:", needle);
+    process.exit(1);
+  }
+}
+for (const id of ["claude-opus-4-8", "claude-opus-5", "deepseek-v4-flash", "glm-5.3", "gpt-5.6-sol"]) {
+  if (!fc.includes(">" + id + "<")) {
+    console.log("FAIL free-credits page missing model chip:", id);
+    process.exit(1);
+  }
+}
+if (!fc.includes('rel="canonical" href="' + site.url + '/free-credits/"') || !fc.includes('property="og:url" content="' + site.url + '/free-credits/"')) {
+  console.log("FAIL free-credits canonical/og:url missing");
+  process.exit(1);
+}
+if (!fc.includes('"@type": "FAQPage"') || !fc.includes('"@type": "WebPage"')) {
+  console.log("FAIL free-credits JSON-LD missing");
+  process.exit(1);
+}
+if (fc.includes("__SITE_URL__") || fc.includes("__OG_IMAGE_URL__") || /\/\*__(CSS|SUB_APP)__\*\//.test(fc)) {
+  console.log("FAIL leftover build token in free-credits page");
+  process.exit(1);
+}
+if (!html.includes('href="/free-credits/"')) {
+  console.log("FAIL main page does not link to /free-credits/");
+  process.exit(1);
+}
+const fcApp = [...fc.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
+if (fcApp !== arApp) {
+  console.log("FAIL free-credits page does not share the sub-page theme-picker bundle");
+  process.exit(1);
+}
+console.log("free-credits page: intro/4 offer cards/model lists/disclosure + SEO head present, shares sub-page bundle ✓");
