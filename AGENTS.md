@@ -7,9 +7,9 @@
 ## Commands
 
 ```bash
-npm run build                      # REQUIRED before verify — builds dist/index.html
+npm run build                      # REQUIRED before verify — builds dist/ (index + sub-pages)
 npm run watch                      # rebuild on change
-node scripts/verify.cjs            # the test suite (reads built dist/index.html)
+node scripts/verify.cjs            # the test suite (reads the built dist/ artifacts)
 npm run build && node scripts/verify.cjs   # standard check — MUST be green before finishing any task
 ```
 
@@ -18,12 +18,13 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 
 ## Verify.cjs conventions (test suite)
 
-- It tests the **built artifacts** (`dist/index.html` and `dist/agentrouter/index.html`), so always `npm run build` first.
-- The site has three pages: the verdict page (`index.template.html` + `src/app.js`) and two static sub-pages, `agentrouter.template.html` and `omp.template.html`. Sub-pages are built by the `for (const slug of […])` loop in `build.mjs` to `dist/<slug>/index.html`; each needs a `/*__CSS__*/` and a `/*__SUB_APP__*/` placeholder, a `@source` line in `src/style.css`, and a watch target. They share one bundle (`src/subpage.js`, theme picker only) and the theme list from `src/themes.js`.
+- It tests the **built artifacts** (`dist/index.html` plus each `dist/<slug>/index.html` sub-page), so always `npm run build` first.
+- The site has four pages: the verdict page (`index.template.html` + `src/app.js`) and three static referral sub-pages — `agentrouter.template.html`, `omp.template.html`, `free-credits.template.html`. Sub-pages are built by the `for (const slug of […])` loop in `build.mjs` to `dist/<slug>/index.html`; each needs a `/*__CSS__*/` and a `/*__SUB_APP__*/` placeholder, a `@source` line in `src/style.css`, a watch target in `build.mjs`, and its own assertion block in `verify.cjs`. They share one bundle (`src/subpage.js`, theme picker only) and the theme list from `src/themes.js`.
+- Cross-page offer wiring: the homepage and the `omp` `#creditCta` link to `/free-credits/` (the offers hub), and **no page footer links `/agentrouter/`** — `verify.cjs` enforces both. `free-credits.gist.md` is a standalone Markdown copy of that page for posting as a GitHub Gist; it is not built.
 - Pure logic functions are exported from `src/app.js` by injecting `window.__t = { name, … };` — to test a new pure helper, add its name to that injected object AND write assertions in the corresponding block.
 - DOM-bound renderers are NOT unit-tested (the `elem()` mock is a no-op); test their pure logic instead (e.g. `taglineText`, `priceModeText`, `timelineHourLabel`).
 - Static template expectations are asserted via string/regex checks on `html` (e.g. `data-col="model"`, `<details`, absence of `clockLocal`). Remember `dist` inlines `src/app.js`, so identifier-presence checks scan the JS too.
-- SEO/GEO static checks cover the head (canonical, og:url/og:image, twitter:card, JSON-LD `WebSite`/`FAQPage`/`speakable`, `<noscript>`, `theme-color`) and the extra dist files (`og-image.png` PNG signature, `robots.txt`; no `sitemap.xml` — single-page site). The minify check asserts the inlined `app.js` is smaller than `src/app.js`.
+- SEO/GEO static checks cover the head (canonical, og:url/og:image, twitter:card, JSON-LD `WebSite`/`FAQPage`/`speakable`, `<noscript>`, `theme-color`) and the extra dist files (`og-image.png` PNG signature, `robots.txt`, `site.webmanifest`; no `sitemap.xml`). Each sub-page has its own head block check (canonical/og:url = `/<slug>/`, JSON-LD). The minify check asserts the inlined `app.js` is smaller than `src/app.js`.
 - Existing assertion style: `if (!cond) { console.log("FAIL …"); process.exit(1); }` + `console.log("… ✓")`.
 - Reference-based cross-checks exist for `isPeak` (9 UTC days spanning two Beijing weekends, checked against an independent Intl-weekday reference) and a Colombo (UTC+5:30) minute-mask case.
 
@@ -41,7 +42,7 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 ## Editing themes
 
 - Theme key `deepseek-peak-theme` (localStorage), default `monokai-pro`, invalid → default, wrapped in try/catch. `[data-theme]` is set on `documentElement` by both the inline `<head>` FOUC script and `src/app.js`.
-- Adding a theme requires: a `[data-theme=…]` block in `src/style.css`, an entry in `src/themes.js` (the single source of truth — `build.mjs` prepends it to both page bundles as `window.__THEMES`), and (optionally) updating the theme list in verify.cjs.
+- Adding a theme requires: a `[data-theme=…]` block in `src/style.css`, an entry in `src/themes.js` (the single source of truth — `build.mjs` prepends it to every page bundle as `window.__THEMES`), and (optionally) updating the theme list in verify.cjs.
 - The palette, invariants and FOUC/persistence design live in `DESIGN.md` (§ Theme system).
 
 ## Git / workflow
