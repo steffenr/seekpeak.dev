@@ -45,6 +45,25 @@ weekend rule) lives in `config.json`, the single source of truth.
 See `DESIGN.md` for the full design, and `docs/ADR-*.md` + `docs/GLOSSARY.md`
 for the committed domain-model decisions.
 
+## Referral sub-pages
+
+Alongside the verdict page, the build emits three static sub-pages to
+`dist/<slug>/index.html`:
+
+| Slug | Page |
+|------|------|
+| `agentrouter` | AgentRouter.org referral + setup write-up |
+| `omp` | Why the oh-my-pi (omp) coding agent |
+| `free-credits` | Hand-checked list of provider sign-up credits |
+
+Each is `<slug>.template.html` with `/*__CSS__*/` and `/*__SUB_APP__*/`
+placeholders, a `@source` line in `src/style.css`, a watch target in
+`scripts/build.mjs`, and an assertion block in `scripts/verify.cjs`. They share
+one small bundle (`src/subpage.js`, theme picker only) and the theme list from
+`src/themes.js`. The homepage and the `omp` "credit" CTA link to
+`/free-credits/`. `free-credits.gist.md` is a standalone Markdown copy of that
+page for posting as a GitHub Gist — it is not part of the build.
+
 ## Build
 
 ```bash
@@ -53,10 +72,11 @@ npm run build && node scripts/verify.cjs   # build + run the test suite
 npm run watch                 # rebuild on change
 ```
 
-Output: `dist/index.html`, plus `dist/og-image.png` (copied verbatim from
-`assets/og-image.png` — author it yourself, 1200×630 recommended) and
-`dist/robots.txt`. The inlined JS is minified with terser. The test harness
-(`scripts/verify.cjs`) parses the built artifact and covers verdict logic
+Output: `dist/index.html`, one `dist/<slug>/index.html` per referral sub-page,
+plus `dist/og-image.png` (copied verbatim from `assets/og-image.png` — author it
+yourself, 1200×630 recommended), `dist/site.webmanifest` and `dist/robots.txt`.
+The inlined JS is minified with terser. The test harness
+(`scripts/verify.cjs`) parses the built artifacts and covers verdict logic
 (a 9-UTC-day sweep spanning Beijing weekends, checked against an independent
 Intl-weekday reference), half-open boundaries, countdown text, DST-transition
 midnights, cross-midnight timelines, and static template / SEO / dist-file
@@ -89,8 +109,12 @@ build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
 | Path | Purpose |
 |------|---------|
 | `index.template.html` | Single-page layout + placeholders for CSS, config, app |
+| `<slug>.template.html` | Referral sub-pages (`agentrouter`, `omp`, `free-credits`) — CSS + sub-app placeholders |
+| `free-credits.gist.md` | Standalone Markdown copy of the free-credits page for a GitHub Gist (not built) |
 | `src/app.js` | All logic (pure, testable helpers + thin DOM renderers) |
-| `src/style.css` | Tailwind v4 source: theme tokens + `[data-theme=…]` blocks |
+| `src/subpage.js` | Shared sub-page bundle (theme picker only) |
+| `src/themes.js` | Theme list — single source of truth, prepended to every page bundle |
+| `src/style.css` | Tailwind v4 source: theme tokens + `[data-theme=…]` blocks + `@source` lines |
 | `config.json` | Peak windows, weekend off-peak rule, model prices, + `site` block |
 | `scripts/build.mjs` | Build pipeline (Tailwind v4 → minified CSS, then inline + dist assets) |
 | `assets/og-image.png` | Your Open Graph image (1200×630 recommended), copied to `dist/og-image.png` |
