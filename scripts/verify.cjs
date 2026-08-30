@@ -607,6 +607,10 @@ for (const needle of [
   "https://tabitoken.com/sign-up?aff=aEl5",
   "Gorouter.app — $70 Credits",
   "https://gorouter.app/sign-up?aff=4Ssb",
+  "BluesMinds.com — $100 Credits",
+  "https://api.bluesminds.com/sign-up?aff=n8iO",
+  "Justwoker.icu — $70 Credits",
+  "https://api.justwoker.icu/register?aff=4HgG",
   "Vyceai.com — $40 Credits",
   "https://vyceai.com/signup?ref=VYCE_XFR2A9",
   'id="freeCreditsIntro"',
@@ -648,4 +652,13 @@ if (fcApp !== arApp) {
   console.log("FAIL free-credits page does not share the sub-page theme-picker bundle");
   process.exit(1);
 }
-console.log("free-credits page: intro/4 offer cards/model lists/disclosure + SEO head present, shares sub-page bundle ✓");
+console.log("free-credits page: intro/6 offer cards/model lists/disclosure + SEO head present, shares sub-page bundle ✓");
+
+// Every page footer carries the repo link (icon-only <a> to the source on GitHub).
+for (const [name, src] of [["index", html], ["agentrouter", ar], ["omp", omp], ["free-credits", fc]]) {
+  if (!src.includes('href="https://github.com/steffenr/seekpeak.dev"')) {
+    console.log("FAIL", name, "footer missing the GitHub repo link");
+    process.exit(1);
+  }
+}
+console.log("every page footer links the GitHub repo ✓");
