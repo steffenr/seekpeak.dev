@@ -56,7 +56,7 @@ async function build() {
 
   writeFileSync(join(dist, "index.html"), html);
 
-  for (const slug of ["agentrouter", "omp"]) {
+  for (const slug of ["agentrouter", "omp", "free-credits"]) {
     let page = readFileSync(join(root, `${slug}.template.html`), "utf8");
     page = page.replace("/*__CSS__*/", () => css);
     page = page.replace("/*__SUB_APP__*/", () => subApp);
@@ -102,7 +102,7 @@ await build();
 if (watch) {
   const { watchFile } = await import("node:fs");
   const { debounce } = await import("node:util");
-  const targets = ["src/style.css", "src/app.js", "src/themes.js", "src/subpage.js", "config.json", "index.template.html", "agentrouter.template.html", "omp.template.html", "assets/site.webmanifest"];
+  const targets = ["src/style.css", "src/app.js", "src/themes.js", "src/subpage.js", "config.json", "index.template.html", "agentrouter.template.html", "omp.template.html", "free-credits.template.html", "assets/site.webmanifest"];
   for (const t of targets) {
     watchFile(join(root, t), { interval: 150 }, debounce(build, 100));
   }
