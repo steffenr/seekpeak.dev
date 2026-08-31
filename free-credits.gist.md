@@ -16,9 +16,17 @@ free balance on real work.
 
 ## Working offers
 
+### B.Ai — 300,000 credits
+
+The biggest sign-up balance on the list, and the widest model spread — DeepSeek, GLM,
+Qwen, MiMo, Claude, GPT, Gemini, MiniMax and Kimi lines all on one key.
+
+- **Claim:** https://chat.b.ai/chat?invite_code=5MXLTF
+- **Models:** `deepseek-v4-flash`, `deepseek-v4-flash-vision-exp`, `deepseek-v4-pro`, `hy3`, `mimo-v2.5`, `mimo-v2.5-pro`, `glm-5.3-flash`, `glm-5.3`, `qwen3.8-flash`, `qwen3.8-max`, `claude-opus-5`, `claude-opus-4.8`, `claude-fable-5`, `claude-sonnet-5`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gemini-3.1-pro`, `gemini-3.5-flash`, `gemini-3.5-flash-lite`, `minimax-m3`, `kimi-k3`
+
 ### Tabitoken.com — $120 credit
 
-The largest sign-up balance on the list right now.
+The largest dollar-denominated balance on the list.
 
 - **Claim:** https://tabitoken.com/sign-up?aff=aEl5
 - **Models:** `claude-opus-4-8`, `claude-opus-5`
@@ -64,6 +72,7 @@ Has the OpenAI `gpt-5.6-luna` line plus a `claude-sonnet-4-6` option.
 
 | Provider | Credit | Models |
 | --- | --- | --- |
+| [B.Ai](https://chat.b.ai/chat?invite_code=5MXLTF) | 300,000 credits | deepseek-v4-flash, deepseek-v4-flash-vision-exp, deepseek-v4-pro, hy3, mimo-v2.5, mimo-v2.5-pro, glm-5.3-flash, glm-5.3, qwen3.8-flash, qwen3.8-max, claude-opus-5, claude-opus-4.8, claude-fable-5, claude-sonnet-5, gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gemini-3.1-pro, gemini-3.5-flash, gemini-3.5-flash-lite, minimax-m3, kimi-k3 |
 | [Tabitoken.com](https://tabitoken.com/sign-up?aff=aEl5) | $120 | claude-opus-4-8, claude-opus-5 |
 | [BluesMinds.com](https://api.bluesminds.com/sign-up?aff=n8iO) | $100 | deepseek-v4-pro, glm-5.3, gpt-5.6-luna, gpt-5.6-sol, gpt-5.6-terra, gpt-5.5, gpt-5.3-codex, gpt-5.2-chat, kimi-k3, kimi-k2.6, minimax-m3, nemotron-3-ultra-550b-a55b, nemotron-3-nano-omni-30b-a3b-reasoning, llama-4-maverick, gemma-4-26b, meta/muse-glimmer-30b |
 | [Gorouter.app](https://gorouter.app/sign-up?aff=4Ssb) | $70 | claude-opus-4-8, claude-opus-5 |

@@ -601,6 +601,9 @@ for (const needle of [
   'id="freeCreditsTitle"',
   'id="offerAgentRouter"',
   "AgentRouter.org — $50 Credits",
+  'id="offerBAi"',
+  "B.Ai — 300,000 Credits",
+  "https://chat.b.ai/chat?invite_code=5MXLTF",
   AFF,
   'rel="noopener sponsored"',
   "Tabitoken.com — $120 Credits",
@@ -625,7 +628,7 @@ for (const needle of [
     process.exit(1);
   }
 }
-for (const id of ["claude-opus-4-8", "claude-opus-5", "deepseek-v4-flash", "glm-5.3", "gpt-5.6-sol"]) {
+for (const id of ["claude-opus-4-8", "claude-opus-5", "deepseek-v4-flash", "glm-5.3", "gpt-5.6-sol", "hy3", "claude-fable-5"]) {
   if (!fc.includes(">" + id + "<")) {
     console.log("FAIL free-credits page missing model chip:", id);
     process.exit(1);
@@ -652,7 +655,7 @@ if (fcApp !== arApp) {
   console.log("FAIL free-credits page does not share the sub-page theme-picker bundle");
   process.exit(1);
 }
-console.log("free-credits page: intro/6 offer cards/model lists/disclosure + SEO head present, shares sub-page bundle ✓");
+console.log("free-credits page: intro/7 offer cards/model lists/disclosure + SEO head present, shares sub-page bundle ✓");
 
 // Every page footer carries the repo link (icon-only <a> to the source on GitHub).
 for (const [name, src] of [["index", html], ["agentrouter", ar], ["omp", omp], ["free-credits", fc]]) {
