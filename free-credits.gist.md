@@ -18,53 +18,43 @@ free balance on real work.
 
 ### B.Ai — 300,000 credits
 
-The biggest sign-up balance on the list, and the widest model spread — DeepSeek, GLM,
-Qwen, MiMo, Claude, GPT, Gemini, MiniMax and Kimi lines all on one key.
+The biggest sign-up balance on the list, and the widest model spread — DeepSeek, GLM, Qwen, MiMo, Claude, GPT, Gemini, MiniMax and Kimi lines all on one key.
 
 - **Claim:** https://chat.b.ai/chat?invite_code=5MXLTF
-- **Models:** `deepseek-v4-flash`, `deepseek-v4-flash-vision-exp`, `deepseek-v4-pro`, `hy3`, `mimo-v2.5`, `mimo-v2.5-pro`, `glm-5.3-flash`, `glm-5.3`, `qwen3.8-flash`, `qwen3.8-max`, `claude-opus-5`, `claude-opus-4.8`, `claude-fable-5`, `claude-sonnet-5`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gemini-3.1-pro`, `gemini-3.5-flash`, `gemini-3.5-flash-lite`, `minimax-m3`, `kimi-k3`
+- **Models:** `deepseek/deepseek-reasoner`, `glm-5.3`, `gpt-6-astra`, `meta/llama-3.1-70b-instruct`, `meta/llama-3.1-8b-instruct`, `meta/llama-3.2-11b-vision-instruct`, `claude-opus-5`, `claude-opus-4.8`, `claude-fable-5`, `claude-sonnet-5`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gemini-3.1-pro`, `gemini-3.5-flash`, `gemini-3.5-flash-lite`, `minimax-m3`, `kimi-k3`
 
-### Tabitoken.com — $120 credit
-
-The largest dollar-denominated balance on the list.
-
-- **Claim:** https://tabitoken.com/sign-up?aff=aEl5
-- **Models:** `claude-opus-4-8`, `claude-opus-5`
-
-### BluesMinds.com — $100 credit
-
-An AI gateway with an OpenAI-compatible base URL (`https://api.bluesminds.com/v1`), and
-the widest model spread on the list.
-
-- **Claim:** https://api.bluesminds.com/sign-up?aff=n8iO
-- **Models:** `deepseek-v4-pro`, `glm-5.3`, `gpt-5.6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.5`, `gpt-5.3-codex`, `gpt-5.2-chat`, `kimi-k3`, `kimi-k2.6`, `minimax-m3`, `nemotron-3-ultra-550b-a55b`, `nemotron-3-nano-omni-30b-a3b-reasoning`, `llama-4-maverick`, `gemma-4-26b`, `meta/muse-glimmer-30b`
-
-### Gorouter.app — $70 credit
-
-- **Claim:** https://gorouter.app/sign-up?aff=4Ssb
-- **Models:** `No models available`
-
-### JustWoker.icu — $70 credit
+### Justwoker.icu — $70 credits
 
 A New-API gateway with an OpenAI-compatible base URL (`https://api.justwoker.icu/v1`).
 
 - **Claim:** https://api.justwoker.icu/register?aff=4HgG
-- **Models:** `claude-opus-4-8`, `claude-opus-5`
+- **Models:** `gpt-5.6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`
 
-### AgentRouter.org — $50 credit
+### AgentRouter.org — $50 credits
 
-The one with a full setup write-up
-(base URLs, per-tool config, oh-my-pi `models.yaml`): https://seekpeak.dev/agentrouter/
+The one with a full setup write-up (base URLs, per-tool config, oh-my-pi `models.yaml`): https://seekpeak.dev/agentrouter/
 
 - **Claim:** https://agentrouter.org/register?aff=ENwt
-- **Models:** `claude-opus-4-8`, `claude-opus-5`, `deepseek-v4-flash`, `glm-5.3`, `gpt-5.6-sol`
+- **Models:** `glm-5.3`, `deepseek-v4-flash`, `gpt-5.6-sol`, `claude-opus-5`, `claude-opus-4-8`
 
-### Vyceai.com — $40 credit
+### Vyceai.com — $40 credits
 
 Has the OpenAI `gpt-5.6-luna` line plus a `claude-sonnet-4-6` option.
 
 - **Claim:** https://vyceai.com/signup?ref=VYCE_XFR2A9
-- **Models:** `gpt-5.6-luna`, `gpt-5.6-luna-testing`, `claude-sonnet-4-6`, `deepseek-v4-flash`
+- **Models:** `gpt-5.6-luna`, `gpt-5.6-new`, `deepseek-v4-flash`
+
+### Gorouter.app — $70 credits
+
+- **Claim:** https://gorouter.app/sign-up?aff=4Ssb
+- **Models:** `No models available right now`
+
+### Tabitoken.com — $120 credits
+
+The largest dollar-denominated balance on the list.
+
+- **Claim:** https://tabitoken.com/sign-up?aff=aEl5
+- **Models:** `No models available right now`
 
 ---
 
@@ -72,13 +62,12 @@ Has the OpenAI `gpt-5.6-luna` line plus a `claude-sonnet-4-6` option.
 
 | Provider | Credit | Models |
 | --- | --- | --- |
-| [B.Ai](https://chat.b.ai/chat?invite_code=5MXLTF) | 300,000 credits | deepseek-v4-flash, deepseek-v4-flash-vision-exp, deepseek-v4-pro, hy3, mimo-v2.5, mimo-v2.5-pro, glm-5.3-flash, glm-5.3, qwen3.8-flash, qwen3.8-max, claude-opus-5, claude-opus-4.8, claude-fable-5, claude-sonnet-5, gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gemini-3.1-pro, gemini-3.5-flash, gemini-3.5-flash-lite, minimax-m3, kimi-k3 |
-| [Tabitoken.com](https://tabitoken.com/sign-up?aff=aEl5) | $120 | claude-opus-4-8, claude-opus-5 |
-| [BluesMinds.com](https://api.bluesminds.com/sign-up?aff=n8iO) | $100 | deepseek-v4-pro, glm-5.3, gpt-5.6-luna, gpt-5.6-sol, gpt-5.6-terra, gpt-5.5, gpt-5.3-codex, gpt-5.2-chat, kimi-k3, kimi-k2.6, minimax-m3, nemotron-3-ultra-550b-a55b, nemotron-3-nano-omni-30b-a3b-reasoning, llama-4-maverick, gemma-4-26b, meta/muse-glimmer-30b |
-| [Gorouter.app](https://gorouter.app/sign-up?aff=4Ssb) | $70 | claude-opus-4-8, claude-opus-5 |
-| [JustWoker.icu](https://api.justwoker.icu/register?aff=4HgG) | $70 | claude-opus-4-8, claude-opus-5 |
-| [AgentRouter.org](https://agentrouter.org/register?aff=ENwt) | $50 | claude-opus-4-8, claude-opus-5, deepseek-v4-flash, glm-5.3, gpt-5.6-sol |
-| [Vyceai.com](https://vyceai.com/signup?ref=VYCE_XFR2A9) | $40 | gpt-5.6-luna, gpt-5.6-luna-testing, claude-sonnet-4-6, deepseek-v4-flash |
+| [B.Ai](https://chat.b.ai/chat?invite_code=5MXLTF) | 300,000 credits | deepseek/deepseek-reasoner, glm-5.3, gpt-6-astra, meta/llama-3.1-70b-instruct, meta/llama-3.1-8b-instruct, meta/llama-3.2-11b-vision-instruct, claude-opus-5, claude-opus-4.8, claude-fable-5, claude-sonnet-5, gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gemini-3.1-pro, gemini-3.5-flash, gemini-3.5-flash-lite, minimax-m3, kimi-k3 |
+| [Justwoker.icu](https://api.justwoker.icu/register?aff=4HgG) | $70 | gpt-5.6-luna, gpt-5.6-sol, gpt-5.6-terra |
+| [AgentRouter.org](https://agentrouter.org/register?aff=ENwt) | $50 | glm-5.3, deepseek-v4-flash, gpt-5.6-sol, claude-opus-5, claude-opus-4-8 |
+| [Vyceai.com](https://vyceai.com/signup?ref=VYCE_XFR2A9) | $40 | gpt-5.6-luna, gpt-5.6-new, deepseek-v4-flash |
+| [Gorouter.app](https://gorouter.app/sign-up?aff=4Ssb) | $70 | No models available right now |
+| [Tabitoken.com](https://tabitoken.com/sign-up?aff=aEl5) | $120 | No models available right now |
 
 ---
 

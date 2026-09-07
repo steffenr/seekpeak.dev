@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync, mkdirSync, rmSync, copyFileSync } from "no
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { minify } from "terser";
+import { offerCardsHtml, faqProvidersText, creditCtaText, gistMarkdown } from "./credits.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const tmpCss = join(root, "dist", ".tmp.css");
@@ -22,6 +23,9 @@ async function build() {
   const css = readFileSync(tmpCss, "utf8");
 
   const config = JSON.stringify(JSON.parse(readFileSync(join(root, "config.json"), "utf8")), null, 2);
+  const { offers } = JSON.parse(readFileSync(join(root, "credits.json"), "utf8"));
+  if (!Array.isArray(offers) || offers.length === 0) throw new Error("credits.json has no offers");
+  const creditCta = creditCtaText(offers);
   const themes = readFileSync(join(root, "src", "themes.js"), "utf8");
   // Themes are prepended to every page bundle so the theme list has one source of truth.
   const bundle = async (file) =>
@@ -40,6 +44,7 @@ async function build() {
   html = html.replace("/*__CSS__*/", () => css);
   html = html.replace("/*__CONFIG__*/", () => config);
   html = html.replace("/*__APP__*/", () => app);
+  html = html.replace("__CREDIT_CTA__", () => creditCta);
 
   const cfg = JSON.parse(readFileSync(join(root, "config.json"), "utf8"));
   const siteUrl = (cfg.site?.url || "").replace(/\/+$/, "");
@@ -49,7 +54,7 @@ async function build() {
   html = html.split("__SITE_URL__").join(siteUrl);
   html = html.split("__OG_IMAGE_URL__").join(siteUrl + "/og-image.png");
 
-  const leftover = html.match(/\/\*__(CSS|CONFIG|APP)__\*\//) || (html.includes("__SITE_URL__") || html.includes("__OG_IMAGE_URL__") ? html : null);
+  const leftover = html.match(/\/\*__(CSS|CONFIG|APP)__\*\//) || (html.includes("__SITE_URL__") || html.includes("__OG_IMAGE_URL__") || html.includes("__CREDIT_CTA__") ? html : null);
   if (leftover) {
     throw new Error(`placeholder not replaced: ${leftover}`);
   }
@@ -60,9 +65,12 @@ async function build() {
     let page = readFileSync(join(root, `${slug}.template.html`), "utf8");
     page = page.replace("/*__CSS__*/", () => css);
     page = page.replace("/*__SUB_APP__*/", () => subApp);
+    page = page.replace("__CREDIT_CTA__", () => creditCta);
+    page = page.replace("<!--__OFFER_CARDS__-->", () => offerCardsHtml(offers));
+    page = page.replace("__FAQ_PROVIDERS__", () => faqProvidersText(offers));
     page = page.split("__SITE_URL__").join(siteUrl);
     page = page.split("__OG_IMAGE_URL__").join(siteUrl + "/og-image.png");
-    if (page.match(/\/\*__(CSS|SUB_APP)__\*\//) || page.includes("__SITE_URL__") || page.includes("__OG_IMAGE_URL__")) {
+    if (page.match(/\/\*__(CSS|SUB_APP)__\*\//) || page.includes("__SITE_URL__") || page.includes("__OG_IMAGE_URL__") || page.includes("__CREDIT_CTA__") || page.includes("__OFFER_CARDS__") || page.includes("__FAQ_PROVIDERS__")) {
       throw new Error(`${slug} placeholder not replaced`);
     }
     mkdirSync(join(dist, slug), { recursive: true });
@@ -92,6 +100,10 @@ async function build() {
     ].join("\n")
   );
 
+  // free-credits.gist.md is a standalone Markdown mirror of the offers list
+  // (posted as a GitHub Gist); it is not part of dist/ but is regenerated here.
+  writeFileSync(join(root, "free-credits.gist.md"), gistMarkdown(offers));
+
   rmSync(tmpCss, { force: true });
   console.log("dist/index.html written", Buffer.byteLength(html), "bytes");
 }
@@ -101,8 +113,14 @@ await build();
 
 if (watch) {
   const { watchFile } = await import("node:fs");
-  const { debounce } = await import("node:util");
-  const targets = ["src/style.css", "src/app.js", "src/themes.js", "src/subpage.js", "config.json", "index.template.html", "agentrouter.template.html", "omp.template.html", "free-credits.template.html", "assets/site.webmanifest"];
+  const debounce = (fn, ms) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), ms);
+    };
+  };
+  const targets = ["src/style.css", "src/app.js", "src/themes.js", "src/subpage.js", "config.json", "credits.json", "scripts/credits.mjs", "index.template.html", "agentrouter.template.html", "omp.template.html", "free-credits.template.html", "assets/site.webmanifest"];
   for (const t of targets) {
     watchFile(join(root, t), { interval: 150 }, debounce(build, 100));
   }
