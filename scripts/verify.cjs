@@ -457,6 +457,8 @@ if (app.length >= appSrc.length) {
 console.log("inlined app.js minified:", appSrc.length, "->", app.length, "bytes ✓");
 const ar = fs.readFileSync("dist/agentrouter/index.html", "utf8");
 const AFF = "https://agentrouter.org/register?aff=ENwt";
+const OFFERS = JSON.parse(fs.readFileSync("credits.json", "utf8")).offers;
+const CREDIT_CTA = `Free credits — ${(OFFERS.find((o) => /^\$/.test(o.creditsShort)) || OFFERS[0]).creditsShort} to start`;
 for (const needle of [
   'id="creditBadge"',
   "bg-mk-green",
@@ -550,7 +552,7 @@ for (const needle of [
   "curl -fsSL https://omp.sh/install | sh",
   "bun install -g @oh-my-pi/pi-coding-agent",
   'id="creditCta"',
-  "Free credits — $120 to start",
+  CREDIT_CTA,
   'href="/free-credits/"',
   'href="/agentrouter/"',
   'id="themeButton"',
@@ -581,7 +583,7 @@ if (omp.includes("WSL")) {
   console.log("FAIL omp page should not sell the WSL angle");
   process.exit(1);
 }
-if (!html.includes('id="creditCta"') || !html.includes("Free credits — $120 to start") || !html.includes('href="/free-credits/"')) {
+if (!html.includes('id="creditCta"') || !html.includes(CREDIT_CTA) || !html.includes('href="/free-credits/"')) {
   console.log("FAIL main page missing the free-credits CTA");
   process.exit(1);
 }
@@ -599,23 +601,8 @@ console.log("omp page: hero/reasons/comparison/benchmarks/install + SEO head pre
 const fc = fs.readFileSync("dist/free-credits/index.html", "utf8");
 for (const needle of [
   'id="freeCreditsTitle"',
-  'id="offerAgentRouter"',
-  "AgentRouter.org — $50 Credits",
-  'id="offerBAi"',
-  "B.Ai — 300,000 Credits",
-  "https://chat.b.ai/chat?invite_code=5MXLTF",
   AFF,
   'rel="noopener sponsored"',
-  "Tabitoken.com — $120 Credits",
-  "https://tabitoken.com/sign-up?aff=aEl5",
-  "Gorouter.app — $70 Credits",
-  "https://gorouter.app/sign-up?aff=4Ssb",
-  "BluesMinds.com — $100 Credits",
-  "https://api.bluesminds.com/sign-up?aff=n8iO",
-  "Justwoker.icu — $70 Credits",
-  "https://api.justwoker.icu/register?aff=4HgG",
-  "Vyceai.com — $40 Credits",
-  "https://vyceai.com/signup?ref=VYCE_XFR2A9",
   'id="freeCreditsIntro"',
   "Working offers",
   "How this list works",
@@ -628,10 +615,20 @@ for (const needle of [
     process.exit(1);
   }
 }
-for (const id of ["claude-opus-4-8", "claude-opus-5", "deepseek-v4-flash", "glm-5.3", "gpt-5.6-sol", "hy3", "claude-fable-5"]) {
-  if (!fc.includes(">" + id + "<")) {
-    console.log("FAIL free-credits page missing model chip:", id);
-    process.exit(1);
+// Every provider in credits.json is on the page and in the gist, with its models.
+const gist = fs.readFileSync("free-credits.gist.md", "utf8");
+for (const o of OFFERS) {
+  for (const [label, src] of [["free-credits page", fc], ["free-credits.gist.md", gist]]) {
+    if (!src.includes(o.provider)) {
+      console.log("FAIL", label, "missing provider:", o.provider);
+      process.exit(1);
+    }
+    for (const m of o.models) {
+      if (!src.includes(m)) {
+        console.log("FAIL", label, "missing model", m, "for", o.provider);
+        process.exit(1);
+      }
+    }
   }
 }
 if (!fc.includes('rel="canonical" href="' + site.url + '/free-credits/"') || !fc.includes('property="og:url" content="' + site.url + '/free-credits/"')) {
@@ -655,7 +652,7 @@ if (fcApp !== arApp) {
   console.log("FAIL free-credits page does not share the sub-page theme-picker bundle");
   process.exit(1);
 }
-console.log("free-credits page: intro/7 offer cards/model lists/disclosure + SEO head present, shares sub-page bundle ✓");
+console.log(`free-credits page + gist: all ${OFFERS.length} providers from credits.json with their models, SEO head, shared bundle ✓`);
 
 // Every page footer carries the repo link (icon-only <a> to the source on GitHub).
 for (const [name, src] of [["index", html], ["agentrouter", ar], ["omp", omp], ["free-credits", fc]]) {
