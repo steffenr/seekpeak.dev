@@ -42,7 +42,7 @@ the widest model spread on the list.
 ### Gorouter.app — $70 credit
 
 - **Claim:** https://gorouter.app/sign-up?aff=4Ssb
-- **Models:** `claude-opus-4-8`, `claude-opus-5`
+- **Models:** `No models available`
 
 ### JustWoker.icu — $70 credit
 
