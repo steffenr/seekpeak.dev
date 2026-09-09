@@ -1,6 +1,39 @@
 {
   "offers": [
     {
+      "provider": "seekai.cc",
+      "credits": "$200 Credits",
+      "creditsShort": "$200",
+      "url": "https://seekai.cc/sign-up?aff=zLxN",
+      "featured": false,
+      "stars": 0,
+      "blurb": "A New-API gateway with an OpenAI-compatible base URL (`https://seekai.cc/v1`).",
+      "models": [
+        "deepseek-v4-flash",
+        "deepseek-v4-pro",
+        "glm-5.3-flash",
+        "kimi-k3",
+        "qwen3.8-flash"
+      ]
+    },
+    {
+      "provider": "AgentRouter.org",
+      "credits": "$50 Credits",
+      "creditsShort": "$50",
+      "url": "https://agentrouter.org/register?aff=ENwt",
+      "featured": false,
+      "stars": 0,
+      "blurb": "The one with a full setup write-up (base URLs, per-tool config, oh-my-pi `models.yaml`): https://seekpeak.dev/agentrouter/",
+      "note": "Full write-up and setup: <a href=\"/agentrouter/\" class=\"bg-mk-green px-1 text-mk-ink\">the AgentRouter page</a>.",
+      "models": [
+        "glm-5.3",
+        "deepseek-v4-flash",
+        "gpt-5.6-sol",
+        "claude-opus-5",
+        "claude-opus-4-8"
+      ]
+    },
+    {
       "provider": "B.Ai",
       "credits": "300,000 Credits",
       "creditsShort": "300,000 credits",
@@ -30,22 +63,6 @@
       ]
     },
     {
-      "provider": "seekai.cc",
-      "credits": "$200 Credits",
-      "creditsShort": "$200",
-      "url": "https://seekai.cc/sign-up?aff=zLxN",
-      "featured": false,
-      "stars": 0,
-      "blurb": "A New-API gateway with an OpenAI-compatible base URL (`https://seekai.cc/v1`).",
-      "models": [
-        "deepseek-v4-flash",
-        "deepseek-v4-pro",
-        "glm-5.3-flash",
-        "kimi-k3",
-        "qwen3.8-flash"
-      ]
-    },
-    {
       "provider": "Justwoker.icu",
       "credits": "$70 Credits",
       "creditsShort": "$70",
@@ -53,27 +70,11 @@
       "featured": false,
       "stars": 0,
       "blurb": "A New-API gateway with an OpenAI-compatible base URL (`https://api.justwoker.icu/v1`).",
+      "note": "Provider seems to have problems serving models - cloudflare error is thrown from time-to-time.",
       "models": [
         "gpt-5.6-luna",
         "gpt-5.6-sol",
         "gpt-5.6-terra"
-      ]
-    },
-    {
-      "provider": "AgentRouter.org",
-      "credits": "$50 Credits",
-      "creditsShort": "$50",
-      "url": "https://agentrouter.org/register?aff=ENwt",
-      "featured": false,
-      "stars": 0,
-      "blurb": "The one with a full setup write-up (base URLs, per-tool config, oh-my-pi `models.yaml`): https://seekpeak.dev/agentrouter/",
-      "note": "Full write-up and setup: <a href=\"/agentrouter/\" class=\"bg-mk-green px-1 text-mk-ink\">the AgentRouter page</a>.",
-      "models": [
-        "glm-5.3",
-        "deepseek-v4-flash",
-        "gpt-5.6-sol",
-        "claude-opus-5",
-        "claude-opus-4-8"
       ]
     },
     {
