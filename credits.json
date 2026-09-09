@@ -30,6 +30,22 @@
       ]
     },
     {
+      "provider": "seekai.cc",
+      "credits": "$200 Credits",
+      "creditsShort": "$200",
+      "url": "https://seekai.cc/sign-up?aff=zLxN",
+      "featured": false,
+      "stars": 0,
+      "blurb": "A New-API gateway with an OpenAI-compatible base URL (`https://seekai.cc/v1`).",
+      "models": [
+        "deepseek-v4-flash",
+        "deepseek-v4-pro",
+        "glm-5.3-flash",
+        "kimi-k3",
+        "qwen3.8-flash"
+      ]
+    },
+    {
       "provider": "Justwoker.icu",
       "credits": "$70 Credits",
       "creditsShort": "$70",
