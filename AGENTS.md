@@ -38,6 +38,7 @@ npm run build && node scripts/verify.cjs   # standard check — MUST be green be
 - `setInterval` (1s) drives `renderCountdown` every tick; on a verdict flip it re-renders badge, tagline, priceMode, priceTable, timeline.
 - Tailwind JIT: any class used in JS must appear as a **complete literal string** in `src/app.js`/`index.template.html` (no dynamic class-name interpolation) or it will be purged.
 - No comments unless they explain a non-obvious invariant (e.g. the ICU padding note).
+- `config.json` models take an optional `note` string; `renderPriceTable` renders it under the model `id`. Used for `deepseek-v4-pro` ("routes to V4.1 Flash") since DeepSeek routes Pro requests to V4.1 Flash and bills them at Flash rates. The homepage Pricing section carries a matching callout.
 - Don't touch `src/app.js`'s IIFE structure or the export-injection line in verify.cjs carelessly — they must stay in sync.
 
 ## Editing themes

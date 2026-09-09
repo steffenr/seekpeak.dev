@@ -46,7 +46,7 @@ parts:
 | `index.template.html` | Source of the single-page layout: hero badge card (`#badgeCard`, `#badgeText`, `#badgeMsg`, `#countdown`), pricing table, timeline (`#timeline`), timezone picker, footer. Contains the FOUC theme script in `<head>` and the `/*__CSS__|__CONFIG__|__APP__*/` placeholders. |
 | `src/app.js` | Single IIFE holding all logic (see inventory below). |
 | `src/style.css` | Tailwind v4 source: `@theme` tokens + one `[data-theme=…]` override block per theme. |
-| `config.json` | Single source of truth: `peakWindows` + `models` (deepseek-v4-flash, deepseek-v4-pro) with `cacheHit`/`cacheMiss`/`output` offPeak/peak prices, + `site` block (`url`, `name`) for the SEO/OG head. |
+| `config.json` | Single source of truth: `peakWindows` + `models` (deepseek-v4-flash, deepseek-v4-pro) with `cacheHit`/`cacheMiss`/`output` offPeak/peak prices (optional per-model `note` string renders under the id — `deepseek-v4-pro` carries "routes to V4.1 Flash"), + `site` block (`url`, `name`) for the SEO/OG head. |
 | `scripts/build.mjs` | Build pipeline (below). |
 | `scripts/verify.cjs` | Test harness against the built artifact (verification strategy below). |
 | `assets/og-image.png` | User-authored Open Graph image (1200×630 recommended); copied verbatim to `dist/og-image.png`. |
