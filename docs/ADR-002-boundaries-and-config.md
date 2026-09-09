@@ -24,16 +24,17 @@ off-peak. No races at boundaries.
     {
       "id": "deepseek-v4-flash",
       "name": "deepseek-v4-flash",
-      "cacheHit": { "offPeak": 0.007, "peak": 0.014 },
-      "cacheMiss": { "offPeak": 0.22, "peak": 0.44 },
-      "output": { "offPeak": 0.66, "peak": 1.32 }
+      "cacheHit": { "offPeak": 0.003, "peak": 0.006 },
+      "cacheMiss": { "offPeak": 0.15, "peak": 0.3 },
+      "output": { "offPeak": 0.6, "peak": 1.2 }
     },
     {
       "id": "deepseek-v4-pro",
       "name": "deepseek-v4-pro",
-      "cacheHit": { "offPeak": 0.022, "peak": 0.044 },
-      "cacheMiss": { "offPeak": 0.66, "peak": 1.32 },
-      "output": { "offPeak": 1.98, "peak": 3.96 }
+      "note": "routes to V4.1 Flash",
+      "cacheHit": { "offPeak": 0.003, "peak": 0.006 },
+      "cacheMiss": { "offPeak": 0.15, "peak": 0.3 },
+      "output": { "offPeak": 0.6, "peak": 1.2 }
     }
   ],
   "site": {
@@ -45,7 +46,9 @@ off-peak. No races at boundaries.
 The `site` block feeds the build-time head tokens (`__SITE_URL__`,
 `__OG_IMAGE_URL__` — canonical, og:*, JSON-LD); the domain is never
 hardcoded elsewhere. `name` mirrors `id` and is kept for parity with
-pricing elsewhere; renderers currently use `id`.
+pricing elsewhere; renderers currently use `id`. An optional per-model
+`note` string renders under the model id in the price table (used for
+`deepseek-v4-pro` → "routes to V4.1 Flash" until V4.1 Pro ships).
 
 ### Local blocks may wrap midnight
 Per-timezone projections (e.g. `23:00 -> 03:00` PDT) cross the day
