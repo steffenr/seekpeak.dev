@@ -357,6 +357,12 @@
       const name = document.createElement("td");
       name.className = "px-4 py-3 pr-4 font-black text-mk-cyan";
       name.textContent = m.id;
+      if (m.note) {
+        const note = document.createElement("span");
+        note.className = "mt-1 block text-xs font-bold uppercase tracking-wide text-mk-muted";
+        note.textContent = m.note;
+        name.append(note);
+      }
       tr.append(name);
       const keys = [
         ["cacheHit", "Input · cache hit"],
