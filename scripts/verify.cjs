@@ -303,7 +303,7 @@ const staticChecks = [
   "text-mk-ink",
   "Are weekends billed differently?",
   "Since August 23, 2026, DeepSeek bills weekends",
-  "Pricing change",
+  "V4 Pro is being retired",
   "routes to V4.1 Flash",
 ];
 for (const needle of staticChecks) {
