@@ -22,8 +22,8 @@ off-peak. No races at boundaries.
   "peakWindows": [["01:00", "04:00"], ["06:00", "10:00"]],
   "models": [
     {
-      "id": "deepseek-v4-flash",
-      "name": "deepseek-v4-flash",
+      "id": "deepseek-v4.1-flash",
+      "name": "deepseek-v4.1-flash",
       "cacheHit": { "offPeak": 0.003, "peak": 0.006 },
       "cacheMiss": { "offPeak": 0.15, "peak": 0.3 },
       "output": { "offPeak": 0.6, "peak": 1.2 }
