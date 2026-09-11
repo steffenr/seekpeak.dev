@@ -31,7 +31,6 @@ off-peak. No races at boundaries.
     {
       "id": "deepseek-v4-pro",
       "name": "deepseek-v4-pro",
-      "note": "routes to V4.1 Flash on Sep 14, 2026",
       "cacheHit": { "offPeak": 0.022, "peak": 0.044 },
       "cacheMiss": { "offPeak": 0.66, "peak": 1.32 },
       "output": { "offPeak": 1.98, "peak": 3.96 }
@@ -47,10 +46,11 @@ The `site` block feeds the build-time head tokens (`__SITE_URL__`,
 `__OG_IMAGE_URL__` — canonical, og:*, JSON-LD); the domain is never
 hardcoded elsewhere. `name` mirrors `id` and is kept for parity with
 pricing elsewhere; renderers currently use `id`. An optional per-model
-`note` string renders under the model id in the price table (used for
-`deepseek-v4-pro` → "routes to V4.1 Flash on Sep 14, 2026"; Pro keeps
-its own prices until that cutover, then bills at Flash rates until
-V4.1 Pro ships).
+`note` string renders under the model id in the price table; it is
+currently unused. DeepSeek had planned to retire `deepseek-v4-pro` by
+routing it to V4.1 Flash on Sep 14, 2026, but emailed (Sep 2026) that
+it will continue serving V4 Pro past that date with billing unchanged,
+so no note or callout marks it as retiring.
 
 ### Local blocks may wrap midnight
 Per-timezone projections (e.g. `23:00 -> 03:00` PDT) cross the day
