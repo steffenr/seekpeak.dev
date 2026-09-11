@@ -113,7 +113,7 @@ build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
   "weekendOffPeak": { "timezone": "Asia/Shanghai", "days": [0, 6] },  // Sat+Sun, Beijing-anchored
   "models": [
     { "id": "deepseek-v4.1-flash", "cacheHit": { "offPeak": 0.003, "peak": 0.006 }, /* … */ },
-    { "id": "deepseek-v4-pro", "note": "routes to V4.1 Flash on Sep 14, 2026", /* … */ }  // optional note renders under the model id
+    { "id": "deepseek-v4-pro", /* … */ }  // optional per-model "note" string renders under the model id, unused for Pro since DeepSeek confirmed it continues past Sep 14, 2026
   ],
   "site": {
     "url": "https://seekpeak.dev",   // feeds canonical/og:/JSON-LD at build
