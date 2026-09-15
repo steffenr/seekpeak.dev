@@ -1,0 +1,125 @@
+name: Prepare release
+
+# One-click release. Run this from Actions -> "Prepare release" -> "Run workflow"
+# and pick a semantic bump (patch/minor/major). It:
+#   1. runs the validate gate (typecheck-free build + tests) on the current tree
+#   2. reads the latest vX.Y.Z git tag, bumps it (semver) and syncs it into
+#      package.json
+#   3. commits "chore(release): X", creates an annotated tag vX and pushes both
+# The tag push then triggers deploy.yml, which builds and ships dist/ to
+# Netcup over SSH.
+#
+# Requires a repository secret RELEASE_PAT: a Personal Access Token (classic or
+# fine-grained with Contents: Read & write) whose owner may push to develop. A
+# PAT is required because pushes made with the default GITHUB_TOKEN do not
+# trigger other workflows, so the tag would never start the deploy.
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Semantic version bump'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    name: Bump version and tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # full history + tags so we can detect the latest release tag
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_PAT }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Enable Corepack (Yarn Berry)
+        run: |
+          corepack enable
+          corepack prepare yarn@4.14.1 --activate
+
+      - name: Cache Yarn
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/node/corepack
+            ~/.yarn/berry/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Validate gate
+        run: yarn validate
+
+      - name: Compute next version
+        id: version
+        shell: bash
+        run: |
+          LATEST_TAG=$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' | sort -V | tail -1)
+          CURRENT="${LATEST_TAG#v}"
+          CURRENT="${CURRENT:-0.0.0}"
+          NEXT=$(CURRENT="${CURRENT}" BUMP="${{ github.event.inputs.bump }}" node -e '
+            const [maj, min, pat] = process.env.CURRENT.split(".").map(Number);
+            switch (process.env.BUMP) {
+              case "major": console.log(`${maj + 1}.0.0`); break;
+              case "minor": console.log(`${maj}.${min + 1}.0`); break;
+              default: console.log(`${maj}.${min}.${pat + 1}`);
+            }
+          ')
+          TAG="v${NEXT}"
+          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            echo "::error::Tag ${TAG} already exists. Bump manually or choose a different increment."
+            exit 1
+          fi
+          {
+            echo "current=${CURRENT}"
+            echo "next=${NEXT}"
+            echo "tag=${TAG}"
+          } >> "$GITHUB_OUTPUT"
+          echo "Releasing ${CURRENT} -> ${NEXT} (tag ${TAG})"
+
+      - name: Sync version into package.json
+        shell: bash
+        env:
+          NEXT: ${{ steps.version.outputs.next }}
+        run: |
+          node -e '
+            const fs = require("fs");
+            const path = "package.json";
+            const pkg = JSON.parse(fs.readFileSync(path, "utf8"));
+            pkg.version = process.env.NEXT;
+            fs.writeFileSync(path, JSON.stringify(pkg, null, 2) + "\n");
+          '
+
+      - name: Commit, tag and push
+        shell: bash
+        env:
+          GIT_TOKEN: ${{ secrets.RELEASE_PAT }}
+          NEXT: ${{ steps.version.outputs.next }}
+          TAG: ${{ steps.version.outputs.tag }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json
+          git commit -m "chore(release): ${NEXT}"
+          git tag -a "$TAG" -m "Release ${NEXT}"
+          REMOTE="https://x-access-token:${GIT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push "$REMOTE" "HEAD:refs/heads/${BRANCH}"
+          git push "$REMOTE" "$TAG"
+          echo "Pushed ${BRANCH} and tag ${TAG}; deploy.yml will build and ship to Netcup."
