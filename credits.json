@@ -141,19 +141,6 @@
       "featured": false,
       "stars": 0,
       "blurb": "A New-API gateway with an OpenAI-compatible base URL (`https://api.justwoker.icu/v1`).",
-      "note": "Provider seems to have problems serving models - cloudflare error is thrown from time-to-time.",
-      "models": [
-        "No models available right now"
-      ]
-    },
-    {
-      "provider": "Gorouter.app",
-      "credits": "$70 Credits",
-      "creditsShort": "$70",
-      "url": "https://gorouter.app/sign-up?aff=4Ssb",
-      "featured": false,
-      "stars": 0,
-      "blurb": "",
       "models": [
         "No models available right now"
       ]
