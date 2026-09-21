@@ -23,7 +23,7 @@
       "stars": 0,
       "blurb": "A New-API gateway with an OpenAI-compatible base URL (`https://api.justwoker.icu/v1`).",
       "models": [
-        "claude-opus-4-8",
+        "claude-opus-4-8"
       ]
     },
     {
