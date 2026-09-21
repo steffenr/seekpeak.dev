@@ -9,11 +9,21 @@
       "stars": 0,
       "blurb": "A New-API gateway with an OpenAI-compatible base URL (`https://seekai.cc/v1`).",
       "models": [
+        "DeepSeek-V4-Flash-0731",
         "deepseek-v4-flash",
-        "deepseek-v4-pro",
-        "glm-5.3-flash",
-        "kimi-k3",
-        "qwen3.8-flash"
+        "glm-5.3"
+      ]
+    },
+    {
+      "provider": "Justwoker.icu",
+      "credits": "$70 Credits",
+      "creditsShort": "$70",
+      "url": "https://api.justwoker.icu/register?aff=4HgG",
+      "featured": false,
+      "stars": 0,
+      "blurb": "A New-API gateway with an OpenAI-compatible base URL (`https://api.justwoker.icu/v1`).",
+      "models": [
+        "claude-opus-4-8",
       ]
     },
     {
@@ -131,18 +141,6 @@
         "Wan 2.2 Enhanced",
         "Wan 3.0",
         "Wan 3.0 Prime"
-      ]
-    },
-    {
-      "provider": "Justwoker.icu",
-      "credits": "$70 Credits",
-      "creditsShort": "$70",
-      "url": "https://api.justwoker.icu/register?aff=4HgG",
-      "featured": false,
-      "stars": 0,
-      "blurb": "A New-API gateway with an OpenAI-compatible base URL (`https://api.justwoker.icu/v1`).",
-      "models": [
-        "No models available right now"
       ]
     },
     {
