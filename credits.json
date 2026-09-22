@@ -9,9 +9,11 @@
       "stars": 0,
       "blurb": "A New-API gateway with an OpenAI-compatible base URL (`https://seekai.cc/v1`).",
       "models": [
-        "DeepSeek-V4-Flash-0731",
         "deepseek-v4-flash",
-        "glm-5.3"
+        "deepseek-v4.1-flash",
+        "glm-5.3",
+        "hy4-preview-f",
+        "claude-sonnet"        
       ]
     },
     {
