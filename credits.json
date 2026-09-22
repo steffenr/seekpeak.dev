@@ -56,8 +56,13 @@
       "models": [
         "claude-sonnet-4-6",
         "deepseek-v4-flash",
+        "deepseek-v4-pro",
         "deepseek-v4.1",
-        "agnes-3.0-flash"
+        "agnes-3.0-flash",
+        "gpt-astra",
+        "gpt-5.6-terra",
+        "grok-4.6",
+        "qwen3.8-flash"
       ]
     },
     {
