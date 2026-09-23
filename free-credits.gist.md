@@ -16,19 +16,10 @@ free balance on real work.
 
 ## Working offers
 
-### seekai.cc — $200 credits
+### Vyceai.com — $40 credits
 
-A New-API gateway with an OpenAI-compatible base URL (`https://seekai.cc/v1`).
-
-- **Claim:** https://seekai.cc/sign-up?aff=zLxN
-- **Models:** `deepseek-v4-flash`, `deepseek-v4.1-flash`, `glm-5.3`, `hy4-preview-f`, `claude-sonnet`
-
-### Justwoker.icu — $70 credits
-
-A New-API gateway with an OpenAI-compatible base URL (`https://api.justwoker.icu/v1`).
-
-- **Claim:** https://api.justwoker.icu/register?aff=4HgG
-- **Models:** `claude-opus-4-8`
+- **Claim:** https://vyceai.com/signup?ref=VYCE_XFR2A9
+- **Models:** `claude-sonnet-4-6`, `deepseek-v4-flash`, `deepseek-v4-pro`, `deepseek-v4.1`, `agnes-3.0-flash`, `gpt-astra`, `gpt-5.6-terra`, `grok-4.6`, `qwen3.8-flash`
 
 ### AgentRouter.org — $50 credits
 
@@ -37,19 +28,26 @@ The one with a full setup write-up (base URLs, per-tool config, oh-my-pi `models
 - **Claim:** https://agentrouter.org/register?aff=ENwt
 - **Models:** `glm-5.3`, `deepseek-v4-flash`, `gpt-5.6-sol`, `claude-opus-5`, `claude-opus-4-8`
 
-### Vyceai.com — $40 credits
-
-Has the OpenAI `gpt-5.6-luna` line plus a `claude-sonnet-4-6` option.
-
-- **Claim:** https://vyceai.com/signup?ref=VYCE_XFR2A9
-- **Models:** `claude-sonnet-4-6`, `deepseek-v4-flash`, `deepseek-v4-pro`, `deepseek-v4.1`, `agnes-3.0-flash`, `gpt-astra`, `gpt-5.6-terra`, `grok-4.6`, `qwen3.8-flash`
-
 ### B.Ai — 300,000 credits
 
 The biggest sign-up balance on the list, and the widest model spread — DeepSeek, GLM, Qwen, MiMo, Claude, GPT, Gemini, MiniMax and Kimi lines all on one key.
 
 - **Claim:** https://chat.b.ai/chat?invite_code=5MXLTF
 - **Models:** `deepseek-v4.1-flash`, `deepseek-v4-pro`, `hy3`, `glm-5.3`, `glm-5.3-flash`, `gpt-6-astra`, `meta/llama-3.1-70b-instruct`, `meta/llama-3.1-8b-instruct`, `meta/llama-3.2-11b-vision-instruct`, `claude-opus-5`, `claude-opus-4.8`, `claude-fable-5`, `claude-sonnet-5`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gemini-3.1-pro`, `gemini-3.5-flash`, `gemini-3.5-flash-lite`, `minimax-m3`, `mimo-v2.5`, `kimi-k3`, `qwen3.8-flash`
+
+### seekai.cc — $200 credits
+
+Sometimes the endpoints are not reliable and may break at long running tasks.
+
+- **Claim:** https://seekai.cc/sign-up?aff=zLxN
+- **Models:** `deepseek-v4-flash`, `deepseek-v4.1-flash`, `glm-5.3`, `hy4-preview-f`, `claude-sonnet`
+
+### Justwoker.icu — $70 credits
+
+Has some issues with cloudflare right now.. 
+
+- **Claim:** https://api.justwoker.icu/register?aff=4HgG
+- **Models:** `claude-opus-4-8`
 
 ### venice.ai — $10 credits
 
@@ -71,11 +69,11 @@ The largest dollar-denominated balance on the list.
 
 | Provider | Credit | Models |
 | --- | --- | --- |
+| [Vyceai.com](https://vyceai.com/signup?ref=VYCE_XFR2A9) | $40 | claude-sonnet-4-6, deepseek-v4-flash, deepseek-v4-pro, deepseek-v4.1, agnes-3.0-flash, gpt-astra, gpt-5.6-terra, grok-4.6, qwen3.8-flash |
+| [AgentRouter.org](https://agentrouter.org/register?aff=ENwt) | $50 | glm-5.3, deepseek-v4-flash, gpt-5.6-sol, claude-opus-5, claude-opus-4-8 |
+| [B.Ai](https://chat.b.ai/chat?invite_code=5MXLTF) | 300,000 credits | deepseek-v4.1-flash, deepseek-v4-pro, hy3, glm-5.3, glm-5.3-flash, gpt-6-astra, meta/llama-3.1-70b-instruct, meta/llama-3.1-8b-instruct, meta/llama-3.2-11b-vision-instruct, claude-opus-5, claude-opus-4.8, claude-fable-5, claude-sonnet-5, gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gemini-3.1-pro, gemini-3.5-flash, gemini-3.5-flash-lite, minimax-m3, mimo-v2.5, kimi-k3, qwen3.8-flash |
 | [seekai.cc](https://seekai.cc/sign-up?aff=zLxN) | $200 | deepseek-v4-flash, deepseek-v4.1-flash, glm-5.3, hy4-preview-f, claude-sonnet |
 | [Justwoker.icu](https://api.justwoker.icu/register?aff=4HgG) | $70 | claude-opus-4-8 |
-| [AgentRouter.org](https://agentrouter.org/register?aff=ENwt) | $50 | glm-5.3, deepseek-v4-flash, gpt-5.6-sol, claude-opus-5, claude-opus-4-8 |
-| [Vyceai.com](https://vyceai.com/signup?ref=VYCE_XFR2A9) | $40 | claude-sonnet-4-6, deepseek-v4-flash, deepseek-v4-pro, deepseek-v4.1, agnes-3.0-flash, gpt-astra, gpt-5.6-terra, grok-4.6, qwen3.8-flash |
-| [B.Ai](https://chat.b.ai/chat?invite_code=5MXLTF) | 300,000 credits | deepseek-v4.1-flash, deepseek-v4-pro, hy3, glm-5.3, glm-5.3-flash, gpt-6-astra, meta/llama-3.1-70b-instruct, meta/llama-3.1-8b-instruct, meta/llama-3.2-11b-vision-instruct, claude-opus-5, claude-opus-4.8, claude-fable-5, claude-sonnet-5, gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gemini-3.1-pro, gemini-3.5-flash, gemini-3.5-flash-lite, minimax-m3, mimo-v2.5, kimi-k3, qwen3.8-flash |
 | [venice.ai](https://venice.ai/chat?ref=u281-E) | $10 | Aion 3.0, Aion 3.0 Mini, Claude Fable 5.1, Claude Opus 5, DeepSeek V4 Flash, DeepSeek V4 Flash 0731, DeepSeek V4 Pro 0813, Flux 3, Gemini 3.5 Flash-Lite, Gemini 3.6 Flash, Gemini 3.7 Flash, Gemini 3.8 Flash, Gemini Omni Flash 1.1, GPT-5.6 Luna, GPT-5.6 Sol, GPT-5.6 Terra, GPT-6 Astra, GPT-6 Astra Pro, Grok 4.6, Grok Imagine 2.0, Inkling, Kimi K2.6, Kimi K3, Krea 2 Turbo, LTX Video 2.5 Fast, LTX Video 2.5 Pro, MiniMax H3, MiniMax H3 Enhanced, MiniMax H3 Max, Muse Image, Qwen 3.8 2.4T, Qwen 3.8 27B, Qwen 3.8 Max, Qwen Image 3, Qwen Image 3 Pro, Seedance 2.5, Seedream V5 Pro, Wan 2.2 Enhanced, Wan 3.0, Wan 3.0 Prime |
 | [Tabitoken.com](https://tabitoken.com/sign-up?aff=aEl5) | $120 | No models available right now |
 
