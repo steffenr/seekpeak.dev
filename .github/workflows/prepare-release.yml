@@ -5,7 +5,8 @@ name: Prepare release
 #   1. runs the validate gate (typecheck-free build + tests) on the current tree
 #   2. reads the latest vX.Y.Z git tag, bumps it (semver) and syncs it into
 #      package.json
-#   3. commits "chore(release): X", creates an annotated tag vX and pushes both
+#   3. commits "chore(release): X" (refreshing package.json and free-credits.gist.md
+#      from the current credits.json), creates an annotated tag vX and pushes both
 # The tag push then triggers deploy.yml, which builds and ships dist/ to
 # Netcup over SSH.
 #
@@ -116,7 +117,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add package.json
+          # The validate gate (yarn build) above regenerated free-credits.gist.md from
+          # credits.json; stage it so the release commit ships fresh offers.
+          git add package.json free-credits.gist.md
           git commit -m "chore(release): ${NEXT}"
           git tag -a "$TAG" -m "Release ${NEXT}"
           REMOTE="https://x-access-token:${GIT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
