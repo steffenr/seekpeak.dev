@@ -30,6 +30,19 @@ ports are checked against the same `tests/fixtures/verdict-cases.json` —
 if you change the billing rule, update that shared fixtures file and
 re-run **both** `node scripts/verify.cjs` and `cd api && vendor/bin/phpunit`.
 
+**Deployment prerequisite — vhost document root:** the web server's document
+root for `api.seekpeak.dev` **MUST** be the deployed `public/` subdirectory
+(front controller `public/index.php`), **NOT** the project root. Otherwise
+`/v1/status` 404s and `.env`, `config.json`, `composer.lock`, `src/` and
+`var/log/` are served as static files. This is server config outside the
+repo — verify it before the first deploy. `var/` must be writable (the deploy
+excludes it; Symfony rebuilds the prod cache on first request), and the
+deploy runs `composer dump-env prod` so the app boots with `APP_ENV=prod`,
+`APP_DEBUG=0`.
+
+- Timezones: `tz` is validated against `\DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC)` — exact-case, aliases like `Asia/Calcutta` allowed.
+- `App\EventSubscriber\CorsHeadersSubscriber` adds `Access-Control-Allow-Origin: *` to every response and `Cache-Control: no-store` to framework-generated errors (404/405/500/400) lacking explicit caching directives.
+
 ## Verify.cjs conventions (test suite)
 
 - It tests the **built artifacts** (`dist/index.html` plus each `dist/<slug>/index.html` sub-page), so always `npm run build` first.

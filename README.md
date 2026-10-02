@@ -92,26 +92,36 @@ Symfony skeleton) deployed independently to `api.seekpeak.dev`:
 GET /v1/status?tz=Europe/Berlin
 ```
 
-`tz` is an optional IANA timezone name (defaults to `UTC`; an unrecognized
-value returns `400`). Response:
+`tz` is an optional IANA timezone name, case-sensitive; backward-compatible
+aliases such as `Asia/Calcutta` are accepted (defaults to `UTC`; an
+unrecognized value returns `400`). Response, e.g. on Thursday
+2026-01-08 at 07:00 UTC:
 
 ```json
 {
   "tz": "Europe/Berlin",
-  "utcTime": "2026-10-02T13:00:00.000Z",
-  "localTime": "2026-10-02T15:00:00+02:00",
-  "peak": false,
+  "utcTime": "2026-01-08T07:00:00.000Z",
+  "localTime": "2026-01-08T08:00:00+01:00",
+  "peak": true,
   "reason": "window",
-  "nextTransition": { "at": "2026-10-02T14:00:00.000Z", "peak": true }
+  "nextTransition": { "at": "2026-01-08T10:00:00.000Z", "peak": false }
 }
 ```
 
 The API reads the same repo-root `config.json` the static site does (copied
 into `api/config.json` by a composer script on install — never hand-edited)
 and does **not** replace the site's client-side computation; the static
-page keeps working offline exactly as before. See
-`docs/superpowers/specs/2026-10-02-status-api-design.md` for the full
-design.
+page keeps working offline exactly as before.
+
+> **Deployment prerequisite — vhost document root.** The web server's
+> document root for `api.seekpeak.dev` **must** point at the deployed
+> `public/` subdirectory (Symfony's front controller is `public/index.php`),
+> **not** at the project root. With the project root as docroot,
+> `/v1/status` 404s **and** sensitive files — `.env`, `config.json`,
+> `composer.lock`, source under `src/`, logs under `var/log/` — are served as
+> static files. Verify/configure this on the server before the first deploy.
+> `var/` must also be writable by PHP: the deploy ships no cache, and Symfony
+> rebuilds `var/cache/prod` on the first request.
 
 ## Build
 
