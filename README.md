@@ -40,9 +40,11 @@ at any instant. Peak windows are half-open UTC intervals
 is off-peak — on weekdays. **Weekends are always off-peak:** Saturday and
 Sunday in Beijing time (`Asia/Shanghai`, fixed UTC+8) override the UTC
 windows above, all day, regardless of the visitor's own timezone (see
-`docs/ADR-004`). Per-timezone blocks are derived at runtime via `Intl`
-(DST-correct) — never hardcoded. Configuration (windows + prices +
-weekend rule) lives in `config.json`, the single source of truth.
+`docs/ADR-004`). **Chinese public holidays are also always off-peak**,
+by the same Beijing-anchored override (see `docs/ADR-005`). Per-timezone
+blocks are derived at runtime via `Intl` (DST-correct) — never hardcoded.
+Configuration (windows + prices + weekend rule + holiday dates) lives in
+`config.json`, the single source of truth.
 
 See `DESIGN.md` for the full design, and `docs/ADR-*.md` + `docs/GLOSSARY.md`
 for the committed domain-model decisions.
@@ -95,9 +97,9 @@ yourself, 1200×630 recommended), `dist/site.webmanifest` and `dist/robots.txt`.
 The inlined JS is minified with terser. The test harness
 (`scripts/verify.cjs`) parses the built artifacts and covers verdict logic
 (a 9-UTC-day sweep spanning Beijing weekends, checked against an independent
-Intl-weekday reference), half-open boundaries, countdown text, DST-transition
-midnights, cross-midnight timelines, and static template / SEO / dist-file
-expectations.
+Intl-weekday reference), the Chinese-holiday override, half-open boundaries,
+countdown text, DST-transition midnights, cross-midnight timelines, and
+static template / SEO / dist-file expectations.
 
 The site URL lives in the `site` block of `config.json` and flows through the
 build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
@@ -111,6 +113,7 @@ build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
 {
   "peakWindows": [["01:00", "04:00"], ["06:00", "10:00"]],  // half-open UTC, weekdays only
   "weekendOffPeak": { "timezone": "Asia/Shanghai", "days": [0, 6] },  // Sat+Sun, Beijing-anchored
+  "chinaPublicHolidays": { "timezone": "Asia/Shanghai", "dates": ["2026-01-01", /* … */] },  // Beijing-anchored, updated yearly
   "models": [
     { "id": "deepseek-v4.1-flash", "cacheHit": { "offPeak": 0.003, "peak": 0.006 }, /* … */ },
     { "id": "deepseek-v4-pro", /* … */ }  // optional per-model "note" string renders under the model id, unused for Pro since DeepSeek confirmed it continues past Sep 14, 2026
@@ -135,7 +138,7 @@ build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
 | `src/subpage.js` | Shared sub-page bundle (theme picker only) |
 | `src/themes.js` | Theme list — single source of truth, prepended to every page bundle |
 | `src/style.css` | Tailwind v4 source: theme tokens + `[data-theme=…]` blocks + `@source` lines |
-| `config.json` | Peak windows, weekend off-peak rule, model prices, + `site` block |
+| `config.json` | Peak windows, weekend off-peak rule, Chinese public holiday dates, model prices, + `site` block |
 | `scripts/build.mjs` | Build pipeline (Tailwind v4 → minified CSS, then inline + dist assets) |
 | `assets/og-image.png` | Your Open Graph image (1200×630 recommended), copied to `dist/og-image.png` |
 | `scripts/verify.cjs` | Test suite against the built `dist/index.html` |

@@ -29,12 +29,15 @@ backend, no runtime build, no JavaScript frameworks (see `docs/ADR-003`).
   second, fixed anchor for *which calendar day it is*, never the visitor's
   clock, so the "identical for every visitor" property still holds (see
   `docs/ADR-004`).
+- **Chinese public holidays are always off-peak**, by the same
+  Beijing-anchored, calendar-day override as weekends — a fixed list of
+  dates in `config.json`, updated once a year (see `docs/ADR-005`).
 - The visitor timezone is **display-only**: it changes which clock you read,
   never the price. Per-timezone blocks are derived at runtime via `Intl`
   (DST-correct) — never hardcoded.
 - `config.json` is the single source of truth for `peakWindows`,
-  `weekendOffPeak`, model prices, and the `site` block (see `docs/ADR-002`,
-  `docs/ADR-004`).
+  `weekendOffPeak`, `chinaPublicHolidays`, model prices, and the `site`
+  block (see `docs/ADR-002`, `docs/ADR-004`, `docs/ADR-005`).
 
 ## Architecture
 
@@ -46,7 +49,7 @@ parts:
 | `index.template.html` | Source of the single-page layout: hero badge card (`#badgeCard`, `#badgeText`, `#badgeMsg`, `#countdown`), pricing table, timeline (`#timeline`), timezone picker, footer. Contains the FOUC theme script in `<head>` and the `/*__CSS__|__CONFIG__|__APP__*/` placeholders. |
 | `src/app.js` | Single IIFE holding all logic (see inventory below). |
 | `src/style.css` | Tailwind v4 source: `@theme` tokens + one `[data-theme=…]` override block per theme. |
-| `config.json` | Single source of truth: `peakWindows` + `models` (deepseek-v4.1-flash, deepseek-v4-pro) with `cacheHit`/`cacheMiss`/`output` offPeak/peak prices (optional per-model `note` string renders under the id; currently unused — DeepSeek confirmed V4 Pro continues past its planned Sep 14, 2026 retirement), + `site` block (`url`, `name`) for the SEO/OG head. |
+| `config.json` | Single source of truth: `peakWindows` + `weekendOffPeak` + `chinaPublicHolidays` + `models` (deepseek-v4.1-flash, deepseek-v4-pro) with `cacheHit`/`cacheMiss`/`output` offPeak/peak prices (optional per-model `note` string renders under the id; currently unused — DeepSeek confirmed V4 Pro continues past its planned Sep 14, 2026 retirement), + `site` block (`url`, `name`) for the SEO/OG head. |
 | `scripts/build.mjs` | Build pipeline (below). |
 | `scripts/verify.cjs` | Test harness against the built artifact (verification strategy below). |
 | `assets/og-image.png` | User-authored Open Graph image (1200×630 recommended); copied verbatim to `dist/og-image.png`. |
@@ -70,17 +73,21 @@ parts:
   the hour is requested at the same time (`{hour:"2-digit", minute:"2-digit"}`).
   There is a comment in `countdownText` about this; do not simplify it away.
 - **`nextTransition` scans forward, not just "the next boundary."** Because
-  a Beijing weekend can suppress up to two calendar days of otherwise-peak
-  windows, the next real verdict flip might not be the next chronological
-  window boundary — the function scans a 10-day lookahead and returns the
-  first boundary where `isPeak` actually differs from `isPeak(now)`.
+  a Beijing weekend butted against a multi-day Chinese holiday (e.g. the
+  9-day Spring Festival) can suppress over 10 consecutive calendar days of
+  otherwise-peak windows, the next real verdict flip might not be the next
+  chronological window boundary — the function scans a 20-day lookahead and
+  returns the first boundary where `isPeak` actually differs from
+  `isPeak(now)`.
 
 ### Pure-logic inventory
 
-- Verdict: `isPeak(now)` (UTC + Beijing-weekend override), `isWeekend(now)`
-  (Beijing-anchored, `docs/ADR-004`), `nextTransition(now)` → next flip
-  instant (never null for valid config; scans a 10-day lookahead so it can
-  skip a Beijing weekend's non-flipping window boundaries).
+- Verdict: `isPeak(now)` (UTC + Beijing-weekend + Chinese-holiday override),
+  `isWeekend(now)` (Beijing-anchored, `docs/ADR-004`), `isChineseHoliday(now)`
+  (Beijing-anchored date-list lookup, `docs/ADR-005`), `nextTransition(now)`
+  → next flip instant (never null for valid config; scans a 20-day lookahead
+  so it can skip a combined weekend+holiday run's non-flipping window
+  boundaries).
 - Timezone math: `localMidnight`, `localHour`, `tzOffsetMin`, `offsetLabel`,
   `tzDateParts`.
 - Minute-precision engine: `minuteMask(now, tz)` → `boolean[1440]`,
