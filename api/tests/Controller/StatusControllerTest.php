@@ -65,7 +65,9 @@ final class StatusControllerTest extends WebTestCase
 
         $response = $client->getResponse();
         $this->assertSame('*', $response->headers->get('Access-Control-Allow-Origin'));
-        $this->assertMatchesRegularExpression('/^public, max-age=\d+$/', $response->headers->get('Cache-Control'));
+        $cacheControl = $response->headers->get('Cache-Control');
+        $this->assertStringContainsString('public', $cacheControl);
+        $this->assertMatchesRegularExpression('/\bmax-age=\d+\b/', $cacheControl);
     }
 
     public function testInvalidTzResponseIsNotCached(): void
@@ -73,6 +75,6 @@ final class StatusControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/v1/status?tz=Not/AZone');
 
-        $this->assertSame('no-store', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertStringContainsString('no-store', $client->getResponse()->headers->get('Cache-Control'));
     }
 }

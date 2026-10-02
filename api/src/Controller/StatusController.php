@@ -16,13 +16,14 @@ final class StatusController
         $tz = $request->query->get('tz', 'UTC');
 
         if (!in_array($tz, \DateTimeZone::listIdentifiers(), true)) {
-            $response = new JsonResponse(
+            return new JsonResponse(
                 ['error' => "unknown timezone: {$tz}"],
                 400,
-                ['Access-Control-Allow-Origin' => '*']
+                [
+                    'Access-Control-Allow-Origin' => '*',
+                    'Cache-Control' => 'no-store',
+                ]
             );
-
-            return self::withExactCacheControl($response, 'no-store');
         }
 
         $config = new Config();
@@ -33,7 +34,7 @@ final class StatusController
         $localTime = $now->setTimezone(new \DateTimeZone($tz));
         $maxAge = min(300, max(0, $result->nextTransitionAt->getTimestamp() - $now->getTimestamp()));
 
-        $response = new JsonResponse(
+        return new JsonResponse(
             [
                 'tz' => $tz,
                 'utcTime' => $now->format('Y-m-d\TH:i:s.v\Z'),
@@ -46,27 +47,10 @@ final class StatusController
                 ],
             ],
             200,
-            ['Access-Control-Allow-Origin' => '*']
+            [
+                'Access-Control-Allow-Origin' => '*',
+                'Cache-Control' => "public, max-age={$maxAge}",
+            ]
         );
-
-        return self::withExactCacheControl($response, "public, max-age={$maxAge}");
-    }
-
-    /**
-     * Symfony's ResponseHeaderBag normalizes any Cache-Control value passed through
-     * its normal set() path: it ksort()s directives (breaking a fixed "public, max-age=N"
-     * order) and appends ", private" to any directive set that doesn't already include
-     * "public"/"private" (breaking a bare "no-store"). Both behaviors are internal to
-     * ResponseHeaderBag::computeCacheControlValue() and have no public bypass, so the
-     * literal header value is written directly to avoid them.
-     */
-    private static function withExactCacheControl(JsonResponse $response, string $value): JsonResponse
-    {
-        $headers = new \ReflectionProperty($response->headers, 'headers');
-        $raw = $headers->getValue($response->headers);
-        $raw['cache-control'] = [$value];
-        $headers->setValue($response->headers, $raw);
-
-        return $response;
     }
 }
