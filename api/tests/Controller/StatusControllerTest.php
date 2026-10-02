@@ -22,6 +22,23 @@ final class StatusControllerTest extends WebTestCase
         $this->assertArrayHasKey('peak', $body['nextTransition']);
     }
 
+    public function testResponseIncludesModelPriceTable(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/v1/status');
+
+        $body = json_decode($client->getResponse()->getContent(), true);
+        $this->assertNotEmpty($body['models']);
+        $model = $body['models'][0];
+        $this->assertArrayHasKey('id', $model);
+        $this->assertArrayHasKey('offPeak', $model['cacheHit']);
+        $this->assertArrayHasKey('peak', $model['cacheHit']);
+        $this->assertArrayHasKey('offPeak', $model['cacheMiss']);
+        $this->assertArrayHasKey('peak', $model['cacheMiss']);
+        $this->assertArrayHasKey('offPeak', $model['output']);
+        $this->assertArrayHasKey('peak', $model['output']);
+    }
+
     public function testIanaBackwardCompatibleAliasIsAccepted(): void
     {
         $client = static::createClient();

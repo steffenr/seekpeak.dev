@@ -30,4 +30,9 @@ final class Config
     {
         return $this->data['chinaPublicHolidays'];
     }
+
+    public function models(): array
+    {
+        return $this->data['models'];
+    }
 }

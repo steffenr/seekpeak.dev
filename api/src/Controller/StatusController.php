@@ -45,6 +45,7 @@ final class StatusController
                     'at' => $result->nextTransitionAt->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s.v\Z'),
                     'peak' => $result->nextTransitionPeak,
                 ],
+                'models' => $config->models(),
             ],
             200,
             [

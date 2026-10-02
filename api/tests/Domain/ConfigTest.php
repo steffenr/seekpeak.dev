@@ -16,6 +16,14 @@ final class ConfigTest extends TestCase
             'peakWindows' => [['01:00', '04:00'], ['06:00', '10:00']],
             'weekendOffPeak' => ['timezone' => 'Asia/Shanghai', 'days' => [0, 6]],
             'chinaPublicHolidays' => ['timezone' => 'Asia/Shanghai', 'dates' => ['2026-01-01']],
+            'models' => [
+                [
+                    'id' => 'deepseek-v4.1-flash',
+                    'cacheHit' => ['offPeak' => 0.003, 'peak' => 0.006],
+                    'cacheMiss' => ['offPeak' => 0.15, 'peak' => 0.3],
+                    'output' => ['offPeak' => 0.6, 'peak' => 1.2],
+                ],
+            ],
         ]));
     }
 
@@ -40,6 +48,19 @@ final class ConfigTest extends TestCase
     {
         $config = new Config($this->fixturePath);
         $this->assertSame(['timezone' => 'Asia/Shanghai', 'dates' => ['2026-01-01']], $config->chinaPublicHolidays());
+    }
+
+    public function testModels(): void
+    {
+        $config = new Config($this->fixturePath);
+        $this->assertSame([
+            [
+                'id' => 'deepseek-v4.1-flash',
+                'cacheHit' => ['offPeak' => 0.003, 'peak' => 0.006],
+                'cacheMiss' => ['offPeak' => 0.15, 'peak' => 0.3],
+                'output' => ['offPeak' => 0.6, 'peak' => 1.2],
+            ],
+        ], $config->models());
     }
 
     public function testDefaultPathReadsRealConfig(): void
