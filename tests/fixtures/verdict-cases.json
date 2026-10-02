@@ -6,6 +6,8 @@
   { "instant": "2026-01-08T09:59:59.999Z", "peak": true, "reason": "window" },
   { "instant": "2026-01-08T10:00:00.000Z", "peak": false, "reason": "window" },
   { "instant": "2026-01-08T11:00:00.000Z", "peak": false, "reason": "window" },
+  { "instant": "2026-01-09T15:59:59.999Z", "peak": false, "reason": "window" },
+  { "instant": "2026-01-09T16:00:00.000Z", "peak": false, "reason": "weekend" },
   { "instant": "2026-01-10T07:00:00.000Z", "peak": false, "reason": "weekend" },
   { "instant": "2026-02-18T07:00:00.000Z", "peak": false, "reason": "holiday" },
   { "instant": "2026-02-21T07:00:00.000Z", "peak": false, "reason": "weekend" },
