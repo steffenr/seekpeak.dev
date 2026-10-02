@@ -18,7 +18,7 @@ final class ConfigTest extends TestCase
             'chinaPublicHolidays' => ['timezone' => 'Asia/Shanghai', 'dates' => ['2026-01-01']],
             'models' => [
                 [
-                    'id' => 'deepseek-v4.1-flash',
+                    'id' => 'deepseek-flash',
                     'cacheHit' => ['offPeak' => 0.003, 'peak' => 0.006],
                     'cacheMiss' => ['offPeak' => 0.15, 'peak' => 0.3],
                     'output' => ['offPeak' => 0.6, 'peak' => 1.2],
@@ -55,7 +55,7 @@ final class ConfigTest extends TestCase
         $config = new Config($this->fixturePath);
         $this->assertSame([
             [
-                'id' => 'deepseek-v4.1-flash',
+                'id' => 'deepseek-flash',
                 'cacheHit' => ['offPeak' => 0.003, 'peak' => 0.006],
                 'cacheMiss' => ['offPeak' => 0.15, 'peak' => 0.3],
                 'output' => ['offPeak' => 0.6, 'peak' => 1.2],
