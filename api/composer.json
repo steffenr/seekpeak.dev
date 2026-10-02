@@ -58,11 +58,11 @@
         },
         "post-install-cmd": [
             "@auto-scripts",
-            "php -r \"copy(__DIR__.'/../config.json', __DIR__.'/config.json');\""
+            "php -r \"if (!copy(__DIR__.'/../config.json', __DIR__.'/config.json')) { fwrite(STDERR, 'ERROR: failed to copy ../config.json to api/config.json'.PHP_EOL); exit(1); }\""
         ],
         "post-update-cmd": [
             "@auto-scripts",
-            "php -r \"copy(__DIR__.'/../config.json', __DIR__.'/config.json');\""
+            "php -r \"if (!copy(__DIR__.'/../config.json', __DIR__.'/config.json')) { fwrite(STDERR, 'ERROR: failed to copy ../config.json to api/config.json'.PHP_EOL); exit(1); }\""
         ]
     },
     "conflict": {

@@ -120,6 +120,10 @@ jobs:
         working-directory: api
         run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader --classmap-authoritative
 
+      - name: Compile prod environment (.env.local.php, APP_ENV=prod, APP_DEBUG=0)
+        working-directory: api
+        run: APP_ENV=prod composer dump-env prod
+
       - name: Write SSH key
         run: |
           mkdir -p ~/.ssh
@@ -129,7 +133,7 @@ jobs:
 
       - name: Deploy (tar over ssh)
         run: |
-          tar -C api -czf - --exclude=tests --exclude=phpunit.xml.dist --exclude=.env.test . \
+          tar -C api -czf - --exclude=tests --exclude=var --exclude=phpunit.dist.xml --exclude=.env.test . \
             | ssh -i ~/.ssh/netcup_gh_sp_deploy \
               -o StrictHostKeyChecking=accept-new \
               "${{ secrets.NETCUP_USER }}@${{ secrets.NETCUP_HOST }}" \
