@@ -15,7 +15,7 @@ final class StatusController
     {
         $tz = $request->query->get('tz', 'UTC');
 
-        if (!in_array($tz, \DateTimeZone::listIdentifiers(), true)) {
+        if (!in_array($tz, \DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC), true)) {
             return new JsonResponse(
                 ['error' => "unknown timezone: {$tz}"],
                 400,
@@ -32,7 +32,7 @@ final class StatusController
         $result = $verdict->evaluate($now);
 
         $localTime = $now->setTimezone(new \DateTimeZone($tz));
-        $maxAge = min(300, max(0, $result->nextTransitionAt->getTimestamp() - $now->getTimestamp()));
+        $maxAge = self::cacheMaxAgeSeconds($now, $result->nextTransitionAt);
 
         return new JsonResponse(
             [
@@ -52,5 +52,10 @@ final class StatusController
                 'Cache-Control' => "public, max-age={$maxAge}",
             ]
         );
+    }
+
+    public static function cacheMaxAgeSeconds(\DateTimeImmutable $now, \DateTimeImmutable $nextTransitionAt): int
+    {
+        return min(300, max(0, $nextTransitionAt->getTimestamp() - $now->getTimestamp()));
     }
 }

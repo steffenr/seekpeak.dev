@@ -22,6 +22,27 @@ final class StatusControllerTest extends WebTestCase
         $this->assertArrayHasKey('peak', $body['nextTransition']);
     }
 
+    public function testIanaBackwardCompatibleAliasIsAccepted(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/v1/status?tz=Asia/Calcutta');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $body = json_decode($client->getResponse()->getContent(), true);
+        $this->assertSame('Asia/Calcutta', $body['tz']);
+    }
+
+    public function testFrameworkErrorResponsesCarryCorsAndNoStore(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/v1/nonexistent');
+
+        $response = $client->getResponse();
+        $this->assertSame(404, $response->getStatusCode());
+        $this->assertSame('*', $response->headers->get('Access-Control-Allow-Origin'));
+        $this->assertStringContainsString('no-store', $response->headers->get('Cache-Control'));
+    }
+
     public function testMissingTzDefaultsToUtc(): void
     {
         $client = static::createClient();
