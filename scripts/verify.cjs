@@ -259,7 +259,8 @@ check("countdown off-peak→peak", cd(5 * 3600), "Next: Peak starts at 06:00 in 
 check("countdown peak→off-peak", cd(2 * 3600 + 30 * 60), "Next: Off-peak starts at 04:00 in 1h 30m");
 check("countdown <1m edge", cd(6 * 3600 - 30), "Next: Peak starts at 06:00 in <1m");
 check("countdown Colombo tz", cd(5 * 3600, "Asia/Colombo"), "Next: Peak starts at 11:30 in 1h");
-console.log("countdown text (both states + edge + Col-timezone) ✓");
+check("countdown multi-day (weekend span)", cd(3 * 86400 + 10 * 3600 + 13 * 60), "Next: Peak starts at 01:00 in 2d 14h 47m");
+console.log("countdown text (both states + edge + Col-timezone + multi-day) ✓");
 
 // DST-transition days: localMidnight must anchor on the real start of the
 // local day. The offset at `now` is wrong when the transition has already

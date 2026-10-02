@@ -213,9 +213,14 @@
     const hmOpts = { hour: "2-digit", minute: "2-digit" };
     const time = `${part(t, tz, "hour", hmOpts)}:${part(t, tz, "minute", hmOpts)}`;
     const totalMin = Math.floor((t.getTime() - now.getTime()) / 60000);
-    const h = Math.floor(totalMin / 60);
+    const d = Math.floor(totalMin / 1440);
+    const h = Math.floor((totalMin % 1440) / 60);
     const m = totalMin % 60;
-    const dur = h > 0 && m > 0 ? `${h}h ${m}m` : h > 0 ? `${h}h` : m > 0 ? `${m}m` : "<1m";
+    const parts = [];
+    if (d > 0) parts.push(`${d}d`);
+    if (h > 0) parts.push(`${h}h`);
+    if (m > 0) parts.push(`${m}m`);
+    const dur = parts.length ? parts.join(" ") : "<1m";
     return `Next: ${isPeak(now) ? "Off-peak" : "Peak"} starts at ${time} in ${dur}`;
   }
 
