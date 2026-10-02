@@ -39,3 +39,29 @@ jobs:
 
       - name: Validate
         run: yarn validate
+
+  validate-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: api/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('api/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        working-directory: api
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run tests
+        working-directory: api
+        run: vendor/bin/phpunit

@@ -84,3 +84,53 @@ jobs:
             -o StrictHostKeyChecking=accept-new \
             "${{ secrets.NETCUP_USER }}@${{ secrets.NETCUP_HOST }}" \
             "rm -rf ${WEB_ROOT%/}/ && mkdir -p ${WEB_ROOT%/} && tar -xzf - -C ${WEB_ROOT%/}"
+
+  validate-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+
+      - name: Install dependencies
+        working-directory: api
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run tests
+        working-directory: api
+        run: vendor/bin/phpunit
+
+  deploy-api:
+    needs: validate-api
+    runs-on: ubuntu-latest
+    env:
+      WEB_ROOT: /httpdocs/api-seekpeak-dev
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+
+      - name: Install production dependencies
+        working-directory: api
+        run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader --classmap-authoritative
+
+      - name: Write SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.NETCUP_SSH_KEY }}" > ~/.ssh/netcup_gh_sp_deploy
+          chmod 600 ~/.ssh/netcup_gh_sp_deploy
+          echo "${{ secrets.NETCUP_HOST }} ${{ secrets.NETCUP_KNOWN_HOSTS }}" > ~/.ssh/known_hosts || true
+
+      - name: Deploy (tar over ssh)
+        run: |
+          tar -C api -czf - --exclude=tests --exclude=phpunit.xml.dist --exclude=.env.test . \
+            | ssh -i ~/.ssh/netcup_gh_sp_deploy \
+              -o StrictHostKeyChecking=accept-new \
+              "${{ secrets.NETCUP_USER }}@${{ secrets.NETCUP_HOST }}" \
+              "rm -rf ${WEB_ROOT%/}/ && mkdir -p ${WEB_ROOT%/} && tar -xzf - -C ${WEB_ROOT%/}"
