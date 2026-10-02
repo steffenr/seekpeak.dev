@@ -116,21 +116,19 @@ for (const [sec, expect] of cases) {
 }
 console.log("half-open boundary semantics [start,end) ✓");
 
-const weekdayPeakCheck = isPeak(new Date("2026-01-08T07:00:00.000Z"));
-const weekendPeakCheck = isPeak(new Date("2026-01-10T07:00:00.000Z"));
-if (weekdayPeakCheck !== true || weekendPeakCheck !== false) {
-  console.log("FAIL weekend override: weekday(Thu 07:00Z)=", weekdayPeakCheck, "weekend(Sat 07:00Z)=", weekendPeakCheck);
-  process.exit(1);
+const { isWeekend: isWeekendForReason, isChineseHoliday: isChineseHolidayForReason } = context.window.__t;
+const reasonFor = (d) => (isWeekendForReason(d) ? "weekend" : isChineseHolidayForReason(d) ? "holiday" : "window");
+const verdictCases = JSON.parse(fs.readFileSync("tests/fixtures/verdict-cases.json", "utf8"));
+for (const { instant, peak, reason } of verdictCases) {
+  const d = new Date(instant);
+  const gotPeak = isPeak(d);
+  const gotReason = reasonFor(d);
+  if (gotPeak !== peak || gotReason !== reason) {
+    console.log(`FAIL verdict-cases ${instant}: expected peak=${peak} reason=${reason}, got peak=${gotPeak} reason=${gotReason}`);
+    process.exit(1);
+  }
 }
-console.log("weekend off-peak override (same UTC clock time, weekday vs Saturday) ✓");
-
-const holidayWeekdayPeakCheck = isPeak(new Date("2026-02-18T07:00:00.000Z"));
-const resumedPeakCheck = isPeak(new Date("2026-02-24T07:00:00.000Z"));
-if (holidayWeekdayPeakCheck !== false || resumedPeakCheck !== true) {
-  console.log("FAIL holiday override: holiday weekday(Wed 07:00Z)=", holidayWeekdayPeakCheck, "resumed weekday(Tue 07:00Z)=", resumedPeakCheck);
-  process.exit(1);
-}
-console.log("Chinese-holiday off-peak override (weekday inside Spring Festival vs. the first weekday after it) ✓");
+console.log(`shared verdict-cases.json (${verdictCases.length} cases, incl. weekend/holiday overrides) ✓`);
 
 const t = next(ref(3600 * 5));
 const isPeakAt = isPeak(t);
