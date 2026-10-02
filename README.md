@@ -107,8 +107,8 @@ unrecognized value returns `400`). Response, e.g. on Thursday
   "nextTransition": { "at": "2026-01-08T10:00:00.000Z", "peak": false },
   "models": [
     {
-      "id": "deepseek-v4.1-flash",
-      "name": "deepseek-v4.1-flash",
+      "id": "deepseek-flash",
+      "name": "deepseek-flash",
       "cacheHit": { "offPeak": 0.003, "peak": 0.006 },
       "cacheMiss": { "offPeak": 0.15, "peak": 0.3 },
       "output": { "offPeak": 0.6, "peak": 1.2 }
@@ -158,7 +158,7 @@ build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
   "weekendOffPeak": { "timezone": "Asia/Shanghai", "days": [0, 6] },  // Sat+Sun, Beijing-anchored
   "chinaPublicHolidays": { "timezone": "Asia/Shanghai", "dates": ["2026-01-01", /* … */] },  // Beijing-anchored, updated yearly
   "models": [
-    { "id": "deepseek-v4.1-flash", "cacheHit": { "offPeak": 0.003, "peak": 0.006 }, /* … */ },
+    { "id": "deepseek-flash", "cacheHit": { "offPeak": 0.003, "peak": 0.006 }, /* … */ },
     { "id": "deepseek-v4-pro", /* … */ }  // optional per-model "note" string renders under the model id, unused for Pro since DeepSeek confirmed it continues past Sep 14, 2026
   ],
   "site": {
