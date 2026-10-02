@@ -104,9 +104,22 @@ unrecognized value returns `400`). Response, e.g. on Thursday
   "localTime": "2026-01-08T08:00:00+01:00",
   "peak": true,
   "reason": "window",
-  "nextTransition": { "at": "2026-01-08T10:00:00.000Z", "peak": false }
+  "nextTransition": { "at": "2026-01-08T10:00:00.000Z", "peak": false },
+  "models": [
+    {
+      "id": "deepseek-v4.1-flash",
+      "name": "deepseek-v4.1-flash",
+      "cacheHit": { "offPeak": 0.003, "peak": 0.006 },
+      "cacheMiss": { "offPeak": 0.15, "peak": 0.3 },
+      "output": { "offPeak": 0.6, "peak": 1.2 }
+    }
+  ]
 }
 ```
+
+`models` is the same per-1M-token price table (`cacheHit`/`cacheMiss`/`output`,
+each with `offPeak`/`peak` rates) the static page's pricing table renders —
+included so a consumer gets the verdict and the full rate table in one call.
 
 The API reads the same repo-root `config.json` the static site does (copied
 into `api/config.json` by a composer script on install — never hand-edited)
