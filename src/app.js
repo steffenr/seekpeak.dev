@@ -4,6 +4,7 @@
   const CONFIG = window.CONFIG;
   const WINDOWS = CONFIG.peakWindows;
   const WEEKEND = CONFIG.weekendOffPeak;
+  const HOLIDAYS = CONFIG.chinaPublicHolidays;
 
   const $ = (sel) => document.querySelector(sel);
   const pad = (n) => String(n).padStart(2, "0");
@@ -38,7 +39,7 @@
   }
 
   function isPeak(d) {
-    if (isWeekend(d)) return false;
+    if (isWeekend(d) || isChineseHoliday(d)) return false;
     const s = utcDaySec(d);
     return WINDOWS.some(([a, b]) => {
       const sa = toMin(a) * 60;
@@ -53,7 +54,10 @@
     const boundaryMin = [];
     for (const [a, b] of WINDOWS) boundaryMin.push(toMin(a), toMin(b));
     const candidates = [];
-    for (let day = 0; day <= 9; day++) {
+    // 20-day lookahead: a multi-day Chinese holiday (e.g. the 9-day Spring
+    // Festival) butted up against its adjacent Beijing weekend can suppress
+    // over 10 consecutive calendar days of otherwise-peak windows.
+    for (let day = 0; day <= 20; day++) {
       for (const m of boundaryMin) candidates.push(day0 + day * 86400000 + m * 60000);
     }
     candidates.sort((a, b) => a - b);
@@ -117,6 +121,12 @@
     const { y, mo, d: dd } = tzDateParts(d, WEEKEND.timezone);
     const day = new Date(Date.UTC(y, mo, dd)).getUTCDay();
     return WEEKEND.days.includes(day);
+  }
+
+  function isChineseHoliday(d) {
+    const { y, mo, d: dd } = tzDateParts(d, HOLIDAYS.timezone);
+    const key = `${y}-${pad(mo + 1)}-${pad(dd)}`;
+    return HOLIDAYS.dates.includes(key);
   }
 
   function localMidnight(d, tz) {
@@ -233,9 +243,12 @@
   const PEAKCHIP = "border border-black bg-mk-yellow text-mk-ink shadow-[1px_1px_0px_0px_#000000]";
   const DIM = "border border-black bg-mk-input text-mk-muted";
 
-  function badgeMsgText(peak, weekend) {
+  function badgeMsgText(peak, weekend, holiday) {
     if (weekend) {
       return "It's the weekend in Beijing — DeepSeek bills every request at the off-peak rate right now, no matter the hour.";
+    }
+    if (holiday) {
+      return "It's a Chinese public holiday — DeepSeek bills every request at the off-peak rate right now, no matter the hour.";
     }
     return peak
       ? "Your next request right now is billed at peak rates."
@@ -245,8 +258,9 @@
   function renderBadge(now) {
     const peak = isPeak(now);
     const weekend = isWeekend(now);
+    const holiday = isChineseHoliday(now);
     state.peak = peak;
-    const msg = badgeMsgText(peak, weekend);
+    const msg = badgeMsgText(peak, weekend, holiday);
     const els = peak
       ? {
           card: "bg-mk-yellow",

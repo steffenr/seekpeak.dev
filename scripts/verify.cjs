@@ -37,7 +37,7 @@ const context = {
 };
 vm.createContext(context);
 
-const withExport = app.replace(/\}\)\(\);\s*$/, ";window.__t = { pad, toMin, utcDaySec, isPeak, nextTransition, minuteMask, hourFraction, peakRuns, fmtBoundary, localMidnight, countdownText, priceModeText, timelineHourLabel, isNowHour, taglineText, isWeekend, badgeMsgText }; })();");
+const withExport = app.replace(/\}\)\(\);\s*$/, ";window.__t = { pad, toMin, utcDaySec, isPeak, nextTransition, minuteMask, hourFraction, peakRuns, fmtBoundary, localMidnight, countdownText, priceModeText, timelineHourLabel, isNowHour, taglineText, isWeekend, isChineseHoliday, badgeMsgText }; })();");
 vm.runInContext(withExport, context);
 
 const isPeak = context.window.__t.isPeak;
@@ -45,15 +45,20 @@ const next = context.window.__t.nextTransition;
 
 const windows = config.peakWindows.map(([a, b]) => [a, b].map((t) => t.split(":").map(Number).reduce((h, m) => h * 60 + m)));
 const utcSec = (d) => d.getUTCHours() * 3600 + d.getUTCMinutes() * 60 + d.getUTCSeconds() + d.getUTCMilliseconds() / 1000;
-const ref = (sec) => new Date(Date.UTC(2026, 0, 1) + sec * 1000);
+const ref = (sec) => new Date(Date.UTC(2026, 0, 6) + sec * 1000); // Tuesday — plain weekday, no weekend/holiday override
 const weekendCfgForSweep = config.weekendOffPeak;
 const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const isWeekendRef = (d) => {
   const wd = new Intl.DateTimeFormat("en-US", { timeZone: weekendCfgForSweep.timezone, weekday: "short" }).format(d);
   return weekendCfgForSweep.days.includes(weekdayNames.indexOf(wd));
 };
+const holidayCfgForSweep = config.chinaPublicHolidays;
+const isHolidayRef = (d) => {
+  const key = new Intl.DateTimeFormat("en-CA", { timeZone: holidayCfgForSweep.timezone }).format(d); // en-CA -> YYYY-MM-DD
+  return holidayCfgForSweep.dates.includes(key);
+};
 const isPeakRef = (d) => {
-  if (isWeekendRef(d)) return false;
+  if (isWeekendRef(d) || isHolidayRef(d)) return false;
   const s = utcSec(d);
   return windows.some(([a, b]) => s >= a * 60 && s < b * 60);
 };
@@ -75,6 +80,23 @@ if (bad) {
 }
 console.log("isPeak matches reference across 9 UTC days (a full Beijing weekend, incl. margin) ✓");
 
+const holidaySweepStart = Date.UTC(2026, 1, 13); // Friday, 2026-02-13 (margin before Spring Festival)
+let badHoliday = 0;
+for (let day = 0; day < 13; day++) {
+  for (let s = 0; s < 86400; s += 7) {
+    const d = new Date(holidaySweepStart + day * 86400000 + s * 1000);
+    if (isPeakRef(d) !== isPeak(d)) {
+      badHoliday++;
+      if (badHoliday < 6) console.log("MISMATCH", d.toISOString());
+    }
+  }
+}
+if (badHoliday) {
+  console.log("FAIL:", badHoliday, "mismatches across Spring Festival + adjacent weekend");
+  process.exit(1);
+}
+console.log("isPeak matches reference across the Spring Festival holiday + adjacent Beijing weekend ✓");
+
 const cases = [
   [3600, true],
   [3600 * 4 - 1, true],
@@ -94,13 +116,21 @@ for (const [sec, expect] of cases) {
 }
 console.log("half-open boundary semantics [start,end) ✓");
 
-const weekdayPeakCheck = isPeak(new Date("2026-01-01T07:00:00.000Z"));
-const weekendPeakCheck = isPeak(new Date("2026-01-03T07:00:00.000Z"));
+const weekdayPeakCheck = isPeak(new Date("2026-01-08T07:00:00.000Z"));
+const weekendPeakCheck = isPeak(new Date("2026-01-10T07:00:00.000Z"));
 if (weekdayPeakCheck !== true || weekendPeakCheck !== false) {
   console.log("FAIL weekend override: weekday(Thu 07:00Z)=", weekdayPeakCheck, "weekend(Sat 07:00Z)=", weekendPeakCheck);
   process.exit(1);
 }
 console.log("weekend off-peak override (same UTC clock time, weekday vs Saturday) ✓");
+
+const holidayWeekdayPeakCheck = isPeak(new Date("2026-02-18T07:00:00.000Z"));
+const resumedPeakCheck = isPeak(new Date("2026-02-24T07:00:00.000Z"));
+if (holidayWeekdayPeakCheck !== false || resumedPeakCheck !== true) {
+  console.log("FAIL holiday override: holiday weekday(Wed 07:00Z)=", holidayWeekdayPeakCheck, "resumed weekday(Tue 07:00Z)=", resumedPeakCheck);
+  process.exit(1);
+}
+console.log("Chinese-holiday off-peak override (weekday inside Spring Festival vs. the first weekday after it) ✓");
 
 const t = next(ref(3600 * 5));
 const isPeakAt = isPeak(t);
@@ -118,6 +148,24 @@ if (tWeekend.getTime() !== wantWeekend.getTime() || isPeak(tWeekend) !== true) {
   process.exit(1);
 }
 console.log("nextTransition spans a full Beijing weekend (Sat mid-window → Mon window start) ✓");
+
+const tHoliday = next(new Date("2026-02-15T07:00:00.000Z")); // Sunday, start of the Feb 14-23 combined weekend+holiday run
+const wantHoliday = new Date("2026-02-24T01:00:00.000Z");
+if (tHoliday.getTime() !== wantHoliday.getTime() || isPeak(tHoliday) !== true) {
+  console.log("FAIL nextTransition holiday span: got", tHoliday.toISOString(), "want", wantHoliday.toISOString());
+  process.exit(1);
+}
+console.log("nextTransition spans the combined weekend+Spring Festival run (20-day lookahead) ✓");
+
+// Worst case: "now" on the UTC calendar day (Feb 13) before the run starts,
+// so the day-0 anchor is 11 days short of the Feb 24 resumption — this is
+// the scenario that overflowed the old 10-day lookahead (ADR-005).
+const tWorst = next(new Date("2026-02-13T23:00:00.000Z"));
+if (tWorst.getTime() !== wantHoliday.getTime() || isPeak(tWorst) !== true) {
+  console.log("FAIL nextTransition worst-case lookahead: got", tWorst.toISOString(), "want", wantHoliday.toISOString());
+  process.exit(1);
+}
+console.log("nextTransition 20-day lookahead covers the Feb-13-anchor worst case ✓");
 
 console.log("config:", config.models.length, "models,", config.peakWindows.length, "windows");
 const site = config.site || {};
@@ -138,7 +186,32 @@ if (!weekendCfg.timezone || !Array.isArray(weekendCfg.days) || weekendCfg.days.l
 }
 console.log("config.weekendOffPeak:", weekendCfg.timezone, weekendCfg.days);
 
-const { isWeekend } = context.window.__t;
+const holidayCfg = config.chinaPublicHolidays || {};
+if (!holidayCfg.timezone || !Array.isArray(holidayCfg.dates) || holidayCfg.dates.length === 0) {
+  console.log("FAIL config.chinaPublicHolidays missing timezone/dates:", JSON.stringify(holidayCfg));
+  process.exit(1);
+}
+if (!holidayCfg.dates.every((d) => /^\d{4}-\d{2}-\d{2}$/.test(d))) {
+  console.log("FAIL config.chinaPublicHolidays.dates must be YYYY-MM-DD strings:", JSON.stringify(holidayCfg.dates));
+  process.exit(1);
+}
+console.log("config.chinaPublicHolidays:", holidayCfg.timezone, holidayCfg.dates.length, "dates");
+
+const { isWeekend, isChineseHoliday } = context.window.__t;
+const holidayCases = [
+  ["2026-02-14T15:59:59.999Z", false, "Sat 23:59:59.999 Beijing (day before Spring Festival starts)"],
+  ["2026-02-14T16:00:00.000Z", true, "Sun 00:00:00.000 Beijing (Spring Festival begins)"],
+  ["2026-02-23T15:59:59.999Z", true, "Mon 23:59:59.999 Beijing (last instant of Spring Festival)"],
+  ["2026-02-23T16:00:00.000Z", false, "Tue 00:00:00.000 Beijing (Spring Festival ends)"],
+];
+for (const [iso, expect, label] of holidayCases) {
+  const got = isChineseHoliday(new Date(iso));
+  if (got !== expect) {
+    console.log(`FAIL isChineseHoliday ${label}: expected ${expect} got ${got}`);
+    process.exit(1);
+  }
+}
+console.log("isChineseHoliday Beijing-anchored boundaries ✓");
 const weekendCases = [
   ["2026-01-02T15:59:59.999Z", false, "Fri 23:59:59.999 Beijing"],
   ["2026-01-02T16:00:00.000Z", true, "Sat 00:00:00.000 Beijing"],
@@ -251,8 +324,9 @@ console.log("pricing mode helper ✓");
 const { badgeMsgText } = context.window.__t;
 check("badgeMsgText peak", badgeMsgText(true, false), "Your next request right now is billed at peak rates.");
 check("badgeMsgText off-peak", badgeMsgText(false, false), "Your next request right now is billed at off-peak rates.");
-check("badgeMsgText weekend", badgeMsgText(false, true), "It's the weekend in Beijing — DeepSeek bills every request at the off-peak rate right now, no matter the hour.");
-console.log("badge message helper (peak/off-peak/weekend) ✓");
+check("badgeMsgText weekend", badgeMsgText(false, true, false), "It's the weekend in Beijing — DeepSeek bills every request at the off-peak rate right now, no matter the hour.");
+check("badgeMsgText holiday", badgeMsgText(false, false, true), "It's a Chinese public holiday — DeepSeek bills every request at the off-peak rate right now, no matter the hour.");
+console.log("badge message helper (peak/off-peak/weekend/holiday) ✓");
 
 const { timelineHourLabel, isNowHour, taglineText } = context.window.__t;
 check("timeline label h0", timelineHourLabel(0), "00");

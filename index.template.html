@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Seek Peak — Is the DeepSeek API in peak time right now?</title>
-    <meta name="description" content="See in real time whether DeepSeek API requests are billed at peak (2×) or off-peak rates. Peak hours are 01:00–04:00 and 06:00–10:00 UTC on weekdays; weekends (Sat–Sun, Beijing time) are always off-peak. Per-1M-token prices shown in your timezone." />
+    <meta name="description" content="See in real time whether DeepSeek API requests are billed at peak (2×) or off-peak rates. Peak hours are 01:00–04:00 and 06:00–10:00 UTC on weekdays; weekends (Sat–Sun, Beijing time) and Chinese public holidays are always off-peak. Per-1M-token prices shown in your timezone." />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -42,7 +42,7 @@
               "name": "Is the DeepSeek API in peak time right now?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Seek Peak compares the current UTC time against DeepSeek's peak windows (01:00-04:00 and 06:00-10:00 UTC, weekdays only) and shows whether requests are billed at peak (2x) or off-peak rates, in your timezone — weekends (Saturday and Sunday, Beijing time) are always off-peak."
+                "text": "Seek Peak compares the current UTC time against DeepSeek's peak windows (01:00-04:00 and 06:00-10:00 UTC, weekdays only) and shows whether requests are billed at peak (2x) or off-peak rates, in your timezone — weekends (Saturday and Sunday, Beijing time) and Chinese public holidays are always off-peak."
               }
             },
             {
@@ -50,7 +50,7 @@
               "name": "What are DeepSeek's peak hours?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Peak windows are 01:00-04:00 and 06:00-10:00 UTC (half-open intervals, so 06:00:00.000 is peak and 10:00:00.000 is off-peak) on weekdays. All other weekday hours are off-peak, and weekends (Saturday and Sunday, Beijing time) are always off-peak regardless of the clock."
+                "text": "Peak windows are 01:00-04:00 and 06:00-10:00 UTC (half-open intervals, so 06:00:00.000 is peak and 10:00:00.000 is off-peak) on weekdays. All other weekday hours are off-peak, and weekends (Saturday and Sunday, Beijing time) and Chinese public holidays are always off-peak regardless of the clock."
               }
             },
             {
@@ -59,6 +59,14 @@
               "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "Yes — since August 23, 2026, DeepSeek bills all weekend traffic (Saturday and Sunday, Beijing time) at the off-peak rate, regardless of hour. Peak windows (01:00-04:00 and 06:00-10:00 UTC) apply Monday through Friday only."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are Chinese public holidays billed differently?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes — Chinese public holidays (New Year's Day, Spring Festival, Qingming, Labour Day, Dragon Boat Festival, Mid-Autumn Festival, and National Day) are billed at the off-peak rate all day, the same as weekends, regardless of whether the day falls on a weekday."
               }
             },
             {
@@ -92,7 +100,8 @@
       <p>
         Enable JavaScript to see the live verdict. DeepSeek peak windows are
         01:00-04:00 and 06:00-10:00 UTC on weekdays; weekends (Sat-Sun,
-        Beijing time) are always off-peak. During peak, rates are 2x off-peak.
+        Beijing time) and Chinese public holidays are always off-peak. During
+        peak, rates are 2x off-peak.
       </p>
     </noscript>
     <style>/*__CSS__*/</style>
@@ -193,7 +202,7 @@
         <details class="mt-3 rounded-md border-2 border-black bg-mk-card px-3 py-2 shadow-[3px_3px_0px_0px_#000000]">
           <summary class="cursor-pointer text-xs font-black uppercase tracking-wider text-mk-cyan">Why do prices change?</summary>
           <p class="mt-2 text-sm font-semibold text-mk-muted">
-            DeepSeek uses demand-based pricing: during peak windows rates are 2× off-peak. Peak hours are 01:00 - 04:00 and 06:00 - 10:00 UTC, Monday through Friday. Weekends (Saturday and Sunday, Beijing time) are always off-peak.
+            DeepSeek uses demand-based pricing: during peak windows rates are 2× off-peak. Peak hours are 01:00 - 04:00 and 06:00 - 10:00 UTC, Monday through Friday, excluding Chinese public holidays. Weekends (Saturday and Sunday, Beijing time) and Chinese public holidays are always off-peak.
           </p>
         </details>
       </section>
@@ -289,9 +298,9 @@
         it works offline.
       </p>
       <p class="mt-3 text-sm font-semibold leading-relaxed text-mk-ink">
-        Since August 23, 2026, DeepSeek bills weekends (Saturday and Sunday, Beijing time) at the
-        off-peak rate all day — the peak windows shown on the pricing table only apply Monday
-        through Friday.
+        Since August 23, 2026, DeepSeek bills weekends (Saturday and Sunday, Beijing time) and
+        Chinese public holidays at the off-peak rate all day — the peak windows shown on the
+        pricing table only apply on non-holiday weekdays.
       </p>
       <a
         href="https://www.paypal.com/paypalme/SeekPeak"
