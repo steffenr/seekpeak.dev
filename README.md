@@ -83,6 +83,36 @@ renders as ★/☆ behind the provider name on the CTA button.
 the gist. Copy, styling and star counts are left to the renderer — adding or
 editing an offer is just a `credits.json` change plus `npm run build`.
 
+## Status API
+
+Alongside the static page, `api/` holds a small read-only JSON API (PHP,
+Symfony skeleton) deployed independently to `api.seekpeak.dev`:
+
+```
+GET /v1/status?tz=Europe/Berlin
+```
+
+`tz` is an optional IANA timezone name (defaults to `UTC`; an unrecognized
+value returns `400`). Response:
+
+```json
+{
+  "tz": "Europe/Berlin",
+  "utcTime": "2026-10-02T13:00:00.000Z",
+  "localTime": "2026-10-02T15:00:00+02:00",
+  "peak": false,
+  "reason": "window",
+  "nextTransition": { "at": "2026-10-02T14:00:00.000Z", "peak": true }
+}
+```
+
+The API reads the same repo-root `config.json` the static site does (copied
+into `api/config.json` by a composer script on install — never hand-edited)
+and does **not** replace the site's client-side computation; the static
+page keeps working offline exactly as before. See
+`docs/superpowers/specs/2026-10-02-status-api-design.md` for the full
+design.
+
 ## Build
 
 ```bash
