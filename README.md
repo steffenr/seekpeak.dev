@@ -89,7 +89,7 @@ Alongside the static page, `api/` holds a small read-only JSON API (PHP,
 Symfony skeleton) deployed independently to `api.seekpeak.dev`:
 
 ```
-GET /v1/status?tz=Europe/Berlin
+https://api.seekpeak.dev/v1/status?tz=Europe/Berlin
 ```
 
 `tz` is an optional IANA timezone name, case-sensitive; backward-compatible
@@ -125,16 +125,6 @@ The API reads the same repo-root `config.json` the static site does (copied
 into `api/config.json` by a composer script on install — never hand-edited)
 and does **not** replace the site's client-side computation; the static
 page keeps working offline exactly as before.
-
-> **Deployment prerequisite — vhost document root.** The web server's
-> document root for `api.seekpeak.dev` **must** point at the deployed
-> `public/` subdirectory (Symfony's front controller is `public/index.php`),
-> **not** at the project root. With the project root as docroot,
-> `/v1/status` 404s **and** sensitive files — `.env`, `config.json`,
-> `composer.lock`, source under `src/`, logs under `var/log/` — are served as
-> static files. Verify/configure this on the server before the first deploy.
-> `var/` must also be writable by PHP: the deploy ships no cache, and Symfony
-> rebuilds `var/cache/prod` on the first request.
 
 ## Build
 
