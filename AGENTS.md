@@ -40,6 +40,17 @@ excludes it; Symfony rebuilds the prod cache on first request), and the
 deploy runs `composer dump-env prod` so the app boots with `APP_ENV=prod`,
 `APP_DEBUG=0`.
 
+**`APP_SECRET` is intentionally empty in every committed `.env*` file** — a
+Symfony Flex-generated dev secret was previously committed to `api/.env.dev`
+and flagged by GitHub secret scanning (low real risk: `.env.dev` only loads
+under `APP_ENV=dev`, which the deploy never uses, and nothing in this app
+currently relies on `APP_SECRET` for anything — no sessions, no CSRF, no
+`SecurityBundle`, no signed URLs). Never put a real secret in any committed
+`.env*` file, including `.env.$APP_ENV` variants — if the app ever needs a
+real `APP_SECRET` (e.g. if CSRF/sessions/signed URLs are added later), set
+it as a real environment variable on the server (or via `.env.local`, which
+is gitignored), then `composer dump-env prod` will pick it up.
+
 - Timezones: `tz` is validated against `\DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC)` — exact-case, aliases like `Asia/Calcutta` allowed.
 - `App\EventSubscriber\CorsHeadersSubscriber` adds `Access-Control-Allow-Origin: *` to every response and `Cache-Control: no-store` to framework-generated errors (404/405/500/400) lacking explicit caching directives.
 
