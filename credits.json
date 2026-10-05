@@ -26,8 +26,8 @@
       "url": "https://agentrouter.org/register?aff=ENwt",
       "featured": false,
       "stars": 0,
-      "blurb": "The one with a full setup write-up (base URLs, per-tool config, oh-my-pi `models.yaml`): https://seekpeak.dev/agentrouter/",
-      "note": "Full write-up and setup: <a href=\"/agentrouter/\" class=\"bg-mk-green px-1 text-mk-ink\">the AgentRouter page</a>.",
+      "blurb": "An AI gateway and routing platform — Claude, Codex, Cursor, Cline, Roo Code and more connect via base URLs and per-tool config.",
+      "note": "Setup docs: <a href=\"https://agentrouter.org/docs/index.html\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-mk-green px-1 text-mk-ink\">agentrouter.org/docs</a>.",
       "models": [
         "glm-5.3",
         "deepseek-v4-flash",

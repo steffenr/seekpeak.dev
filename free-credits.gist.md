@@ -23,7 +23,7 @@ free balance on real work.
 
 ### AgentRouter.org — $50 credits
 
-The one with a full setup write-up (base URLs, per-tool config, oh-my-pi `models.yaml`): https://seekpeak.dev/agentrouter/
+An AI gateway and routing platform — Claude, Codex, Cursor, Cline, Roo Code and more connect via base URLs and per-tool config.
 
 - **Claim:** https://agentrouter.org/register?aff=ENwt
 - **Models:** `glm-5.3`, `deepseek-v4-flash`, `gpt-5.6-sol`, `claude-opus-5`, `claude-opus-4-8`
