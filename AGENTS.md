@@ -2,12 +2,12 @@
 
 ## Project
 
-**Seek Peak** — a zero-dependency static page that tells a visitor whether the DeepSeek API is currently in peak (2×) or off-peak time, in their own timezone. The domain model, architecture, build pipeline and theme system are documented in `DESIGN.md`; committed decisions live in `docs/ADR-001`/`ADR-002`/`ADR-003`/`ADR-004` + `docs/GLOSSARY.md`.
+**Seek Peak** — a zero-dependency static page that tells a visitor whether the DeepSeek API is currently in peak (2×) or off-peak time, in their own timezone. The domain model, architecture, build pipeline and theme system are documented in `DESIGN.md`; committed decisions live in `docs/ADR-001`/`ADR-002`/`ADR-003`/`ADR-004`/`ADR-005` + `docs/GLOSSARY.md`.
 
 ## Commands
 
 ```bash
-npm run build                      # REQUIRED before verify — builds dist/ (index + sub-pages)
+npm run build                      # REQUIRED before verify — builds dist/ (index + free-credits sub-page)
 npm run watch                      # rebuild on change
 node scripts/verify.cjs            # the test suite (reads the built dist/ artifacts)
 npm run build && node scripts/verify.cjs   # standard check — MUST be green before finishing any task

@@ -2,7 +2,8 @@
 
 This document records how Seek Peak works and why it is built this way. It
 complements the decision records (`docs/ADR-001` verdict model, `docs/ADR-002`
-boundaries & config, `docs/ADR-003` deliverable) and `docs/GLOSSARY.md`.
+boundaries & config, `docs/ADR-003` deliverable, `docs/ADR-004` weekend
+off-peak, `docs/ADR-005` Chinese public holidays) and `docs/GLOSSARY.md`.
 Operating instructions for agents live in `AGENTS.md`.
 
 ## Overview
