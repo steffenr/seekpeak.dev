@@ -68,7 +68,7 @@ The `free-credits` offers are **not** hand-written in the template. `credits.jso
 at the repo root is the single source of truth — one object per offer (`provider`,
 `credits`, `creditsShort`, `url`, `featured`, `stars` 1–5, `models`, optional
 `blurb`/`note`). `scripts/build.mjs` (via `scripts/credits.mjs`) renders the offer
-cards, the page's FAQ JSON-LD, the homepage CTA copy, and regenerates
+cards, the page's FAQ JSON-LD, and regenerates
 `free-credits.gist.md` — a standalone Markdown copy for posting as a GitHub Gist
 (not part of `dist/`). Edit `credits.json` and run `npm run build`.
 
