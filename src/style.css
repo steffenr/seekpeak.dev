@@ -18,7 +18,6 @@
 }
 
 @source "../index.template.html";
-@source "../agentrouter.template.html";
 @source "./app.js";
 @source "./subpage.js";
 @source "../free-credits.template.html";

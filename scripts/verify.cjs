@@ -528,86 +528,13 @@ if (app.length >= appSrc.length) {
   process.exit(1);
 }
 console.log("inlined app.js minified:", appSrc.length, "->", app.length, "bytes ✓");
-const ar = fs.readFileSync("dist/agentrouter/index.html", "utf8");
 const AFF = "https://agentrouter.org/register?aff=ENwt";
 const OFFERS = JSON.parse(fs.readFileSync("credits.json", "utf8")).offers;
-for (const needle of [
-  'id="creditBadge"',
-  "bg-mk-green",
-  "$50 Free Credit",
-  AFF,
-  'rel="noopener sponsored"',
-  "claude-opus-4-8",
-  "claude-opus-5",
-  "deepseek-v4-flash",
-  "glm-5.3",
-  "gpt-5.6-sol",
-  "AgentRouter is an AI gateway and routing platform that provides compatible relay services and model routing.",
-  "Acts as an Anthropic-compatible proxy that lets coding agents and API clients connect seamlessly.",
-  "Uses Model Context Protocol (MCP) routing to discover and delegate tasks to specialized AI agents.",
-  "Designed to allow quick integration with compatible apps without mandatory sign-ups or billing setup for basic use.",
-  'id="themeButton"',
-  'id="themeList"',
-  "Use it in oh-my-pi",
-  "https://agentrouter.org/v1",
-  "https://agentrouter.org/docs/index.html",
-  "https://agentrouter.org/docs/terms.html",
-  "models.yaml",
-  "baseUrl: https://agentrouter.org/v1",
-  "api: openai-completions",
-  "authHeader: true",
-  "User-Agent: opencode/1.0.0",
-]) {
-  if (!ar.includes(needle)) {
-    console.log("FAIL agentrouter page missing:", needle);
-    process.exit(1);
-  }
-}
-for (const id of ["claude-opus-4-8", "glm-5.3", "deepseek-v4-flash", "claude-opus-5", "gpt-5.6-sol"]) {
-  if (!ar.includes("- id: " + id) || !ar.includes("  name: " + id)) {
-    console.log("FAIL oh-my-pi models.yaml block missing model:", id);
-    process.exit(1);
-  }
-}
-if (!ar.includes('rel="canonical" href="' + site.url + '/agentrouter/"')) {
-  console.log("FAIL agentrouter canonical missing");
-  process.exit(1);
-}
-if (!ar.includes('property="og:url" content="' + site.url + '/agentrouter/"') || !ar.includes('property="og:image" content="' + site.url + '/og-image.png"')) {
-  console.log("FAIL agentrouter OG url/image missing");
-  process.exit(1);
-}
-if (ar.includes("__SITE_URL__") || ar.includes("__OG_IMAGE_URL__") || /\/\*__(CSS|AR_APP)__\*\//.test(ar)) {
-  console.log("FAIL leftover build token in agentrouter page");
-  process.exit(1);
-}
+
 if (html.includes('href="/agentrouter/"')) {
-  console.log("FAIL main page should no longer link to /agentrouter/ (route offers through /free-credits/)");
+  console.log("FAIL main page should no longer link to /agentrouter/ (page removed)");
   process.exit(1);
 }
-console.log("agentrouter page: badge/CTA/models/benefits/theme picker + SEO head present, delinked from main page ✓");
-
-// The two bundles must ship the same theme list (src/themes.js is prepended to both).
-const arApp = [...ar.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
-for (const [name, src] of [["index", app], ["agentrouter", arApp]]) {
-  for (const id of themes) {
-    if (!src.includes('"' + id + '"')) {
-      console.log("FAIL", name, "bundle missing theme id:", id);
-      process.exit(1);
-    }
-  }
-}
-if (!arApp.includes("deepseek-peak-theme")) {
-  console.log("FAIL agentrouter bundle does not use the shared theme storage key");
-  process.exit(1);
-}
-const arSrc = fs.readFileSync("src/themes.js", "utf8") + fs.readFileSync("src/subpage.js", "utf8");
-if (arApp.length >= arSrc.length) {
-  console.log("FAIL inlined subpage.js not minified (", arApp.length, ">= src", arSrc.length, ")");
-  process.exit(1);
-}
-console.log("agentrouter bundle: all", themes.length, "themes + shared storage key, minified:", arSrc.length, "->", arApp.length, "bytes ✓");
-
 if (!html.includes('href="/free-credits/"')) {
   console.log("FAIL main page footer missing the free-credits link");
   process.exit(1);
@@ -630,7 +557,6 @@ for (const needle of [
   "Working offers",
   "How this list works",
   'id="themeButton"',
-  'href="/agentrouter/"',
 ]) {
   if (!fc.includes(needle)) {
     console.log("FAIL free-credits page missing:", needle);
@@ -670,14 +596,28 @@ if (!html.includes('href="/free-credits/"')) {
   process.exit(1);
 }
 const fcApp = [...fc.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
-if (fcApp !== arApp) {
-  console.log("FAIL free-credits page does not share the sub-page theme-picker bundle");
+// The sub-page bundle must ship the same theme list as the homepage (src/themes.js is prepended to both).
+for (const [name, src] of [["index", app], ["free-credits", fcApp]]) {
+  for (const id of themes) {
+    if (!src.includes('"' + id + '"')) {
+      console.log("FAIL", name, "bundle missing theme id:", id);
+      process.exit(1);
+    }
+  }
+}
+if (!fcApp.includes("deepseek-peak-theme")) {
+  console.log("FAIL free-credits bundle does not use the shared theme storage key");
   process.exit(1);
 }
-console.log(`free-credits page + gist: all ${OFFERS.length} providers from credits.json with their models, SEO head, shared bundle ✓`);
+const subSrc = fs.readFileSync("src/themes.js", "utf8") + fs.readFileSync("src/subpage.js", "utf8");
+if (fcApp.length >= subSrc.length) {
+  console.log("FAIL inlined subpage.js not minified (", fcApp.length, ">= src", subSrc.length, ")");
+  process.exit(1);
+}
+console.log(`free-credits page + gist: all ${OFFERS.length} providers from credits.json with their models, SEO head, minified: ${subSrc.length} -> ${fcApp.length} bytes ✓`);
 
 // Every page footer carries the repo link (icon-only <a> to the source on GitHub).
-for (const [name, src] of [["index", html], ["agentrouter", ar], ["free-credits", fc]]) {
+for (const [name, src] of [["index", html], ["free-credits", fc]]) {
   if (!src.includes('href="https://github.com/steffenr/seekpeak.dev"')) {
     console.log("FAIL", name, "footer missing the GitHub repo link");
     process.exit(1);

@@ -59,7 +59,7 @@ async function build() {
 
   writeFileSync(join(dist, "index.html"), html);
 
-  for (const slug of ["agentrouter", "free-credits"]) {
+  for (const slug of ["free-credits"]) {
     let page = readFileSync(join(root, `${slug}.template.html`), "utf8");
     page = page.replace("/*__CSS__*/", () => css);
     page = page.replace("/*__SUB_APP__*/", () => subApp);
@@ -117,7 +117,7 @@ if (watch) {
       timer = setTimeout(() => fn(...args), ms);
     };
   };
-  const targets = ["src/style.css", "src/app.js", "src/themes.js", "src/subpage.js", "config.json", "credits.json", "scripts/credits.mjs", "index.template.html", "agentrouter.template.html", "free-credits.template.html", "assets/site.webmanifest"];
+  const targets = ["src/style.css", "src/app.js", "src/themes.js", "src/subpage.js", "config.json", "credits.json", "scripts/credits.mjs", "index.template.html", "free-credits.template.html", "assets/site.webmanifest"];
   for (const t of targets) {
     watchFile(join(root, t), { interval: 150 }, debounce(build, 100));
   }
