@@ -553,7 +553,6 @@ for (const needle of [
   "https://agentrouter.org/v1",
   "https://agentrouter.org/docs/index.html",
   "https://agentrouter.org/docs/terms.html",
-  'href="/omp/"',
   "models.yaml",
   "baseUrl: https://agentrouter.org/v1",
   "api: openai-completions",
@@ -610,66 +609,14 @@ if (arApp.length >= arSrc.length) {
 }
 console.log("agentrouter bundle: all", themes.length, "themes + shared storage key, minified:", arSrc.length, "->", arApp.length, "bytes ✓");
 
-const omp = fs.readFileSync("dist/omp/index.html", "utf8");
-for (const needle of [
-  'id="ompBadge"',
-  "Complete out of the box",
-  "https://omp.sh/",
-  "https://omp.sh/docs",
-  "https://github.com/can1357/oh-my-pi",
-  "fork of",
-  "Five reasons to switch",
-  "omp vs. a plain harness",
-  "hashline",
-  "workspace/willRenameFiles",
-  "curl -fsSL https://omp.sh/install | sh",
-  "bun install -g @oh-my-pi/pi-coding-agent",
-  'id="creditCta"',
-  CREDIT_CTA,
-  'href="/free-credits/"',
-  'href="/agentrouter/"',
-  'id="themeButton"',
-]) {
-  if (!omp.toLowerCase().includes(needle.toLowerCase())) {
-    console.log("FAIL omp page missing:", needle);
-    process.exit(1);
-  }
-}
-if (!omp.includes('rel="canonical" href="' + site.url + '/omp/"') || !omp.includes('property="og:url" content="' + site.url + '/omp/"')) {
-  console.log("FAIL omp page canonical/og:url missing");
-  process.exit(1);
-}
-if (!omp.includes('"@type": "SoftwareApplication"') || !omp.includes('"@type": "FAQPage"')) {
-  console.log("FAIL omp page JSON-LD missing");
-  process.exit(1);
-}
-if (omp.includes("__SITE_URL__") || omp.includes("__OG_IMAGE_URL__") || /\/\*__(CSS|SUB_APP)__\*\//.test(omp)) {
-  console.log("FAIL leftover build token in omp page");
-  process.exit(1);
-}
-// Windows stays a one-line mention (install command + platform list), not a pitch.
-if (!omp.includes("irm https://omp.sh/install.ps1 | iex")) {
-  console.log("FAIL omp page missing the Windows install command");
-  process.exit(1);
-}
-if (omp.includes("WSL")) {
-  console.log("FAIL omp page should not sell the WSL angle");
-  process.exit(1);
-}
 if (!html.includes('id="creditCta"') || !html.includes(CREDIT_CTA) || !html.includes('href="/free-credits/"')) {
   console.log("FAIL main page missing the free-credits CTA");
   process.exit(1);
 }
-if (!html.includes('href="/omp/"')) {
-  console.log("FAIL main page does not link to /omp/");
+if (html.includes('href="/omp/"')) {
+  console.log("FAIL main page should no longer link to /omp/ (page removed)");
   process.exit(1);
 }
-const ompApp = [...omp.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
-if (ompApp !== arApp) {
-  console.log("FAIL sub-pages do not share the same theme-picker bundle");
-  process.exit(1);
-}
-console.log("omp page: hero/reasons/comparison/benchmarks/install + SEO head present, shares sub-page bundle ✓");
 
 const fc = fs.readFileSync("dist/free-credits/index.html", "utf8");
 for (const needle of [
@@ -681,7 +628,6 @@ for (const needle of [
   "How this list works",
   'id="themeButton"',
   'href="/agentrouter/"',
-  'href="/omp/"',
 ]) {
   if (!fc.includes(needle)) {
     console.log("FAIL free-credits page missing:", needle);
@@ -728,7 +674,7 @@ if (fcApp !== arApp) {
 console.log(`free-credits page + gist: all ${OFFERS.length} providers from credits.json with their models, SEO head, shared bundle ✓`);
 
 // Every page footer carries the repo link (icon-only <a> to the source on GitHub).
-for (const [name, src] of [["index", html], ["agentrouter", ar], ["omp", omp], ["free-credits", fc]]) {
+for (const [name, src] of [["index", html], ["agentrouter", ar], ["free-credits", fc]]) {
   if (!src.includes('href="https://github.com/steffenr/seekpeak.dev"')) {
     console.log("FAIL", name, "footer missing the GitHub repo link");
     process.exit(1);
