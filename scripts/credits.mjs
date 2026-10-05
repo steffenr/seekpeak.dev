@@ -1,6 +1,6 @@
 // Single source of truth for the free-credits offers is credits.json at the repo
 // root. These builders turn it into the /free-credits/ offer cards, the page's
-// FAQ JSON-LD, the homepage CTA copy and the free-credits.gist.md mirror.
+// FAQ JSON-LD, and the free-credits.gist.md mirror.
 // Every Tailwind class used in the cards appears here as a complete literal so
 // the JIT scanner (see the @source line in src/style.css) keeps it.
 
@@ -61,14 +61,6 @@ export const faqProvidersText = (offers) => {
       ? parts.slice(0, -1).join(", ") + " and " + parts[parts.length - 1]
       : parts[0];
   return `The list currently has ${numberWord(offers.length)} verified offers: ${list}. Each one adds credit to a new account on registration.`;
-};
-
-// CTA copy on the homepage. Uses the first dollar-denominated
-// offer (a "$120" reads better in the CTA than "300,000 credits"), else the
-// first offer.
-export const creditCtaText = (offers) => {
-  const pick = offers.find((o) => /^\$/.test(o.creditsShort)) || offers[0];
-  return `Free credits — ${pick.creditsShort} to start`;
 };
 
 const gistSection = (o) => {

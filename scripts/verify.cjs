@@ -531,7 +531,6 @@ console.log("inlined app.js minified:", appSrc.length, "->", app.length, "bytes 
 const ar = fs.readFileSync("dist/agentrouter/index.html", "utf8");
 const AFF = "https://agentrouter.org/register?aff=ENwt";
 const OFFERS = JSON.parse(fs.readFileSync("credits.json", "utf8")).offers;
-const CREDIT_CTA = `Free credits — ${(OFFERS.find((o) => /^\$/.test(o.creditsShort)) || OFFERS[0]).creditsShort} to start`;
 for (const needle of [
   'id="creditBadge"',
   "bg-mk-green",
@@ -609,8 +608,12 @@ if (arApp.length >= arSrc.length) {
 }
 console.log("agentrouter bundle: all", themes.length, "themes + shared storage key, minified:", arSrc.length, "->", arApp.length, "bytes ✓");
 
-if (!html.includes('id="creditCta"') || !html.includes(CREDIT_CTA) || !html.includes('href="/free-credits/"')) {
-  console.log("FAIL main page missing the free-credits CTA");
+if (!html.includes('href="/free-credits/"')) {
+  console.log("FAIL main page footer missing the free-credits link");
+  process.exit(1);
+}
+if (html.includes('id="creditCta"')) {
+  console.log("FAIL main page should no longer have the prominent free-credits CTA block");
   process.exit(1);
 }
 if (html.includes('href="/omp/"')) {
