@@ -18,7 +18,7 @@ free balance on real work.
 
 ### Vyceai.com — $40 credits
 
-- **Claim:** https://vyceai.com/signup?ref=VYCE_XFR2A9
+- **Claim:** https://vyceai.com/signup?ref=VYCE_FVUV9Z
 - **Models:** `claude-sonnet-4-6`, `deepseek-v4-flash`, `deepseek-v4-pro`, `deepseek-v4.1`, `agnes-3.0-flash`, `gpt-astra`, `gpt-5.6-terra`, `grok-4.6`, `qwen3.8-flash`
 
 ### AgentRouter.org — $50 credits
@@ -69,7 +69,7 @@ The largest dollar-denominated balance on the list.
 
 | Provider | Credit | Models |
 | --- | --- | --- |
-| [Vyceai.com](https://vyceai.com/signup?ref=VYCE_XFR2A9) | $40 | claude-sonnet-4-6, deepseek-v4-flash, deepseek-v4-pro, deepseek-v4.1, agnes-3.0-flash, gpt-astra, gpt-5.6-terra, grok-4.6, qwen3.8-flash |
+| [Vyceai.com](https://vyceai.com/signup?ref=VYCE_FVUV9Z) | $40 | claude-sonnet-4-6, deepseek-v4-flash, deepseek-v4-pro, deepseek-v4.1, agnes-3.0-flash, gpt-astra, gpt-5.6-terra, grok-4.6, qwen3.8-flash |
 | [AgentRouter.org](https://agentrouter.org/register?aff=ENwt) | $50 | glm-5.3, deepseek-v4-flash, gpt-5.6-sol, claude-opus-5, claude-opus-4-8 |
 | [B.Ai](https://chat.b.ai/chat?invite_code=5MXLTF) | 300,000 credits | deepseek-v4.1-flash, deepseek-v4-pro, hy3, glm-5.3, glm-5.3-flash, gpt-6-astra, meta/llama-3.1-70b-instruct, meta/llama-3.1-8b-instruct, meta/llama-3.2-11b-vision-instruct, claude-opus-5, claude-opus-4.8, claude-fable-5, claude-sonnet-5, gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gemini-3.1-pro, gemini-3.5-flash, gemini-3.5-flash-lite, minimax-m3, mimo-v2.5, kimi-k3, qwen3.8-flash |
 | [seekai.cc](https://seekai.cc/sign-up?aff=zLxN) | $200 | deepseek-v4-flash, deepseek-v4.1-flash, glm-5.3, hy4-preview-f, claude-sonnet |
