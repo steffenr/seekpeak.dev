@@ -31,7 +31,7 @@
       "models": [
         "glm-5.3",
         "deepseek-v4-flash",
-        "gpt-5.6-sol",
+        "gpt-6-astra",
         "claude-opus-5",
         "claude-opus-4-8"
       ]
@@ -81,21 +81,11 @@
       "models": [
         "deepseek-v4-flash",
         "deepseek-v4.1-flash",
-        "glm-5.3",
+        "glm-5.3-flash",
+        "hy3",
         "hy4-preview-f",
-        "claude-sonnet"        
-      ]
-    },
-    {
-      "provider": "Justwoker.icu",
-      "credits": "$70 Credits",
-      "creditsShort": "$70",
-      "url": "https://api.justwoker.icu/register?aff=4HgG",
-      "featured": false,
-      "stars": 0,
-      "blurb": "Has some issues with cloudflare right now.. ",
-      "models": [
-        "claude-opus-4-8"
+        "claude-sonnet",
+        "Qwen3.8-27B"
       ]
     },
     {
