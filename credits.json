@@ -148,18 +148,6 @@
         "Wan 3.0",
         "Wan 3.0 Prime"
       ]
-    },
-    {
-      "provider": "Tabitoken.com",
-      "credits": "$120 Credits",
-      "creditsShort": "$120",
-      "url": "https://tabitoken.com/sign-up?aff=aEl5",
-      "featured": false,
-      "stars": 0,
-      "blurb": "The largest dollar-denominated balance on the list.",
-      "models": [
-        "No models available right now"
-      ]
     }
   ]
 }
