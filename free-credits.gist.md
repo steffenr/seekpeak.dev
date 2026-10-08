@@ -56,13 +56,6 @@ More than 300 models for text, audio and video generation.
 - **Claim:** https://venice.ai/chat?ref=u281-E
 - **Models:** `Aion 3.0`, `Aion 3.0 Mini`, `Claude Fable 5.1`, `Claude Opus 5`, `DeepSeek V4 Flash`, `DeepSeek V4 Flash 0731`, `DeepSeek V4 Pro 0813`, `Flux 3`, `Gemini 3.5 Flash-Lite`, `Gemini 3.6 Flash`, `Gemini 3.7 Flash`, `Gemini 3.8 Flash`, `Gemini Omni Flash 1.1`, `GPT-5.6 Luna`, `GPT-5.6 Sol`, `GPT-5.6 Terra`, `GPT-6 Astra`, `GPT-6 Astra Pro`, `Grok 4.6`, `Grok Imagine 2.0`, `Inkling`, `Kimi K2.6`, `Kimi K3`, `Krea 2 Turbo`, `LTX Video 2.5 Fast`, `LTX Video 2.5 Pro`, `MiniMax H3`, `MiniMax H3 Enhanced`, `MiniMax H3 Max`, `Muse Image`, `Qwen 3.8 2.4T`, `Qwen 3.8 27B`, `Qwen 3.8 Max`, `Qwen Image 3`, `Qwen Image 3 Pro`, `Seedance 2.5`, `Seedream V5 Pro`, `Wan 2.2 Enhanced`, `Wan 3.0`, `Wan 3.0 Prime`
 
-### Tabitoken.com — $120 credits
-
-The largest dollar-denominated balance on the list.
-
-- **Claim:** https://tabitoken.com/sign-up?aff=aEl5
-- **Models:** `No models available right now`
-
 ---
 
 ## At a glance
@@ -75,7 +68,6 @@ The largest dollar-denominated balance on the list.
 | [seekai.cc](https://seekai.cc/sign-up?aff=zLxN) | $200 | deepseek-v4-flash, deepseek-v4.1-flash, glm-5.3, hy4-preview-f, claude-sonnet |
 | [Justwoker.icu](https://api.justwoker.icu/register?aff=4HgG) | $70 | claude-opus-4-8 |
 | [venice.ai](https://venice.ai/chat?ref=u281-E) | $10 | Aion 3.0, Aion 3.0 Mini, Claude Fable 5.1, Claude Opus 5, DeepSeek V4 Flash, DeepSeek V4 Flash 0731, DeepSeek V4 Pro 0813, Flux 3, Gemini 3.5 Flash-Lite, Gemini 3.6 Flash, Gemini 3.7 Flash, Gemini 3.8 Flash, Gemini Omni Flash 1.1, GPT-5.6 Luna, GPT-5.6 Sol, GPT-5.6 Terra, GPT-6 Astra, GPT-6 Astra Pro, Grok 4.6, Grok Imagine 2.0, Inkling, Kimi K2.6, Kimi K3, Krea 2 Turbo, LTX Video 2.5 Fast, LTX Video 2.5 Pro, MiniMax H3, MiniMax H3 Enhanced, MiniMax H3 Max, Muse Image, Qwen 3.8 2.4T, Qwen 3.8 27B, Qwen 3.8 Max, Qwen Image 3, Qwen Image 3 Pro, Seedance 2.5, Seedream V5 Pro, Wan 2.2 Enhanced, Wan 3.0, Wan 3.0 Prime |
-| [Tabitoken.com](https://tabitoken.com/sign-up?aff=aEl5) | $120 | No models available right now |
 
 ---
 
