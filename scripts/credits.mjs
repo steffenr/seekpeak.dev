@@ -21,7 +21,7 @@ export const stars = (n) => {
 };
 
 const esc = (s) =>
-  String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 
 const modelChip = (id) =>
   `<span class="rounded-md border-2 border-black bg-mk-input px-2.5 py-1 text-xs font-black text-mk-fg shadow-[2px_2px_0px_0px_#000000]">${esc(id)}</span>`;

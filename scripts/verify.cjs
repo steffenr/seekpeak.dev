@@ -2,8 +2,8 @@ const fs = require("fs");
 const vm = require("vm");
 
 const html = fs.readFileSync("dist/index.html", "utf8");
-const config = JSON.parse(html.match(/window\.CONFIG = ([\s\S]*?);\n    <\/script>/)[1]);
-const app = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
+const config = JSON.parse(html.match(/window\.CONFIG = ([\s\S]*?);\n    <\/script>/i)[1]);
+const app = [...html.matchAll(/<script>([\s\S]*?)<\/script>/gi)].at(-1)[1];
 
 const elem = () => ({
   className: "",
@@ -595,7 +595,7 @@ if (!html.includes('href="/free-credits/"')) {
   console.log("FAIL main page does not link to /free-credits/");
   process.exit(1);
 }
-const fcApp = [...fc.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
+const fcApp = [...fc.matchAll(/<script>([\s\S]*?)<\/script>/gi)].at(-1)[1];
 // The sub-page bundle must ship the same theme list as the homepage (src/themes.js is prepended to both).
 for (const [name, src] of [["index", app], ["free-credits", fcApp]]) {
   for (const id of themes) {
