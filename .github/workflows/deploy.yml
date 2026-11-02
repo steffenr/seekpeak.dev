@@ -95,6 +95,13 @@ jobs:
           php-version: '8.4'
           tools: composer:v2
 
+      # Ubuntu's tzdata package omits the backward-compatible IANA aliases
+      # (Asia/Calcutta, US/Eastern, ...) into tzdata-legacy, and the PPA PHP build
+      # reads the system tzdb rather than timelib's bundled copy. Without this,
+      # DateTimeZone::ALL_WITH_BC loses those aliases and the alias test 400s.
+      - name: Install legacy timezone aliases (tzdata-legacy)
+        run: sudo apt-get update && sudo apt-get install -y tzdata-legacy
+
       - name: Install dependencies
         working-directory: api
         run: composer install --no-interaction --prefer-dist
