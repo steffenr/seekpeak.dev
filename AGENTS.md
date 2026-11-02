@@ -30,6 +30,19 @@ ports are checked against the same `tests/fixtures/verdict-cases.json` —
 if you change the billing rule, update that shared fixtures file and
 re-run **both** `node scripts/verify.cjs` and `cd api && vendor/bin/phpunit`.
 
+**CI prerequisite — `tzdata-legacy`:** the `validate-api` jobs install
+`tzdata-legacy` before running PHPUnit. Ubuntu's `tzdata` package moved the
+backward-compatible IANA aliases (`Asia/Calcutta`, `US/Eastern`, …) into that
+separate package, and the ondrej-PPA PHP build `setup-php` installs reads the
+*system* tzdb instead of timelib's bundled copy (`timezone_version_get()`
+reports `0.system` on the runner). Without the package
+`DateTimeZone::listIdentifiers(ALL_WITH_BC)` returns ~500 instead of ~600
+identifiers, `Asia/Calcutta` is absent, and
+`testIanaBackwardCompatibleAliasIsAccepted` fails with `400 is identical to
+200` — an *environment* failure, not a code one. Production is unaffected (the
+Netcup host has the legacy zones; the live API answers 200 for
+`?tz=Asia/Calcutta`). If you switch runners or base images, keep that step.
+
 **Deployment prerequisite — vhost document root:** the web server's document
 root for `api.seekpeak.dev` **MUST** be the deployed `public/` subdirectory
 (front controller `public/index.php`), **NOT** the project root. Otherwise
