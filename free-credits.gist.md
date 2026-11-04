@@ -19,21 +19,14 @@ free balance on real work.
 ### Vyceai.com — $40 credits
 
 - **Claim:** https://vyceai.com/signup?ref=VYCE_XFR2A9
-- **Models:** `gpt-6-luna`, `claude-sonnet-4-6`, `glm-5.3-flash`, `deepseek-v4-flash`, `deepseek-v4.1`, `agnes-3.0-flash`
+- **Models:** `beam-1.0`, `gpt-6-luna`, `claude-sonnet-4-6`, `glm-5.3-flash`, `deepseek-v4-flash`, `deepseek-v4.1`, `agnes-3.0-flash`
 
 ### AgentRouter.org — $50 credits
 
 An AI gateway and routing platform — Claude, Codex, Cursor, Cline, Roo Code and more connect via base URLs and per-tool config.
 
 - **Claim:** https://agentrouter.org/register?aff=ENwt
-- **Models:** `gpt-6.1-sol`, `deepseek-v4-flash`, `gpt-6-astra`, `claude-opus-4-8`, `claude-opus-5`, `claude-opus-5-5`
-
-### seekai.cc — $200 credits
-
-Sometimes the endpoints are not reliable and may break at long running tasks.
-
-- **Claim:** https://seekai.cc/sign-up?aff=zLxN
-- **Models:** `deepseek-v4-flash`, `deepseek-v4.1-flash`, `glm-5.3`, `hy4-preview-f`, `claude-sonnet`
+- **Models:** `gpt-6.1-sol`, `gpt-6-astra`, `gpt-5.6-sol`
 
 ### B.Ai — 300,000 credits
 
@@ -55,9 +48,8 @@ More than 300 models for text, audio and video generation.
 
 | Provider | Credit | Models |
 | --- | --- | --- |
-| [Vyceai.com](https://vyceai.com/signup?ref=VYCE_XFR2A9) | $40 | gpt-6-luna, claude-sonnet-4-6, glm-5.3-flash, deepseek-v4-flash, deepseek-v4.1, agnes-3.0-flash |
-| [AgentRouter.org](https://agentrouter.org/register?aff=ENwt) | $50 | gpt-6.1-sol, deepseek-v4-flash, gpt-6-astra, claude-opus-4-8, claude-opus-5, claude-opus-5-5 |
-| [seekai.cc](https://seekai.cc/sign-up?aff=zLxN) | $200 | deepseek-v4-flash, deepseek-v4.1-flash, glm-5.3, hy4-preview-f, claude-sonnet |
+| [Vyceai.com](https://vyceai.com/signup?ref=VYCE_XFR2A9) | $40 | beam-1.0, gpt-6-luna, claude-sonnet-4-6, glm-5.3-flash, deepseek-v4-flash, deepseek-v4.1, agnes-3.0-flash |
+| [AgentRouter.org](https://agentrouter.org/register?aff=ENwt) | $50 | gpt-6.1-sol, gpt-6-astra, gpt-5.6-sol |
 | [B.Ai](https://chat.b.ai/chat?invite_code=5MXLTF) | 300,000 credits | deepseek-v4.1-flash, mimo-v2.6-flash, mimo-v2.6-pro, glm-5.3-flash, glm-5.3-flashx, hy3, hy4-preview, qwen3.8-flash, qwen3.8-27b, minimax-m2.7, minimax-m3.1-flash, kimi-k2.8-preview, claude-haiku-5.5, gemini-4-argon |
 | [venice.ai](https://venice.ai/chat?ref=u281-E) | $10 | Aion 3.0, Aion 3.0 Mini, Claude Fable 5.1, Claude Opus 5, DeepSeek V4 Flash, DeepSeek V4 Flash 0731, DeepSeek V4 Pro 0813, Flux 3, Gemini 3.5 Flash-Lite, Gemini 3.6 Flash, Gemini 3.7 Flash, Gemini 3.8 Flash, Gemini Omni Flash 1.1, GPT-5.6 Luna, GPT-5.6 Sol, GPT-5.6 Terra, GPT-6 Astra, GPT-6 Astra Pro, Grok 4.6, Grok Imagine 2.0, Inkling, Kimi K2.6, Kimi K3, Krea 2 Turbo, LTX Video 2.5 Fast, LTX Video 2.5 Pro, MiniMax H3, MiniMax H3 Enhanced, MiniMax H3 Max, Muse Image, Qwen 3.8 2.4T, Qwen 3.8 27B, Qwen 3.8 Max, Qwen Image 3, Qwen Image 3 Pro, Seedance 2.5, Seedream V5 Pro, Wan 2.2 Enhanced, Wan 3.0, Wan 3.0 Prime |
 
