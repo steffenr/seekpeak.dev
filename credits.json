@@ -8,6 +8,7 @@
       "featured": true,
       "stars": 5,
       "models": [
+        "beam-1.0",
         "gpt-6-luna",
         "claude-sonnet-4-6",
         "glm-5.3-flash",
@@ -27,27 +28,8 @@
       "note": "Setup docs: <a href=\"https://agentrouter.org/docs/index.html\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-mk-green px-1 text-mk-ink\">agentrouter.org/docs</a>.",
       "models": [
         "gpt-6.1-sol",
-        "deepseek-v4-flash",
         "gpt-6-astra",
-        "claude-opus-4-8",
-        "claude-opus-5",
-        "claude-opus-5-5"
-      ]
-    },
-    {
-      "provider": "seekai.cc",
-      "credits": "$200 Credits",
-      "creditsShort": "$200",
-      "url": "https://seekai.cc/sign-up?aff=zLxN",
-      "featured": false,
-      "stars": 0,
-      "blurb": "Sometimes the endpoints are not reliable and may break at long running tasks.",
-      "models": [
-        "deepseek-v4-flash",
-        "deepseek-v4.1-flash",
-        "glm-5.3",
-        "hy4-preview-f",
-        "claude-sonnet"
+        "gpt-5.6-sol"
       ]
     },
     {
