@@ -66,19 +66,77 @@ a small bundle (`src/subpage.js`, theme picker only) and the theme list from
 
 The `free-credits` offers are **not** hand-written in the template. `credits.json`
 at the repo root is the single source of truth — one object per offer (`provider`,
-`credits`, `creditsShort`, `url`, `featured`, `stars` 1–5, `models`, optional
+`credits`, `creditsShort`, `url`, `featured`, `stars` 0–5, `models`, optional
 `blurb`/`note`). `scripts/build.mjs` (via `scripts/credits.mjs`) renders the offer
 cards, the page's FAQ JSON-LD, and regenerates
 `free-credits.gist.md` — a standalone Markdown copy for posting as a GitHub Gist
 (not part of `dist/`). Edit `credits.json` and run `npm run build`.
 
-`featured: true` gives a card the pink/yellow treatment (currently B.Ai); `stars`
-renders as ★/☆ behind the provider name on the CTA button.
+`featured: true` gives a card the pink/yellow treatment (currently Vyceai.com).
+`stars` is validated metadata (integer 0–5) kept in `credits.json` for future
+use — the current offer cards do **not** render ratings.
 
 `verify.cjs` checks the offers loosely on purpose: every `provider` in
 `credits.json`, and each of its `models`, must appear on the built page **and** in
 the gist. Copy, styling and star counts are left to the renderer — adding or
-editing an offer is just a `credits.json` change plus `npm run build`.
+editing an offer is just a `credits.json` change plus `npm run build`. The
+offer data itself is validated strictly by the provider audit (see below).
+
+## Provider audit
+
+`credits.json` advertises third-party sign-up offers, and models/providers come
+and go. `scripts/audit-credits.mjs` (`npm run audit:credits`) is a reusable,
+read-only audit: it always validates the offer data, and — only when explicitly
+opted in — checks referral URLs, provider model catalogs, and live inference.
+Requires Node 20+ (built-in `fetch`); no extra dependencies.
+
+```bash
+npm run audit:credits                              # offline validation of credits.json only
+npm run audit:credits -- --catalogs                # + referral URLs and public model catalogs
+npm run audit:credits -- --catalogs --pi           # + catalogs for locally configured Pi providers
+npm run audit:credits -- --live --pi --report audit-reports/<new-name>.json
+                                                   # + minimal live probes (paid API usage), sanitized report
+npm run audit:credits -- --credits other.json --pi /custom/pi/dir   # alternate data / Pi directory
+```
+
+- **Default is offline:** without flags the tool only validates `credits.json`
+  (field types/ranges, duplicate providers/models/generated IDs/URLs, HTTPS-only
+  referral URLs without embedded credentials, nonempty model arrays, consistent
+  credit labels). No credentials are read, no network is used, no file is
+  modified — the tool never edits `credits.json` automatically.
+- **`--pi [DIR]`** reads custom models and credentials from a local Pi
+  installation (`models.json`/`auth.json`; default directory
+  `$PI_CODING_AGENT_DIR` or `~/.pi/agent`). Credential values may be literal or
+  `$ENV_VAR` references; `!command` values are refused, never executed. Pi
+  configuration itself is never modified.
+- **`--live`** (requires `--pi`) sends one minimal text probe per model —
+  prompt `Reply only with OK.`, at most 64 output tokens — using your
+  configured keys. This is real (cheap) paid API usage. Image/audio/video
+  models are never probed; at most three providers run concurrently, models
+  sequentially per provider; a provider-wide quota/auth/rate-limit block stops
+  its remaining probes (recorded as skipped, never as failures).
+- **`--report PATH`** writes a sanitized JSON report to a **new** file
+  (mode 0600, never overwrites). Reports contain no keys, no request headers,
+  and no raw authenticated response bodies — review before sharing anyway.
+  `audit-reports/` is gitignored.
+
+Exit codes: `0` audit completed (findings are data, not tool failures), `1`
+invalid credit data, `2` usage or I/O error.
+
+Model statuses: `working` (final answer received); `reasoning_only`/
+`incomplete` (inconclusive — not failures); `unavailable_model`/`maintenance`/
+`provider_error`/`upstream_error` (provider-side problems); `quota`/
+`auth_or_permission`/`rate_limited` (blocked — says nothing about the model);
+`redirected`/`timeout`/`network_error` (transport); `catalog_only` (non-text
+model, or present in a catalog during a catalogs-only run); `skipped`
+(provider blocked earlier in the run); `unverified` (not checked: no
+credentials, unsupported protocol, or checks not requested).
+
+Limitations: a `working` verdict proves the model answered a tiny prompt — not
+that sign-up, payouts, or account creation work; absence from a catalog alone
+never proves an alias is broken; credit amounts are not verified. The workflow
+for stale offers: run the audit → review the report → edit `credits.json` by
+hand → `npm run build` (regenerates the page and gist) → `node scripts/verify.cjs`.
 
 ## Status API
 
@@ -182,6 +240,8 @@ build into the head (canonical, og:*, JSON-LD) — never hardcode the domain in
 | `scripts/build.mjs` | Build pipeline (Tailwind v4 → minified CSS, then inline + dist assets) |
 | `assets/og-image.png` | Your Open Graph image (1200×630 recommended), copied to `dist/og-image.png` |
 | `scripts/verify.cjs` | Test suite against the built `dist/index.html` |
+| `scripts/audit-credits.mjs` | Read-only provider/model audit CLI (offline validation; opt-in catalog/live checks, sanitized reports) |
+| `tests/audit-credits.test.mjs` | Offline audit tests — validation plus fully mocked network/credential/protocol regressions, run through `verify.cjs` |
 | `DESIGN.md` | Domain model, architecture, build pipeline, theme system, verification strategy |
 | `docs/` | ADRs, glossary, and superpowers spec/plan notes |
 

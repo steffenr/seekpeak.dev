@@ -624,3 +624,18 @@ for (const [name, src] of [["index", html], ["free-credits", fc]]) {
   }
 }
 console.log("every page footer links the GitHub repo ✓");
+
+// Offline audit tests (scripts/audit-credits.mjs validation + mocked network
+// regressions) run through the same gate; full output is shown only on failure.
+const { spawnSync } = require("node:child_process");
+const audit = spawnSync(process.execPath, ["--test", "tests/audit-credits.test.mjs"], {
+  cwd: __dirname + "/..",
+  encoding: "utf8",
+});
+if (audit.status !== 0) {
+  console.log("FAIL audit-credits offline tests");
+  console.log(audit.stdout);
+  console.log(audit.stderr);
+  process.exit(1);
+}
+console.log("audit-credits offline tests ✓");

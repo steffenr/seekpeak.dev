@@ -2,19 +2,17 @@
   "offers": [
     {
       "provider": "Vyceai.com",
-      "credits": "$40 Credits",
-      "creditsShort": "$40",
+      "credits": "$50 Credits",
+      "creditsShort": "$50",
       "url": "https://vyceai.com/signup?ref=VYCE_XFR2A9",
       "featured": true,
       "stars": 5,
+      "blurb": "The referral signup page advertises $50 ($40 without a referral code). wave returned OK in the live check on 2026-11-20. claude-sonnet-4-6 remains unverified; deepseek-v4.1 requires Lite tier or higher and was not live-verified.",
+      "note": "With this referral code: $50 signup balance ($40 without a code). Checked 2026-11-20: wave returned OK; Claude Sonnet verification was inconclusive. DeepSeek V4.1 requires Lite tier or higher and was not live-verified.",
       "models": [
-        "beam-1.0",
-        "gpt-6-luna",
+        "wave",
         "claude-sonnet-4-6",
-        "glm-5.3-flash",
-        "deepseek-v4-flash",
-        "deepseek-v4.1",
-        "agnes-3.0-flash"
+        "deepseek-v4.1"
       ]
     },
     {
@@ -28,84 +26,7 @@
       "note": "Setup docs: <a href=\"https://agentrouter.org/docs/index.html\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"bg-mk-green px-1 text-mk-ink\">agentrouter.org/docs</a>.",
       "models": [
         "gpt-6.1-sol",
-        "gpt-6-astra",
         "gpt-5.6-sol"
-      ]
-    },
-    {
-      "provider": "B.Ai",
-      "credits": "300,000 Credits",
-      "creditsShort": "300,000 credits",
-      "url": "https://chat.b.ai/chat?invite_code=5MXLTF",
-      "featured": true,
-      "stars": 0,
-      "blurb": "The biggest sign-up balance on the list, and the widest model spread — DeepSeek, GLM, Qwen, MiMo, Claude, GPT, Gemini, MiniMax and Kimi lines all on one key.",
-      "models": [
-        "deepseek-v4.1-flash",
-        "mimo-v2.6-flash",
-        "mimo-v2.6-pro",
-        "glm-5.3-flash",
-        "glm-5.3-flashx",
-        "hy3",
-        "hy4-preview",
-        "qwen3.8-flash",
-        "qwen3.8-27b",
-        "minimax-m2.7",
-        "minimax-m3.1-flash",
-        "kimi-k2.8-preview",
-        "claude-haiku-5.5",
-        "gemini-4-argon"
-      ]
-    },
-    {
-      "provider": "venice.ai",
-      "credits": "$10 Credits",
-      "creditsShort": "$10",
-      "url": "https://venice.ai/chat?ref=u281-E",
-      "featured": false,
-      "stars": 0,
-      "blurb": "More than 300 models for text, audio and video generation.",
-      "models": [
-        "Aion 3.0",
-        "Aion 3.0 Mini",
-        "Claude Fable 5.1",
-        "Claude Opus 5",
-        "DeepSeek V4 Flash",
-        "DeepSeek V4 Flash 0731",
-        "DeepSeek V4 Pro 0813",
-        "Flux 3",
-        "Gemini 3.5 Flash-Lite",
-        "Gemini 3.6 Flash",
-        "Gemini 3.7 Flash",
-        "Gemini 3.8 Flash",
-        "Gemini Omni Flash 1.1",
-        "GPT-5.6 Luna",
-        "GPT-5.6 Sol",
-        "GPT-5.6 Terra",
-        "GPT-6 Astra",
-        "GPT-6 Astra Pro",
-        "Grok 4.6",
-        "Grok Imagine 2.0",
-        "Inkling",
-        "Kimi K2.6",
-        "Kimi K3",
-        "Krea 2 Turbo",
-        "LTX Video 2.5 Fast",
-        "LTX Video 2.5 Pro",
-        "MiniMax H3",
-        "MiniMax H3 Enhanced",
-        "MiniMax H3 Max",
-        "Muse Image",
-        "Qwen 3.8 2.4T",
-        "Qwen 3.8 27B",
-        "Qwen 3.8 Max",
-        "Qwen Image 3",
-        "Qwen Image 3 Pro",
-        "Seedance 2.5",
-        "Seedream V5 Pro",
-        "Wan 2.2 Enhanced",
-        "Wan 3.0",
-        "Wan 3.0 Prime"
       ]
     }
   ]

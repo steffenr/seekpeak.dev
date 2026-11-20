@@ -53,6 +53,9 @@ coverage/
 dist/
 build/Release
 
+# Provider audit reports (local, sanitized but never committed)
+/audit-reports/
+
 # TypeScript cache
 *.tsbuildinfo
 
